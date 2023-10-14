@@ -86,9 +86,9 @@ public class LambdaAwareMethodRemapper(
  * to resolve mapping data.
  */
 public class MappingsRemapper(
-    private val mappings: Mappings,
-    private val from: String,
-    private val to: String,
+    public val mappings: Mappings,
+    public val from: String,
+    public val to: String,
     private val shouldRemapDesc: Boolean = mappings.namespaces.indexOf(from) != 0,
     private val loader: (name: String) -> ByteArray?
 ) : Remapper() {
@@ -108,7 +108,7 @@ public class MappingsRemapper(
         } else mapFieldName(owner, name, desc)
     }
 
-    override fun mapFieldName(owner: String, name: String, desc: String): String =
+    override fun mapFieldName(owner: String, name: String, desc: String?): String =
         walk(owner, name) { map["$it.$name"] }
 
     override fun mapRecordComponentName(owner: String, name: String, desc: String): String =

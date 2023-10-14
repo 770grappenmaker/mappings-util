@@ -105,6 +105,14 @@ public sealed interface MappingsFormat<T : Mappings> {
 }
 
 /**
+ * Represents an empty mappings object, with no data.
+ */
+public data object EmptyMappings : Mappings {
+    override val namespaces: List<String> = emptyList()
+    override val classes: List<MappedClass> = emptyList()
+}
+
+/**
  * The entry point for loading [Mappings]
  */
 public object MappingsLoader {
