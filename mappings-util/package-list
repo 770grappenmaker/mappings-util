@@ -21,7 +21,7 @@ $dokka.location:com.grappenmaker.mappings//isData/com.grappenmaker.mappings.Mapp
 $dokka.location:com.grappenmaker.mappings//join/com.grappenmaker.mappings.Mappings#com.grappenmaker.mappings.Mappings#kotlin.String#kotlin.Boolean/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/join.html
 $dokka.location:com.grappenmaker.mappings//join/kotlin.collections.Iterable[com.grappenmaker.mappings.AccessMask]#/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/join.html
 $dokka.location:com.grappenmaker.mappings//join/kotlin.collections.Iterable[com.grappenmaker.mappings.AccessWidener]#/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/join.html
-$dokka.location:com.grappenmaker.mappings//join/kotlin.collections.List[com.grappenmaker.mappings.Mappings]#kotlin.String#kotlin.Boolean/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/join.html
+$dokka.location:com.grappenmaker.mappings//join/kotlin.collections.Iterable[com.grappenmaker.mappings.Mappings]#kotlin.String#kotlin.Boolean/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/join.html
 $dokka.location:com.grappenmaker.mappings//join/kotlin.sequences.Sequence[com.grappenmaker.mappings.AccessWidener]#/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/join.html
 $dokka.location:com.grappenmaker.mappings//loadAccessWidener/#kotlin.collections.List[kotlin.String]/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/load-access-widener.html
 $dokka.location:com.grappenmaker.mappings//mapClasses/com.grappenmaker.mappings.Mappings#kotlin.Function1[com.grappenmaker.mappings.MappedClass,com.grappenmaker.mappings.MappedClass]/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/map-classes.html
@@ -52,6 +52,8 @@ $dokka.location:com.grappenmaker.mappings//write/com.grappenmaker.mappings.Progu
 $dokka.location:com.grappenmaker.mappings//write/com.grappenmaker.mappings.SRGMappings#/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/write.html
 $dokka.location:com.grappenmaker.mappings//write/com.grappenmaker.mappings.TSRGMappings#/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/write.html
 $dokka.location:com.grappenmaker.mappings//write/com.grappenmaker.mappings.TinyMappings#kotlin.Boolean/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/write.html
+$dokka.location:com.grappenmaker.mappings/AccessMask.Companion///PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-access-mask/-companion/index.html
+$dokka.location:com.grappenmaker.mappings/AccessMask.Companion/EMPTY/#/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-access-mask/-companion/-e-m-p-t-y.html
 $dokka.location:com.grappenmaker.mappings/AccessMask///PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-access-mask/index.html
 $dokka.location:com.grappenmaker.mappings/AccessMask/AccessMask/#kotlin.Int/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-access-mask/-access-mask.html
 $dokka.location:com.grappenmaker.mappings/AccessMask/contains/#com.grappenmaker.mappings.AccessType/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-access-mask/contains.html
