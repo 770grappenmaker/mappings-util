@@ -27,8 +27,15 @@ public fun MappedMethod.index(owner: String, namespace: Int): String = "$owner.$
 
 /**
  * Returns a simple mapping representing all of the [Mappings], mapping between the namespaces [from] and [to].
+ * If [includeMethods] is true, then methods will be included in the mapping.
+ * If [includeFields] is true, then fields will be included in the mapping.
  */
-public fun Mappings.asASMMapping(from: String, to: String): Map<String, String> = buildMap {
+public fun Mappings.asASMMapping(
+    from: String,
+    to: String,
+    includeMethods: Boolean = true,
+    includeFields: Boolean = true,
+): Map<String, String> = buildMap {
     val fromIndex = namespaces.indexOf(from)
     val toIndex = namespaces.indexOf(to)
 
@@ -38,7 +45,7 @@ public fun Mappings.asASMMapping(from: String, to: String): Map<String, String> 
     classes.forEach { clz ->
         val owner = clz.names[fromIndex]
         put(owner, clz.names[toIndex])
-        clz.fields.forEach { put(it.index(owner, fromIndex), it.names[toIndex]) }
-        clz.methods.forEach { put(it.index(owner, fromIndex), it.names[toIndex]) }
+        if (includeFields) clz.fields.forEach { put(it.index(owner, fromIndex), it.names[toIndex]) }
+        if (includeMethods) clz.methods.forEach { put(it.index(owner, fromIndex), it.names[toIndex]) }
     }
 }
