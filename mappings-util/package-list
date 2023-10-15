@@ -1,16 +1,19 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:com.grappenmaker.mappings////PointingToDeclaration/mappings-util/com.grappenmaker.mappings/index.html
-$dokka.location:com.grappenmaker.mappings//asASMMapping/com.grappenmaker.mappings.Mappings#kotlin.String#kotlin.String/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/as-a-s-m-mapping.html
+$dokka.location:com.grappenmaker.mappings//asASMMapping/com.grappenmaker.mappings.Mappings#kotlin.String#kotlin.String#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/as-a-s-m-mapping.html
 $dokka.location:com.grappenmaker.mappings//asProguardMappings/com.grappenmaker.mappings.Mappings#/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/as-proguard-mappings.html
 $dokka.location:com.grappenmaker.mappings//asSRGMappings/com.grappenmaker.mappings.Mappings#kotlin.Boolean/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/as-s-r-g-mappings.html
 $dokka.location:com.grappenmaker.mappings//asSimpleRemapper/com.grappenmaker.mappings.Mappings#kotlin.String#kotlin.String/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/as-simple-remapper.html
 $dokka.location:com.grappenmaker.mappings//asSimpleRemapper/com.grappenmaker.mappings.SRGMappings#/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/as-simple-remapper.html
 $dokka.location:com.grappenmaker.mappings//asTinyMappings/com.grappenmaker.mappings.Mappings#kotlin.Boolean/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/as-tiny-mappings.html
 $dokka.location:com.grappenmaker.mappings//extractNamespaces/com.grappenmaker.mappings.Mappings#kotlin.String#kotlin.String/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/extract-namespaces.html
+$dokka.location:com.grappenmaker.mappings//filterNamespaces/com.grappenmaker.mappings.Mappings#kotlin.Array[kotlin.String]/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/filter-namespaces.html
+$dokka.location:com.grappenmaker.mappings//filterNamespaces/com.grappenmaker.mappings.Mappings#kotlin.collections.Set[kotlin.String]/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/filter-namespaces.html
 $dokka.location:com.grappenmaker.mappings//index/com.grappenmaker.mappings.MappedField#kotlin.String#kotlin.Int/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/--index--.html
 $dokka.location:com.grappenmaker.mappings//index/com.grappenmaker.mappings.MappedMethod#kotlin.String#kotlin.Int/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/--index--.html
-$dokka.location:com.grappenmaker.mappings//join/com.grappenmaker.mappings.Mappings#kotlin.String#com.grappenmaker.mappings.Mappings#kotlin.String#kotlin.String/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/join.html
+$dokka.location:com.grappenmaker.mappings//join/com.grappenmaker.mappings.Mappings#kotlin.String#com.grappenmaker.mappings.Mappings#kotlin.String#kotlin.String#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/join.html
+$dokka.location:com.grappenmaker.mappings//join/kotlin.collections.List[com.grappenmaker.mappings.Mappings]#kotlin.String#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/join.html
 $dokka.location:com.grappenmaker.mappings//namespace/com.grappenmaker.mappings.Mappings#kotlin.String/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/namespace.html
 $dokka.location:com.grappenmaker.mappings//remapJar/#com.grappenmaker.mappings.Mappings#java.io.File#java.io.File#kotlin.String#kotlin.String#kotlin.collections.List[java.io.File]/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/remap-jar.html
 $dokka.location:com.grappenmaker.mappings//renameNamespaces/com.grappenmaker.mappings.Mappings#kotlin.Array[kotlin.String]/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/rename-namespaces.html
@@ -27,6 +30,9 @@ $dokka.location:com.grappenmaker.mappings/AccessWideningVisitor/visitField/#kotl
 $dokka.location:com.grappenmaker.mappings/AccessWideningVisitor/visitMethod/#kotlin.Int#kotlin.String#kotlin.String#kotlin.String?#kotlin.Array[kotlin.String]?/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-access-widening-visitor/visit-method.html
 $dokka.location:com.grappenmaker.mappings/Commented///PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-commented/index.html
 $dokka.location:com.grappenmaker.mappings/Commented/comments/#/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-commented/comments.html
+$dokka.location:com.grappenmaker.mappings/EmptyMappings///PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-empty-mappings/index.html
+$dokka.location:com.grappenmaker.mappings/EmptyMappings/classes/#/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-empty-mappings/classes.html
+$dokka.location:com.grappenmaker.mappings/EmptyMappings/namespaces/#/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-empty-mappings/namespaces.html
 $dokka.location:com.grappenmaker.mappings/GenericMappings///PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-generic-mappings/index.html
 $dokka.location:com.grappenmaker.mappings/GenericMappings/GenericMappings/#kotlin.collections.List[kotlin.String]#kotlin.collections.List[com.grappenmaker.mappings.MappedClass]/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-generic-mappings/-generic-mappings.html
 $dokka.location:com.grappenmaker.mappings/GenericMappings/classes/#/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-generic-mappings/classes.html
@@ -79,11 +85,14 @@ $dokka.location:com.grappenmaker.mappings/MappingsLoader/findMappingsFormat/#kot
 $dokka.location:com.grappenmaker.mappings/MappingsLoader/loadMappings/#kotlin.collections.List[kotlin.String]/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-mappings-loader/load-mappings.html
 $dokka.location:com.grappenmaker.mappings/MappingsRemapper///PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-mappings-remapper/index.html
 $dokka.location:com.grappenmaker.mappings/MappingsRemapper/MappingsRemapper/#com.grappenmaker.mappings.Mappings#kotlin.String#kotlin.String#kotlin.Boolean#kotlin.Function1[kotlin.String,kotlin.ByteArray?]/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-mappings-remapper/-mappings-remapper.html
+$dokka.location:com.grappenmaker.mappings/MappingsRemapper/from/#/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-mappings-remapper/from.html
 $dokka.location:com.grappenmaker.mappings/MappingsRemapper/map/#kotlin.String/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-mappings-remapper/map.html
-$dokka.location:com.grappenmaker.mappings/MappingsRemapper/mapFieldName/#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-mappings-remapper/map-field-name.html
+$dokka.location:com.grappenmaker.mappings/MappingsRemapper/mapFieldName/#kotlin.String#kotlin.String#kotlin.String?/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-mappings-remapper/map-field-name.html
 $dokka.location:com.grappenmaker.mappings/MappingsRemapper/mapMethodName/#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-mappings-remapper/map-method-name.html
 $dokka.location:com.grappenmaker.mappings/MappingsRemapper/mapRecordComponentName/#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-mappings-remapper/map-record-component-name.html
+$dokka.location:com.grappenmaker.mappings/MappingsRemapper/mappings/#/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-mappings-remapper/mappings.html
 $dokka.location:com.grappenmaker.mappings/MappingsRemapper/reverse/#kotlin.Function1[kotlin.String,kotlin.ByteArray?]/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-mappings-remapper/reverse.html
+$dokka.location:com.grappenmaker.mappings/MappingsRemapper/to/#/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-mappings-remapper/to.html
 $dokka.location:com.grappenmaker.mappings/ProguardMappings///PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-proguard-mappings/index.html
 $dokka.location:com.grappenmaker.mappings/ProguardMappings/ProguardMappings/#kotlin.collections.List[com.grappenmaker.mappings.MappedClass]/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-proguard-mappings/-proguard-mappings.html
 $dokka.location:com.grappenmaker.mappings/ProguardMappings/classes/#/PointingToDeclaration/mappings-util/com.grappenmaker.mappings/-proguard-mappings/classes.html
