@@ -82,8 +82,17 @@ public class LambdaAwareMethodRemapper(
 
 /**
  * A [Remapper] for [Mappings], which is capable of using inheritance information from classes
- * (the implementor may choose to cache them)
- * to resolve mapping data.
+ * (the implementor may choose to cache them) to resolve mapping data.
+ *
+ * Maps between [from] and [to] namespaces. If [shouldRemapDesc] is true (which it is by default if the [from]
+ * namespace is not the first namespace in the mappings), this [MappingsRemapper] will remap the descriptors
+ * of methods before passing them on to the mappings, in order to find the correct overload.
+ *
+ * [loader] should return the bytes for a class file with a given internal name, whether that is in a jar file,
+ * this JVMs system class loader, or another resource. If [loader] returns `null`, the remapper considers the
+ * class file not present/missing/irrelevant.
+ *
+ * @see [ClasspathLoaders] for default implementations of [loader]
  */
 public class MappingsRemapper(
     public val mappings: Mappings,
@@ -113,6 +122,9 @@ public class MappingsRemapper(
 
     override fun mapRecordComponentName(owner: String, name: String, desc: String): String =
         mapFieldName(owner, name, desc)
+
+    override fun mapSignature(signature: String?, typeSignature: Boolean): String? =
+        if (signature?.isEmpty() == true) null else super.mapSignature(signature, typeSignature)
 
     private inline fun walk(
         owner: String,

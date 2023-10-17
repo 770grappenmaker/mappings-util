@@ -193,12 +193,13 @@ public fun Mappings.join(
 
 /**
  * Joins together a list of [Mappings], but takes the first namespace as the target namespace for every [Mappings].
+ * Note: all namespaces are kept, in order to be able to reduce the mappings nicely without a lot of overhead.
+ * If you want to exclude certain namespaces, use [Mappings.filterNamespaces]
  *
  * @see [Mappings.join]
  */
 public fun List<Mappings>.join(
     intermediateNamespace: String,
-    keepOtherNamespaces: Boolean = false,
     requireMatch: Boolean = false
 ): Mappings = reduce { acc, curr ->
     acc.join(
@@ -206,7 +207,7 @@ public fun List<Mappings>.join(
         otherMappings = curr,
         otherNamespace = curr.namespaces.first(),
         intermediateNamespace = intermediateNamespace,
-        keepOtherNamespaces,
+        keepOtherNamespaces = true,
         requireMatch
     )
 }
