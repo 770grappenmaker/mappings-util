@@ -11,6 +11,11 @@ repositories {
 group = "com.grappenmaker"
 version = "0.1"
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
 kotlin {
     jvmToolchain(8)
     explicitApi()
