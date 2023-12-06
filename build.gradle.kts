@@ -12,7 +12,7 @@ repositories {
     mavenCentral()
 }
 
-group = "com.github.770grappenmaker"
+group = "com.grappenmaker"
 version = "0.1"
 
 kotlin {
@@ -39,6 +39,8 @@ dependencies {
 publishing {
     publications {
         create<MavenPublication>("lib") {
+            groupId = "io.github.770grappenmaker"
+
             artifact(dokkaAsJavadoc)
             from(components["java"])
             pom {
@@ -84,7 +86,11 @@ publishing {
             }
         }
 
-        mavenCentral()
+        maven {
+            name = "Central"
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials(PasswordCredentials::class)
+        }
     }
 }
 
