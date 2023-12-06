@@ -38,9 +38,7 @@ dependencies {
 
 publishing {
     publications {
-        create<MavenPublication>("lib") {
-            groupId = "io.github.770grappenmaker"
-
+        fun MavenPublication.setup() {
             artifact(dokkaAsJavadoc)
             from(components["java"])
             pom {
@@ -73,6 +71,13 @@ publishing {
                 }
             }
         }
+
+        create<MavenPublication>("central") {
+            groupId = "io.github.770grappenmaker"
+            setup()
+        }
+
+        create<MavenPublication>("packages", MavenPublication::setup)
     }
 
     repositories {
@@ -95,5 +100,5 @@ publishing {
 }
 
 signing {
-    sign(publishing.publications["lib"])
+    sign(publishing.publications)
 }
