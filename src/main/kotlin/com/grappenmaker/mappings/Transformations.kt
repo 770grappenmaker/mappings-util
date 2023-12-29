@@ -295,7 +295,7 @@ public fun Mappings.recoverFieldDescriptors(nodeProvider: (name: String) -> Clas
 )
 
 /**
- * See [recoverFieldDescs]. [file] is a jar file resource (caller is responsible for closing it) that contains the
+ * See [recoverFieldDescriptors]. [file] is a jar file resource (caller is responsible for closing it) that contains the
  * classes that are referenced in the generic overload.
  */
 public fun Mappings.recoverFieldDescriptors(file: JarFile): Mappings = recoverFieldDescriptors a@{
@@ -334,7 +334,7 @@ public fun Mappings.removeRedundancy(bytesProvider: (name: String) -> ByteArray?
 )
 
 /**
- * See [recoverFieldDescs]. [file] is a jar file resource (caller is responsible for closing it) that contains the
+ * See [removeRedundancy]. [file] is a jar file resource (caller is responsible for closing it) that contains the
  * classes that are referenced in the generic overload. Calls with identical names are being cached by this function,
  * the caller is not responsible for this.
  */

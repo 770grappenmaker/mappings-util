@@ -1,14 +1,28 @@
 package com.grappenmaker.mappings
 
+/**
+ * Represents either a TSRG v1 or a TSRG v2 mappings file, which does not have a definition anywhere.
+ * The serialization method of these mappings is governed by [isV2]
+ */
 public data class TSRGMappings(
     override val namespaces: List<String>,
     override val classes: List<MappedClass>,
     val isV2: Boolean
 ) : Mappings
 
+/**
+ * Writes [TSRGMappings] to a mappings file represented by a list of strings
+ */
 public fun TSRGMappings.write(): List<String> = (if (isV2) TSRGV2MappingsFormat else TSRGV1MappingsFormat).write(this)
 
+/**
+ * Represents the TSRG v1 mappings format
+ */
 public data object TSRGV1MappingsFormat : MappingsFormat<TSRGMappings> by TSRGMappingsFormat(false)
+
+/**
+ * Represents the TSRG v2 mappings format
+ */
 public data object TSRGV2MappingsFormat : MappingsFormat<TSRGMappings> by TSRGMappingsFormat(true)
 
 internal class TSRGMappingsFormat(private val isV2: Boolean) : MappingsFormat<TSRGMappings> {
