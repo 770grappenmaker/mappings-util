@@ -49,3 +49,13 @@ public fun Mappings.asASMMapping(
         if (includeMethods) clz.methods.forEach { put(it.index(owner, fromIndex), it.names[toIndex]) }
     }
 }
+
+/**
+ * Returns whether the methods represented by this [MappedMethod] is a data method, that is, if this method
+ * is [hashCode], [toString], [equals] or an initializer, like a constructor or init {} block
+ * (this means that the jvm names are <init> and <clinit>, respectively)
+ */
+public fun MappedMethod.isData(): Boolean = desc == "(Ljava/lang/Object;)Z" && names.first() == "equals" ||
+        desc == "()I" && names.first() == "hashCode" ||
+        desc == "()Ljava/lang/String;" && names.first() == "toString" ||
+        names.first() == "<init>" || names.first() == "<clinit>"

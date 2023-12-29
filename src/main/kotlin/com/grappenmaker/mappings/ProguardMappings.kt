@@ -8,6 +8,10 @@ import org.objectweb.asm.Type
  */
 public data class ProguardMappings(override val classes: List<MappedClass>) : Mappings {
     override val namespaces: List<String> = listOf("named", "official")
+
+    init {
+        assertValidDescs()
+    }
 }
 
 /**

@@ -44,7 +44,10 @@ public class AccessWideningVisitor(parent: ClassVisitor) : ClassVisitor(Opcodes.
 /**
  * A [ClassRemapper] that is aware of the remapping of Invoke Dynamic instructions for lambdas.
  */
-public class LambdaAwareRemapper(parent: ClassVisitor, remapper: Remapper) : ClassRemapper(Opcodes.ASM9, parent, remapper) {
+public open class LambdaAwareRemapper(
+    parent: ClassVisitor,
+    remapper: Remapper
+) : ClassRemapper(Opcodes.ASM9, parent, remapper) {
     override fun createMethodRemapper(parent: MethodVisitor): MethodRemapper =
         LambdaAwareMethodRemapper(parent, remapper)
 }
@@ -52,7 +55,7 @@ public class LambdaAwareRemapper(parent: ClassVisitor, remapper: Remapper) : Cla
 /**
  * A [MethodRemapper] that is aware of the remapping of Invoke Dynamic instructions for lambdas.
  */
-public class LambdaAwareMethodRemapper(
+public open class LambdaAwareMethodRemapper(
     private val parent: MethodVisitor,
     remapper: Remapper
 ) : MethodRemapper(Opcodes.ASM9, parent, remapper) {
@@ -130,25 +133,7 @@ public class MappingsRemapper(
         owner: String,
         name: String,
         applicator: (owner: String) -> String?
-    ): String {
-        val queue = ArrayDeque<String>()
-        val seen = hashSetOf<String>()
-        queue.addLast(owner)
-
-        while (queue.isNotEmpty()) {
-            val curr = queue.removeLast()
-            val new = applicator(curr)
-            if (new != null) return new
-
-            val bytes = loader(curr) ?: continue
-            val reader = ClassReader(bytes)
-
-            reader.superName?.let { if (seen.add(it)) queue.addLast(it) }
-            queue += reader.interfaces.filter { seen.add(it) }
-        }
-
-        return name
-    }
+    ) = walkInheritance(loader, owner).firstNotNullOfOrNull(applicator) ?: name
 
     /**
      * Returns a [MappingsRemapper] that reverses the changes of this [MappingsRemapper].
@@ -165,6 +150,7 @@ public class MappingsRemapper(
 /**
  * Remaps a .jar file [input] to an [output] file, using [mappings], between namespaces [from] and [to].
  * If inheritance info from classpath jars matters, you should pass all of the relevant [classpath] jars.
+ * If additional class processing is required, an additional [visitor] can be passed.
  */
 public fun remapJar(
     mappings: Mappings,
@@ -173,6 +159,7 @@ public fun remapJar(
     from: String = "official",
     to: String = "named",
     classpath: List<File> = listOf(),
+    visitor: ((parent: ClassVisitor) -> ClassVisitor)? = null,
 ) {
     val cache = hashMapOf<String, ByteArray?>()
     val jarsToUse = (classpath + input).map { JarFile(it) }
@@ -201,7 +188,7 @@ public fun remapJar(
             classes.forEach { entry ->
                 val reader = ClassReader(jar.getInputStream(entry).readBytes())
                 val writer = ClassWriter(reader, 0)
-                reader.accept(LambdaAwareRemapper(writer, remapper), 0)
+                reader.accept(LambdaAwareRemapper(visitor?.invoke(writer) ?: writer, remapper), 0)
 
                 write("${remapper.map(reader.className)}.class", writer.toByteArray())
             }

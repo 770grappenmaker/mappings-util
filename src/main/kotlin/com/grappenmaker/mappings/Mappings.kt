@@ -122,7 +122,7 @@ public object MappingsLoader {
     public val allMappingsFormats: List<MappingsFormat<*>> = listOf(
         TinyMappingsV1Format, TinyMappingsV2Format,
         SRGMappingsFormat, XSRGMappingsFormat,
-        ProguardMappingsFormat
+        ProguardMappingsFormat, TSRGV1MappingsFormat, TSRGV2MappingsFormat
     )
 
     /**
@@ -137,4 +137,11 @@ public object MappingsLoader {
      * invalid mappings sequence is provided (or not supported).
      */
     public fun loadMappings(lines: List<String>): Mappings = findMappingsFormat(lines).parse(lines)
+}
+
+internal fun Mappings.assertValidDescs() {
+    for (c in classes) for (f in c.fields) require(f.desc != null) {
+        "field descriptors are not allowed to be null in ${javaClass.simpleName}! Was null in field $f" +
+                "Consider calling recoverFieldDescriptors"
+    }
 }

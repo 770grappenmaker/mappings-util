@@ -23,19 +23,19 @@ public fun SRGMappings.asSimpleRemapper(): SimpleRemapper = asSimpleRemapper(nam
 public fun SRGMappings.write(): List<String> = (if (isExtended) XSRGMappingsFormat else SRGMappingsFormat).write(this)
 
 /**
- * Represents the XSRG mappings format
+ * Represents the SRG mappings format
  */
 public data object SRGMappingsFormat : MappingsFormat<SRGMappings> by BasicSRGParser(false)
 
 /**
- * Represents the SRG mappings format
+ * Represents the XSRG mappings format
  */
 public data object XSRGMappingsFormat : MappingsFormat<SRGMappings> by BasicSRGParser(true)
 
 internal class BasicSRGParser(private val isExtended: Boolean) : MappingsFormat<SRGMappings> {
     private val entryTypes = setOf("CL", "FD", "MD", "PK")
     override fun detect(lines: List<String>): Boolean {
-        if (!lines.all { it.substringBefore(':') in entryTypes }) return false
+        if (!lines.all { it.substringBefore(':') in entryTypes || it.isEmpty() }) return false
         return lines.find { it.startsWith("FD:") }?.let { l -> l.split(" ").size > 3 == isExtended } ?: true
     }
 

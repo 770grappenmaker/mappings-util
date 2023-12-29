@@ -8,7 +8,11 @@ public data class TinyMappings(
     override val namespaces: List<String>,
     override val classes: List<MappedClass>,
     val isV2: Boolean
-) : Mappings
+) : Mappings {
+    init {
+        assertValidDescs()
+    }
+}
 
 /**
  * Represents the Tiny v1 mappings format
@@ -28,7 +32,7 @@ public fun TinyMappings.write(): List<String> = (if (isV2) TinyMappingsV2Format 
 internal class TinyMappingsFormat(private val isV2: Boolean) : MappingsFormat<TinyMappings> {
     override fun detect(lines: List<String>): Boolean =
         lines.firstOrNull()?.parts()?.first() == (if (isV2) "tiny" else "v1") && (isV2 || lines.drop(1).all {
-            it.startsWith("CLASS") || it.startsWith("FIELD") || it.startsWith("METHOD")
+            it.startsWith("CLASS") || it.startsWith("FIELD") || it.startsWith("METHOD") || it.isEmpty()
         })
 
     // Quirk: empty name means take the last name
@@ -218,34 +222,53 @@ internal class TinyMappingsFormat(private val isV2: Boolean) : MappingsFormat<Ti
     private fun List<String>.indent() = map { "\t" + it }
     private fun List<String>.join() = joinToString("\t")
 
+    /**
+     * see [fixNames]
+     */
+    private fun List<String>.unfixNames(): List<String> {
+        if (isEmpty()) return emptyList()
+
+        val result = mutableListOf(first())
+        var last = first()
+
+        for (c in drop(1)) {
+            result += if (c == last) "" else {
+                last = c
+                c
+            }
+        }
+
+        return result
+    }
+
     override fun write(mappings: TinyMappings): List<String> {
         require(mappings.isV2 == isV2) { "tiny mappings versions do not match" }
 
         val header = (if (isV2) "tiny\t2\t0" else "v1") + "\t${mappings.namespaces.join()}"
         return listOf(header) + if (!isV2) {
-            val classesPart = mappings.classes.map { "CLASS\t${it.names.join()}" }
+            val classesPart = mappings.classes.map { "CLASS\t${it.names.unfixNames().join()}" }
             val methodsPart = mappings.classes.flatMap { c ->
                 c.methods.map {
-                    "METHOD\t${c.names.first()}\t${it.desc}\t${it.names.join()}"
+                    "METHOD\t${c.names.first()}\t${it.desc}\t${it.names.unfixNames().join()}"
                 }
             }
 
             val fieldsPart = mappings.classes.flatMap { c ->
                 c.fields.map {
-                    "FIELD\t${c.names.first()}\t${it.desc}\t${it.names.join()}"
+                    "FIELD\t${c.names.first()}\t${it.desc!!}\t${it.names.unfixNames().join()}"
                 }
             }
 
             classesPart + methodsPart + fieldsPart
         } else mappings.classes.flatMap { c ->
-            listOf("c\t${c.names.join()}") + (c.methods.flatMap { m ->
-                listOf("m\t${m.desc}\t${m.names.join()}") + (m.parameters.map {
-                    "p\t${it.index}\t${it.names.join()}"
+            listOf("c\t${c.names.unfixNames().join()}") + (c.methods.flatMap { m ->
+                listOf("m\t${m.desc}\t${m.names.unfixNames().join()}") + (m.parameters.map {
+                    "p\t${it.index}\t${it.names.unfixNames().join()}"
                 } + m.variables.map {
-                    "v\t${it.index}\t${it.startOffset}\t${it.lvtIndex}\t${it.names.join()}"
+                    "v\t${it.index}\t${it.startOffset}\t${it.lvtIndex}\t${it.names.unfixNames().join()}"
                 }).indent()
             } + c.fields.map {
-                "f\t${it.desc!!}\t${it.names.join()}"
+                "f\t${it.desc!!}\t${it.names.unfixNames().join()}"
             }).indent()
         }
     }

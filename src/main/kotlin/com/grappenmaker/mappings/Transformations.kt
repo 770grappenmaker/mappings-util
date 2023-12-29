@@ -1,4 +1,11 @@
+@file:OptIn(ExperimentalTypeInference::class)
+
 package com.grappenmaker.mappings
+
+import org.objectweb.asm.ClassReader
+import org.objectweb.asm.tree.ClassNode
+import java.util.jar.JarFile
+import kotlin.experimental.ExperimentalTypeInference
 
 /**
  * Transforms this [Mappings] structure to a generic mappings implementation that maps between [from] and [to].
@@ -87,43 +94,43 @@ public fun Mappings.reorderNamespaces(order: List<String>): Mappings {
 }
 
 /**
+ * Calculates the set of elements that are in [this] set but not in [other] and vice-versa
+ */
+private fun <T> Set<T>.disjointTo(other: Set<T>) = (this - other) + (other - this)
+
+/**
  * Joins together this [Mappings] with [otherMappings], by matching on [intermediateNamespace].
- * Creates mappings with namespaces [namespace], [intermediateNamespace], [otherNamespace], in that order.
- * At the end, it will also add on all the other namespaces, when [keepOtherNamespaces] is true.
- * The order in which it does this, is add the namespaces of this [Mappings] first, then [otherMappings].
- *
  * If [requireMatch] is true, this method will throw an exception when no method or field or class is found
  */
 public fun Mappings.join(
-    namespace: String,
     otherMappings: Mappings,
-    otherNamespace: String,
     intermediateNamespace: String,
-    keepOtherNamespaces: Boolean = false,
     requireMatch: Boolean = false,
 ): Mappings {
-    val firstId = namespace(namespace)
+    fun <T> Set<T>.assertEqual(other: Set<T>, name: String) {
+        val disjoint = disjointTo(other)
+        require(disjoint.isEmpty()) { "${disjoint.size} $name are missing (requireMatch)" }
+    }
+
     val firstIntermediaryId = namespace(intermediateNamespace)
     val secondIntermediaryId = otherMappings.namespace(intermediateNamespace)
-    val secondId = otherMappings.namespace(otherNamespace)
-    val bySecondName = otherMappings.classes.associateBy { it.names[secondIntermediaryId] }
+    val firstByName = classes.associateBy { it.names[firstIntermediaryId] }
+    val secondByName = otherMappings.classes.associateBy { it.names[secondIntermediaryId] }
 
-    val otherNamespaces = if (keepOtherNamespaces) {
-        val illegal = setOf(namespace, otherNamespace, intermediateNamespace)
-        (namespaces + otherMappings.namespaces).filterNot { it in illegal }.distinct()
-    } else emptyList()
+    if (requireMatch) firstByName.keys.assertEqual(secondByName.keys, "classes")
 
-    val firstExtraNames = otherNamespaces.mapNotNull { n -> namespaces.indexOf(n).takeIf { it != -1 } }
-    val secondExtraNames = otherNamespaces.mapNotNull { n -> otherMappings.namespaces.indexOf(n).takeIf { it != -1 } }
-    val orderedExtraNames = (firstExtraNames.map { namespaces[it] } +
-            secondExtraNames.map { otherMappings.namespaces[it] }).distinct()
+    val otherNamespaces = (namespaces + otherMappings.namespaces).filterNot { it == intermediateNamespace }.distinct()
+    val firstNs = otherNamespaces.mapNotNull { n -> namespaces.indexOf(n).takeIf { it != -1 } }
+    val secondNs = otherNamespaces.mapNotNull { n -> otherMappings.namespaces.indexOf(n).takeIf { it != -1 } }
+    val orderedNs = firstNs.map { namespaces[it] } +
+            intermediateNamespace +
+            secondNs.map { otherMappings.namespaces[it] }
 
-    fun <T : Mapped> T.updateNames(intermediateName: String, matching: T) =
-        listOf(names[firstId], intermediateName, matching.names[secondId]) +
-                firstExtraNames.map(names::get) + secondExtraNames.map(matching.names::get)
+    fun <T : Mapped> updateName(on: T?, intermediateName: String, ns: List<Int>) =
+        if (on != null) ns.map(on.names::get) else ns.map { intermediateName }
 
-    // Hack to not have to initialize <init> list every time we implement a missing <init> method mapping
-    val initNames = List(3 + firstExtraNames.size + secondExtraNames.size) { "<init>" }
+    fun <T : Mapped> updateNames(first: T?, intermediateName: String, second: T?) =
+        updateName(first, intermediateName, firstNs) + intermediateName + updateName(second, intermediateName, secondNs)
 
     val firstBaseRemapper = MappingsRemapper(
         mappings = this,
@@ -142,48 +149,63 @@ public fun Mappings.join(
     val finalizeRemapper = MappingsRemapper(
         mappings = this,
         from = namespaces.first(),
-        to = namespace,
+        to = orderedNs.first(),
         shouldRemapDesc = false
     ) { null }
 
-    return GenericMappings(
-        namespaces = listOf(namespace, intermediateNamespace, otherNamespace) + orderedExtraNames,
-        classes = classes.mapNotNull { originalClass ->
-            val intermediateName = originalClass.names[firstIntermediaryId]
-            val matching = bySecondName[intermediateName]
-                ?: if (requireMatch) error("No matching class found for ${originalClass.names}!")
-                else return@mapNotNull null
+    val classesToConsider = firstByName.keys + secondByName.keys
 
-            // Faster?
-            val fieldsByName = matching.fields.associateBy { it.names[secondIntermediaryId] }
-            val methodsBySig = matching.methods.associateBy {
+    return GenericMappings(
+        namespaces = orderedNs,
+        classes = classesToConsider.map { intermediateName ->
+            val firstClass = firstByName[intermediateName]
+            val secondClass = secondByName[intermediateName]
+
+            // TODO: DRY
+            val firstFieldsByName = firstClass?.fields?.associateBy { it.names[firstIntermediaryId] } ?: emptyMap()
+            val secondFieldsByName = secondClass?.fields?.associateBy { it.names[secondIntermediaryId] } ?: emptyMap()
+
+            val firstMethodsBySig = firstClass?.methods?.associateBy {
+                it.names[firstIntermediaryId] + firstBaseRemapper.mapMethodDesc(it.desc)
+            } ?: emptyMap()
+
+            val secondMethodsBySig = secondClass?.methods?.associateBy {
                 it.names[secondIntermediaryId] + secondBaseRemapper.mapMethodDesc(it.desc)
+            } ?: emptyMap()
+
+            if (requireMatch) {
+                firstFieldsByName.keys.assertEqual(secondFieldsByName.keys, "fields")
+                firstMethodsBySig.keys.assertEqual(secondMethodsBySig.keys, "methods")
             }
 
-            MappedClass(
-                names = originalClass.updateNames(intermediateName, matching),
-                comments = originalClass.comments + matching.comments,
-                fields = originalClass.fields.mapNotNull inside@{
-                    val intermediateFieldName = it.names[firstIntermediaryId]
-                    val matchingField = fieldsByName[intermediateFieldName]
-                        ?: if (requireMatch) error("No matching field found for ${it.names}!") else return@inside null
+            val fieldsToConsider = firstFieldsByName.keys + secondFieldsByName.keys
+            val methodsToConsider = firstMethodsBySig.keys + secondMethodsBySig.keys
 
-                    it.copy(
-                        names = it.updateNames(intermediateFieldName, matchingField),
-                        comments = it.comments + matchingField.comments,
-                        desc = it.desc?.let(finalizeRemapper::mapDesc)
+            MappedClass(
+                names = updateNames(firstClass, intermediateName, secondClass),
+                comments = (firstClass?.comments ?: emptyList()) + (secondClass?.comments ?: emptyList()),
+                fields = fieldsToConsider.map { intermediateFieldName ->
+                    val firstField = firstFieldsByName[intermediateFieldName]
+                    val secondField = secondFieldsByName[intermediateFieldName]
+
+                    MappedField(
+                        names = updateNames(firstField, intermediateFieldName, secondField),
+                        comments = (firstField?.comments ?: emptyList()) + (secondField?.comments ?: emptyList()),
+                        desc = (firstField ?: secondField)?.desc?.let(finalizeRemapper::mapDesc)
                     )
                 },
-                methods = originalClass.methods.filter { it.names.first() != "<clinit>" }.mapNotNull inside@{
-                    val intermediateMethodName = it.names[firstIntermediaryId]
-                    val matchingMethod = methodsBySig[intermediateMethodName + firstBaseRemapper.mapMethodDesc(it.desc)]
-                        ?: (if (intermediateMethodName == "<init>") return@inside it.copy(names = initNames) else null)
-                        ?: if (requireMatch) error("No matching method found for ${it.names}!") else return@inside null
+                methods = methodsToConsider.map { sig ->
+                    val intermediateMethodName = sig.substringBefore('(')
+                    val desc = sig.drop(intermediateMethodName.length)
+                    val firstMethod = firstMethodsBySig[sig]
+                    val secondMethod = secondMethodsBySig[sig]
 
-                    it.copy(
-                        names = it.updateNames(intermediateMethodName, matchingMethod),
-                        comments = it.comments + matchingMethod.comments,
-                        desc = finalizeRemapper.mapMethodDesc(it.desc)
+                    MappedMethod(
+                        names = updateNames(firstMethod, intermediateMethodName, secondMethod),
+                        comments = (firstMethod?.comments ?: emptyList()) + (secondMethod?.comments ?: emptyList()),
+                        desc = finalizeRemapper.mapMethodDesc(desc),
+                        parameters = emptyList(),
+                        variables = emptyList(),
                     )
                 }
             )
@@ -192,7 +214,7 @@ public fun Mappings.join(
 }
 
 /**
- * Joins together a list of [Mappings], but takes the first namespace as the target namespace for every [Mappings].
+ * Joins together a list of [Mappings].
  * Note: all namespaces are kept, in order to be able to reduce the mappings nicely without a lot of overhead.
  * If you want to exclude certain namespaces, use [Mappings.filterNamespaces]
  *
@@ -201,16 +223,7 @@ public fun Mappings.join(
 public fun List<Mappings>.join(
     intermediateNamespace: String,
     requireMatch: Boolean = false
-): Mappings = reduce { acc, curr ->
-    acc.join(
-        namespace = acc.namespaces.first(),
-        otherMappings = curr,
-        otherNamespace = curr.namespaces.first(),
-        intermediateNamespace = intermediateNamespace,
-        keepOtherNamespaces = true,
-        requireMatch
-    )
-}
+): Mappings = reduce { acc, curr -> acc.join(curr, intermediateNamespace, requireMatch) }
 
 /**
  * Filters these [Mappings] to only contain namespaces that are in [allowed]
@@ -220,8 +233,11 @@ public fun Mappings.filterNamespaces(vararg allowed: String): Mappings = filterN
 /**
  * Filters these [Mappings] to only contain namespaces that are in [allowed]
  */
-public fun Mappings.filterNamespaces(allowed: Set<String>): Mappings {
-    val indices = namespaces.indices.filter { namespaces[it] in allowed }
+public fun Mappings.filterNamespaces(allowed: Set<String>, allowDuplicates: Boolean = false): Mappings {
+    val indices = mutableListOf<Int>()
+    val seen = hashSetOf<String>()
+    namespaces.intersect(allowed).forEachIndexed { idx, n -> if (allowDuplicates || seen.add(n)) indices += idx }
+
     fun <T : Mapped> T.update() = indices.map(names::get)
 
     return GenericMappings(
@@ -234,4 +250,98 @@ public fun Mappings.filterNamespaces(allowed: Set<String>): Mappings {
             )
         }
     )
+}
+
+/**
+ * Removes all duplicate namespace usages in this [Mappings]
+ */
+public fun Mappings.deduplicateNamespaces(): Mappings = filterNamespaces(namespaces.toSet())
+
+/**
+ * Filters classes matching the [predicate]
+ */
+public inline fun Mappings.filterClasses(predicate: (MappedClass) -> Boolean): Mappings =
+    GenericMappings(namespaces, classes.filter(predicate))
+
+/**
+ * Maps classes according to the given [block]
+ */
+public inline fun Mappings.mapClasses(block: (MappedClass) -> MappedClass): Mappings =
+    GenericMappings(namespaces, classes.map(block))
+
+/**
+ * Attempts to recover field descriptors that are missing because the original mappings format did not specify them.
+ * [bytesProvider] is responsible for providing all of the classes that might be referenced in this [Mappings] object,
+ * such that the descriptors can be recovered based on named (fields can be uniquely identified by an owner-name pair).
+ */
+@OverloadResolutionByLambdaReturnType
+public fun Mappings.recoverFieldDescriptors(bytesProvider: (name: String) -> ByteArray?): Mappings =
+    recoverFieldDescriptors { name ->
+        bytesProvider(name)?.let { b -> ClassNode().also { ClassReader(b).accept(it, 0) } }
+    }
+
+@JvmName("recoverDescsByNode")
+@OverloadResolutionByLambdaReturnType
+public fun Mappings.recoverFieldDescriptors(nodeProvider: (name: String) -> ClassNode?): Mappings = GenericMappings(
+    namespaces,
+    classes.map { oc ->
+        val node by lazy { nodeProvider(oc.names.first()) }
+        val fieldsByName by lazy { node?.fields?.associateBy { it.name } ?: emptyMap() }
+
+        oc.copy(fields = oc.fields.mapNotNull { of ->
+            of.copy(desc = of.desc ?: (fieldsByName[of.names.first()]?.desc ?: return@mapNotNull null))
+        })
+    }
+)
+
+/**
+ * See [recoverFieldDescs]. [file] is a jar file resource (caller is responsible for closing it) that contains the
+ * classes that are referenced in the generic overload.
+ */
+public fun Mappings.recoverFieldDescriptors(file: JarFile): Mappings = recoverFieldDescriptors a@{
+    file.getInputStream(file.getJarEntry("$it.class") ?: return@a null).readBytes()
+}
+
+/**
+ * Removes redundant or straight up incorrect data from this [Mappings] object, by looking at the inheritance
+ * information present in class files, presented by the [bytesProvider].
+ *
+ * Redundant information is one of the following:
+ * - Overloads are given a mapping again. Since overloads share the same name, they cannot have different info,
+ * therefore this information is duplicate.
+ * - Abstract methods are populated to interfaces (this can happen when using proguard mappings). This is usually
+ * straight up wrong information, when a mapped method entry is not present on the actual class.
+ * - a method being a data method ([MappedMethod.isData])
+ */
+public fun Mappings.removeRedundancy(bytesProvider: (name: String) -> ByteArray?): Mappings = GenericMappings(
+    namespaces,
+    classes.map { oc ->
+        val name = oc.names.first()
+        val ourSigs = hashSetOf<String>()
+        val superSigs = hashSetOf<String>()
+
+        walkInheritance(bytesProvider, name).forEach { curr ->
+            val target = if (curr == name) ourSigs else superSigs
+            bytesProvider(curr)?.let { b -> ClassNode().also { ClassReader(b).accept(it, 0) } }
+                ?.methods?.forEach { m -> target += "${m.name}${m.desc}" }
+        }
+
+        oc.copy(methods = oc.methods.filter {
+            val sig = "${it.names.first()}${it.desc}"
+            sig in ourSigs && sig !in superSigs && !it.isData()
+        })
+    }
+)
+
+/**
+ * See [recoverFieldDescs]. [file] is a jar file resource (caller is responsible for closing it) that contains the
+ * classes that are referenced in the generic overload. Calls with identical names are being cached by this function,
+ * the caller is not responsible for this.
+ */
+public fun Mappings.removeRedundancy(file: JarFile): Mappings {
+    val cache = hashMapOf<String, ByteArray?>()
+
+    return removeRedundancy a@{
+        cache.getOrPut(it) { file.getInputStream(file.getJarEntry("$it.class") ?: return@a null).readBytes() }
+    }
 }
