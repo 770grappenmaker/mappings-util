@@ -236,7 +236,7 @@ public fun Mappings.filterNamespaces(vararg allowed: String): Mappings = filterN
 public fun Mappings.filterNamespaces(allowed: Set<String>, allowDuplicates: Boolean = false): Mappings {
     val indices = mutableListOf<Int>()
     val seen = hashSetOf<String>()
-    namespaces.intersect(allowed).forEachIndexed { idx, n -> if (allowDuplicates || seen.add(n)) indices += idx }
+    namespaces.forEachIndexed { idx, n -> if (n in allowed && (allowDuplicates || seen.add(n))) indices += idx }
 
     fun <T : Mapped> T.update() = indices.map(names::get)
 
