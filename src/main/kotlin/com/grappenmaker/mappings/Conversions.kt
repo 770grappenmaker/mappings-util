@@ -25,3 +25,8 @@ public fun Mappings.asTinyMappings(v2: Boolean): TinyMappings = TinyMappings(nam
  * Converts these [Mappings] to [TSRGMappings], enabling TSRG v2 when [v2] is true.
  */
 public fun Mappings.asTSRGMappings(v2: Boolean): TSRGMappings = TSRGMappings(namespaces, classes, v2)
+
+/**
+ * Converts these [Mappings] to [CompactedMappings].
+ */
+public fun Mappings.asCompactedMappings(): CompactedMappings = CompactedMappings(namespaces, classes)
