@@ -149,7 +149,7 @@ public class MappingsRemapper(
 
 /**
  * Remaps a .jar file [input] to an [output] file, using [mappings], between namespaces [from] and [to].
- * If inheritance info from classpath jars matters, you should pass all of the relevant [classpath] jars.
+ * If inheritance info from external sources matters, you should pass a classpath [loader].
  * If additional class processing is required, an additional [visitor] can be passed.
  */
 public fun remapJar(
@@ -158,42 +158,57 @@ public fun remapJar(
     output: File,
     from: String = "official",
     to: String = "named",
-    classpath: List<File> = listOf(),
-    visitor: ((parent: ClassVisitor) -> ClassVisitor)? = null,
-) {
-    val cache = hashMapOf<String, ByteArray?>()
-    val jarsToUse = (classpath + input).map { JarFile(it) }
-    val lookup = jarsToUse.flatMap { j ->
-        j.entries().asSequence().filter { it.name.endsWith(".class") }
-            .map { it.name.dropLast(6) to { j.getInputStream(it).readBytes() } }
-    }.toMap()
+    loader: ((name: String) -> ByteArray?) = { null },
+    visitor: ((parent: ClassVisitor) -> ClassVisitor) = { it },
+): Unit = JarFile(input).use { jar ->
+    val commonCache = mutableMapOf<String, ByteArray?>()
 
-    JarFile(input).use { jar ->
-        JarOutputStream(output.outputStream()).use { out ->
-            val (classes, resources) = jar.entries().asSequence().partition { it.name.endsWith(".class") }
+    JarOutputStream(output.outputStream()).use { out ->
+        val (classes, resources) = jar.entries().asSequence().partition { it.name.endsWith(".class") }
 
-            fun write(name: String, bytes: ByteArray) {
-                out.putNextEntry(JarEntry(name))
-                out.write(bytes)
-            }
+        fun write(name: String, bytes: ByteArray) {
+            out.putNextEntry(JarEntry(name))
+            out.write(bytes)
+        }
 
-            resources.filterNot { it.name.endsWith(".RSA") || it.name.endsWith(".SF") }
-                .forEach { write(it.name, jar.getInputStream(it).readBytes()) }
+        resources.filterNot { it.name.endsWith(".RSA") || it.name.endsWith(".SF") }
+            .forEach { write(it.name, jar.getInputStream(it).readBytes()) }
 
-            val remapper = MappingsRemapper(
-                mappings, from, to,
-                loader = { name -> if (name in lookup) cache.getOrPut(name) { lookup.getValue(name)() } else null }
-            )
+        val remapper = MappingsRemapper(
+            mappings, from, to,
+            loader = ClasspathLoaders.compound(ClasspathLoaders.fromJars(listOf(jar)).memoizedTo(commonCache), loader)
+        )
 
-            classes.forEach { entry ->
-                val reader = ClassReader(jar.getInputStream(entry).readBytes())
-                val writer = ClassWriter(reader, 0)
-                reader.accept(LambdaAwareRemapper(visitor?.invoke(writer) ?: writer, remapper), 0)
+        classes.forEach { entry ->
+            val original = jar.getInputStream(entry).readBytes().also { commonCache[entry.name.dropLast(6)] = it }
+            val reader = ClassReader(original)
+            val writer = ClassWriter(reader, 0)
+            reader.accept(LambdaAwareRemapper(visitor(writer), remapper), 0)
 
-                write("${remapper.map(reader.className)}.class", writer.toByteArray())
-            }
+            write("${remapper.map(reader.className)}.class", writer.toByteArray())
         }
     }
+}
 
-    jarsToUse.forEach { it.close() }
+/**
+ * This function provides a shorthand for [remapJar] when using physical [files] representing a classpath,
+ * and also takes cares of delegating to the system loader if necessary.
+ */
+public fun remapJar(
+    mappings: Mappings,
+    input: File,
+    output: File,
+    from: String = "official",
+    to: String = "named",
+    files: List<File>,
+    visitor: ((parent: ClassVisitor) -> ClassVisitor) = { it },
+) {
+    val jars = files.map(::JarFile)
+    val loader = ClasspathLoaders.compound(
+        ClasspathLoaders.fromSystemLoader(),
+        ClasspathLoaders.fromJars(jars).memoized()
+    )
+
+    remapJar(mappings, input, output, from, to, loader, visitor)
+    jars.forEach { it.close() }
 }

@@ -13,7 +13,7 @@ repositories {
 }
 
 group = "com.grappenmaker"
-version = "0.1.2"
+version = "0.1.3"
 
 kotlin {
     jvmToolchain(8)
