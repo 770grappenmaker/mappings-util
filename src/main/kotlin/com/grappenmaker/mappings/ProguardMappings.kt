@@ -1,6 +1,7 @@
 package com.grappenmaker.mappings
 
 import org.objectweb.asm.Type
+import java.net.URL
 
 /**
  * Represents Proguard debug deobfuscation mappings. Note that Proguard only supports two mappings namespaces.

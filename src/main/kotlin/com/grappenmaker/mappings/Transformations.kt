@@ -3,6 +3,7 @@
 package com.grappenmaker.mappings
 
 import org.objectweb.asm.ClassReader
+import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.ClassNode
 import java.util.jar.JarFile
 import kotlin.experimental.ExperimentalTypeInference
@@ -322,12 +323,19 @@ public fun Mappings.removeRedundancy(bytesProvider: (name: String) -> ByteArray?
 
         walkInheritance(bytesProvider, name).forEach { curr ->
             val target = if (curr == name) ourSigs else superSigs
-            bytesProvider(curr)?.let { b -> ClassNode().also { ClassReader(b).accept(it, 0) } }
-                ?.methods?.forEach { m -> target += "${m.name}${m.desc}" }
+            val bytes = bytesProvider(curr)
+
+            if (bytes != null) {
+                val methods = ClassNode().also { ClassReader(bytes).accept(it, 0) }.methods
+                val toConsider = if (curr == name) methods
+                else methods.filter { it.access and Opcodes.ACC_PRIVATE == 0 }
+
+                target += toConsider.map { it.name + it.desc }
+            }
         }
 
         oc.copy(methods = oc.methods.filter {
-            val sig = "${it.names.first()}${it.desc}"
+            val sig = it.names.first() + it.desc
             sig in ourSigs && sig !in superSigs && !it.isData()
         })
     }

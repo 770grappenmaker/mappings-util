@@ -53,7 +53,7 @@ public fun Mappings.asASMMapping(
 /**
  * Returns whether the methods represented by this [MappedMethod] is a data method, that is, if this method
  * is [hashCode], [toString], [equals] or an initializer, like a constructor or init {} block
- * (this means that the jvm names are <init> and <clinit>, respectively)
+ * (this means that the jvm names are &lt;init&gt; and &lt;clinit&gt;, respectively)
  */
 public fun MappedMethod.isData(): Boolean = desc == "(Ljava/lang/Object;)Z" && names.first() == "equals" ||
         desc == "()I" && names.first() == "hashCode" ||
