@@ -109,7 +109,10 @@ public class MappingsRemapper(
         MappingsRemapper(mappings, from, mappings.namespaces.first(), shouldRemapDesc = false, loader)
     }
 
-    override fun map(internalName: String): String = map[internalName] ?: internalName
+    override fun map(internalName: String): String = map[internalName] ?: if ('$' in internalName) {
+        map(internalName.substringBefore('$')) + '$' + internalName.substringAfter('$')
+    } else internalName
+
     override fun mapMethodName(owner: String, name: String, desc: String): String {
         if (name == "<init>" || name == "<clinit>") return name
 
@@ -159,7 +162,7 @@ public fun remapJar(
     from: String = "official",
     to: String = "named",
     loader: ((name: String) -> ByteArray?) = { null },
-    visitor: ((parent: ClassVisitor) -> ClassVisitor) = { it },
+    visitor: ((parent: ClassVisitor) -> ClassVisitor)? = null,
 ): Unit = JarFile(input).use { jar ->
     val commonCache = mutableMapOf<String, ByteArray?>()
 
@@ -183,9 +186,25 @@ public fun remapJar(
             val original = jar.getInputStream(entry).readBytes().also { commonCache[entry.name.dropLast(6)] = it }
             val reader = ClassReader(original)
             val writer = ClassWriter(reader, 0)
-            reader.accept(LambdaAwareRemapper(visitor(writer), remapper), 0)
 
-            write("${remapper.map(reader.className)}.class", writer.toByteArray())
+            var writtenName = remapper.map(reader.className)
+            val inner = if (visitor != null) object : ClassVisitor(Opcodes.ASM9, writer) {
+                override fun visit(
+                    version: Int,
+                    access: Int,
+                    name: String,
+                    signature: String?,
+                    superName: String?,
+                    interfaces: Array<String>?
+                ) {
+                    writtenName = name
+                    super.visit(version, access, name, signature, superName, interfaces)
+                }
+            } else writer
+
+            val outer = if (visitor != null) visitor(inner) else inner
+            reader.accept(LambdaAwareRemapper(outer, remapper), 0)
+            write("$writtenName.class", writer.toByteArray())
         }
     }
 }

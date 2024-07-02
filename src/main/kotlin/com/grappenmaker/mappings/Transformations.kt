@@ -52,24 +52,17 @@ public fun Mappings.renameNamespaces(to: List<String>): Mappings {
 public fun Mappings.renameNamespaces(vararg to: String): Mappings = renameNamespaces(to.toList())
 
 /**
- * Swaps out the names for the namespaces in this [Mappings] data structure, by reordering. All names in [order] should
- * appear in the [Mappings.namespaces]. Duplicate names are allowed.
+ * Swaps out the names for the namespaces in this [Mappings] data structure, by reordering. Duplicate names are allowed.
  */
 public fun Mappings.reorderNamespaces(vararg order: String): Mappings = reorderNamespaces(order.toList())
 
 /**
- * Swaps out the names for the namespaces in this [Mappings] data structure, by reordering. All names in [order] should
- * appear in the [Mappings.namespaces]. Duplicate names are allowed.
+ * Swaps out the names for the namespaces in this [Mappings] data structure, by reordering. Duplicate names are allowed,
+ * in which case mapped entries are duplicated to fit the new [order]. If a name in [Mappings.namespaces] does not
+ * appear in [order], its mapping entries will be missing in the returned [Mappings].
  */
 public fun Mappings.reorderNamespaces(order: List<String>): Mappings {
-    require(order.size == namespaces.size) { "namespace length does not match" }
-
-    val indices = order.map {
-        namespaces.indexOf(it).also { i ->
-            require(i != -1) { "Namespace $it missing in namespaces: $namespaces" }
-        }
-    }
-
+    val indices = order.map { namespaces.indexOf(it) }
     val remapper = MappingsRemapper(this, namespaces.first(), order.first()) { null }
 
     return GenericMappings(

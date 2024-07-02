@@ -1,0 +1,7 @@
+tiny	2	0	official	named
+c	a	Main
+	f	Ld;	b	state
+	m	()Le;	c	action
+	m	()Le;	d	anotherAction
+c	d	SomeState
+c	e	SomeOtherState

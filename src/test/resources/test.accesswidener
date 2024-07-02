@@ -1,0 +1,6 @@
+accessWidener	v2	official
+accessible	class	a
+mutable	field	a	b	Ld;
+extendable	method	a	c	()Le; # this comment is ignored
+accessible	method	a	c	()Le;
+extendable	method	a	d	()Le;

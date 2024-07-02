@@ -17,19 +17,21 @@ public data class TinyMappings(
 /**
  * Represents the Tiny v1 mappings format
  */
-public data object TinyMappingsV1Format : MappingsFormat<TinyMappings> by TinyMappingsFormat(false)
+public data object TinyMappingsV1Format : TinyMappingsWriter by TinyMappingsFormat(false)
 
 /**
  * Represents the Tiny v2 mappings format
  */
-public data object TinyMappingsV2Format : MappingsFormat<TinyMappings> by TinyMappingsFormat(true)
+public data object TinyMappingsV2Format : TinyMappingsWriter by TinyMappingsFormat(true)
 
 /**
- * Writes [TinyMappings] to a mappings file represented by a list of strings
+ * Writes [TinyMappings] to a mappings file represented by a list of strings. If [compact] is set, a more compact
+ * format of tiny mappings will be used, see [TinyMappingsWriter.write].
  */
-public fun TinyMappings.write(): List<String> = (if (isV2) TinyMappingsV2Format else TinyMappingsV1Format).write(this)
+public fun TinyMappings.write(compact: Boolean = isV2): List<String> =
+    (if (isV2) TinyMappingsV2Format else TinyMappingsV1Format).write(this, compact)
 
-internal class TinyMappingsFormat(private val isV2: Boolean) : MappingsFormat<TinyMappings> {
+internal class TinyMappingsFormat(private val isV2: Boolean) : MappingsFormat<TinyMappings>, TinyMappingsWriter {
     override fun detect(lines: List<String>): Boolean =
         lines.firstOrNull()?.parts()?.first() == (if (isV2) "tiny" else "v1") && (isV2 || lines.drop(1).all {
             it.startsWith("CLASS") || it.startsWith("FIELD") || it.startsWith("METHOD") || it.isEmpty()
@@ -222,26 +224,7 @@ internal class TinyMappingsFormat(private val isV2: Boolean) : MappingsFormat<Ti
     private fun List<String>.indent() = map { "\t" + it }
     private fun List<String>.join() = joinToString("\t")
 
-    /**
-     * see [fixNames]
-     */
-    private fun List<String>.unfixNames(): List<String> {
-        if (isEmpty()) return emptyList()
-
-        val result = mutableListOf(first())
-        var last = first()
-
-        for (c in drop(1)) {
-            result += if (c == last) "" else {
-                last = c
-                c
-            }
-        }
-
-        return result
-    }
-
-    override fun write(mappings: TinyMappings): List<String> {
+    override fun TinyMappingsWriter.Context.write(): List<String> {
         require(mappings.isV2 == isV2) { "tiny mappings versions do not match" }
 
         val header = (if (isV2) "tiny\t2\t0" else "v1") + "\t${mappings.namespaces.join()}"
@@ -272,4 +255,47 @@ internal class TinyMappingsFormat(private val isV2: Boolean) : MappingsFormat<Ti
             }).indent()
         }
     }
+}
+
+/**
+ * Convenience interface for parameterizing writing tiny mappings
+ */
+public interface TinyMappingsWriter : MappingsFormat<TinyMappings> {
+    /**
+     * Writes some tiny mappings represented by a [Context] to a file
+     */
+    public fun Context.write(): List<String>
+
+    /**
+     * Writes tiny mappings represented by [mappings] to a file, using a compact format if [compact] is set.
+     */
+    public fun write(mappings: TinyMappings, compact: Boolean): List<String> = Context(mappings, compact).write()
+
+    /**
+     * Context for writing [TinyMappings], see [write]. If [compact] is set, a more compact format will be used,
+     * which is unsupported by mappings-io but supported by tiny-mappings-parser and this library.
+     */
+    public data class Context(val mappings: TinyMappings, val compact: Boolean) {
+        /**
+         * see [fixNames]
+         */
+        internal fun List<String>.unfixNames(): List<String> {
+            if (!compact) return this
+            if (isEmpty()) return emptyList()
+
+            val result = mutableListOf(first())
+            var last = first()
+
+            for (c in drop(1)) {
+                result += if (c == last) "" else {
+                    last = c
+                    c
+                }
+            }
+
+            return result
+        }
+    }
+
+    override fun write(mappings: TinyMappings): List<String> = Context(mappings, mappings.isV2).write()
 }

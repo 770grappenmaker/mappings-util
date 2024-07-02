@@ -1,0 +1,6 @@
+accessWidener	v2	named
+accessible	class	Main
+mutable	field	Main	state	LSomeState;
+extendable	method	Main	anotherAction	()LSomeOtherState;
+extendable	method	Main	action	()LSomeOtherState;
+accessible	method	Main	action	()LSomeOtherState;

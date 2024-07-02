@@ -1,8 +1,8 @@
 import org.jetbrains.dokka.gradle.DokkaTask
 
 plugins {
-    kotlin("jvm")
-    id("org.jetbrains.dokka")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.dokka)
     `maven-publish`
     `java-library`
     signing
@@ -13,7 +13,7 @@ repositories {
 }
 
 group = "com.grappenmaker"
-version = "0.1.4"
+version = "0.1.5"
 
 kotlin {
     jvmToolchain(8)
@@ -32,8 +32,8 @@ java {
 }
 
 dependencies {
-    api("org.ow2.asm:asm:9.6")
-    api("org.ow2.asm:asm-commons:9.6")
+    api(libs.bundles.asm)
+    testImplementation(kotlin("test"))
 }
 
 publishing {
@@ -101,4 +101,13 @@ publishing {
 
 signing {
     sign(publishing.publications)
+}
+
+tasks {
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events("passed")
+        }
+    }
 }

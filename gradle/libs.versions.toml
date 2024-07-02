@@ -1,0 +1,15 @@
+[versions]
+kotlin = "2.0.0"
+dokka = "1.9.20"
+asm = "9.7"
+
+[libraries]
+asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
+asm-commons = { module = "org.ow2.asm:asm-commons", version.ref = "asm" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+
+[bundles]
+asm = [ "asm", "asm-commons" ]
