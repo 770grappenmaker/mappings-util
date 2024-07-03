@@ -1,4 +1,5 @@
 import org.jetbrains.dokka.gradle.DokkaTask
+import java.net.URL
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -20,10 +21,10 @@ kotlin {
     explicitApi()
 }
 
-val dokkaHtml by tasks.getting(DokkaTask::class)
+val dokkaJavadoc by tasks.getting(DokkaTask::class)
 val dokkaAsJavadoc by tasks.registering(Jar::class) {
-    dependsOn(dokkaHtml)
-    from(dokkaHtml.outputDirectory)
+    dependsOn(dokkaJavadoc)
+    from(dokkaJavadoc.outputDirectory)
     archiveClassifier.set("javadoc")
 }
 
@@ -108,6 +109,23 @@ tasks {
         useJUnitPlatform()
         testLogging {
             events("passed")
+        }
+    }
+
+    withType<DokkaTask>().configureEach {
+        dokkaSourceSets.configureEach {
+            sourceLink {
+                localDirectory = rootDir
+                remoteUrl = URL("https://github.com/770grappenmaker/mappings-util/tree/main")
+                remoteLineSuffix = "#L"
+            }
+
+            includes.from("dokka-module.md")
+
+            externalDocumentationLink {
+                url = URL("https://asm.ow2.io/javadoc/")
+                packageListUrl = project.layout.projectDirectory.file("asm.package-list").asFile.toURI().toURL()
+            }
         }
     }
 }

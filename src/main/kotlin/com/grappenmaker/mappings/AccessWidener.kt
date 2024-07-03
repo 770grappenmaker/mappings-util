@@ -12,11 +12,21 @@ import org.objectweb.asm.tree.MethodInsnNode
 
 /**
  * Represents a field or method that is being widened
+ *
+ * @property owner The internal/JVMS name of the owner of the represented member
+ * @property name The name of the represented member
+ * @property desc The descriptor of the represented member
  */
 public data class AccessedMember(val owner: String, val name: String, val desc: String)
 
 /**
  * Represents an access widener file
+ *
+ * @property version The version (part of the file format but undocumented elsewhere) of the file
+ * @property namespace The namespace the names of the members in this file are in
+ * @property classes All masks for each "touched" class in the file
+ * @property methods All masks for each "touched" method in the file
+ * @property fields All masks for each "touched" field in the file
  */
 public data class AccessWidener(
     val version: Int,
@@ -28,22 +38,48 @@ public data class AccessWidener(
 
 /**
  * A bitmask representing a set of [AccessType]s
+ *
+ * @property value The integer value representing this mask
  */
 @JvmInline
 public value class AccessMask(public val value: Int) : Iterable<AccessType> {
+    /**
+     * Combines this [AccessMask] and [other] to produce a new [AccessMask] that can be interpreted as first applying
+     * this [AccessMask] and then the [other].
+     */
     public operator fun plus(other: AccessMask?): AccessMask =
         if (other == null) this else AccessMask(value or other.value)
 
+    /**
+     * Combines this [AccessMask] and [other] to produce a new [AccessMask] that can be interpreted as first applying
+     * this [AccessMask] and then the [other] [AccessType].
+     */
     public operator fun plus(other: AccessType?): AccessMask =
         if (other == null) this else AccessMask(value or other.mask)
 
+    /**
+     * Excludes all set [AccessType]s in the [other] [AccessMask] from this [AccessMask], producing a new [AccessMask]
+     * that therefore contains all [AccessType]s in this [AccessMask] that are not in the [other] [AccessMask]
+     */
     public operator fun minus(other: AccessMask?): AccessMask =
         if (other == null) this else AccessMask(value and other.value.inv())
 
+    /**
+     * Removes an [AccessType] from this [AccessMask], producing a new [AccessMask] that therefore contains all
+     * [AccessType]s in this [AccessMask] that are not equal to [other]. If [other] is not in this [AccessMask],
+     * an identical [AccessMask] will be returned.
+     */
     public operator fun minus(other: AccessType?): AccessMask =
         if (other == null) this else AccessMask(value and other.mask.inv())
 
+    /**
+     * Tests whether a given [AccessType] is contained in this [AccessMask]
+     */
     public operator fun contains(type: AccessType): Boolean = (value and type.mask) != 0
+
+    /**
+     * Returns an [Iterator] that yields all [AccessType]s in this [AccessMask]
+     */
     override fun iterator(): Iterator<AccessType> = iterator {
         AccessType.entries.forEach { if (it in this@AccessMask) yield(it) }
     }
@@ -61,10 +97,30 @@ public fun Iterable<AccessMask>.join(): AccessMask = reduce { acc, curr -> acc +
 
 /**
  * A type of access that can be "widened" on a class, field or method
+ *
+ * @property mask The value that is equivalent to an [AccessMask] as an integer instead of a value class
  */
 public enum class AccessType(public val mask: Int) {
-    ACCESSIBLE(0b001), EXTENDABLE(0b010), MUTABLE(0b100);
+    /**
+     * Means that a member should be made accessible / public
+     */
+    ACCESSIBLE(0b001),
 
+    /**
+     * Means that a method or class should be made non-final and overridable/extendable. Invalid on fields.
+     */
+    EXTENDABLE(0b010),
+
+    /**
+     * Means that a field should be made non-final (mutable). Invalid on classes and methods.
+     * Note: there is no reason for the mappings format to merge this and [EXTENDABLE] to fix the incompatibility
+     * and simplify the format a little, it just is not the case.
+     */
+    MUTABLE(0b100);
+
+    /**
+     * Allows for easy lookup of [AccessType]s by a given [String]
+     */
     public companion object {
         /**
          * Returns an [AccessType] associated with a given [name], throws [IllegalArgumentException] when [name] is
@@ -197,6 +253,9 @@ public fun AccessWidener.write(): List<String> = buildList {
 
 /**
  * A tree-like structure that is easier to use when access widening one or more classes
+ *
+ * @property namespace The namespace the names of the members in this tree are in
+ * @property classes All of the "touched" classes for each internal/JVMS class name
  */
 public data class AccessWidenerTree(
     val namespace: String,
@@ -205,11 +264,20 @@ public data class AccessWidenerTree(
 
 /**
  * Similar to [AccessedMember], but without an `owner` field. Used in an [AccessedClass]
+ *
+ * @property name The name of the represented member
+ * @property desc The descriptor of the represented member
  */
 public data class MemberIdentifier(val name: String, val desc: String)
 
 /**
  * Part of an [AccessWidenerTree]
+ *
+ * @property mask The mask that was configured for this class
+ * @property methods All of the "touched" methods for each name-descriptor pair
+ * @property fields All of the "touched" fields for each name-descriptor pair
+ * @property propagated A mask of [AccessType]s that are propagated down to the class as a result of wideners in members
+ * @property total The mask that should be applied to this class
  */
 public data class AccessedClass(
     val mask: AccessMask,

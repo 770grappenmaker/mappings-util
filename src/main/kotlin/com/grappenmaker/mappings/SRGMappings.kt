@@ -5,6 +5,8 @@ import org.objectweb.asm.commons.SimpleRemapper
 /**
  * Represent any type of SRG mappings, whether this data structure represents XSRG or regular SRG is governed
  * by [isExtended].
+ *
+ * @property isExtended whether this is an extended SRG mappings file (XSRG)
  */
 public data class SRGMappings(override val classes: List<MappedClass>, val isExtended: Boolean) : Mappings {
     override val namespaces: List<String> = listOf("official", "named")

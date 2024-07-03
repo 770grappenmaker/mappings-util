@@ -267,13 +267,22 @@ public inline fun Mappings.mapClasses(block: (MappedClass) -> MappedClass): Mapp
  * Attempts to recover field descriptors that are missing because the original mappings format did not specify them.
  * [bytesProvider] is responsible for providing all of the classes that might be referenced in this [Mappings] object,
  * such that the descriptors can be recovered based on named (fields can be uniquely identified by an owner-name pair).
+ * When field descriptors were not found, field mappings will not be passed onto the new [Mappings] as field mappings
+ * without descriptors will be considered invalid.
  */
 @OverloadResolutionByLambdaReturnType
-public fun Mappings.recoverFieldDescriptors(bytesProvider: (name: String) -> ByteArray?): Mappings =
+public fun Mappings.recoverFieldDescriptors(bytesProvider: ClasspathLoader): Mappings =
     recoverFieldDescriptors { name ->
         bytesProvider(name)?.let { b -> ClassNode().also { ClassReader(b).accept(it, 0) } }
     }
 
+/**
+ * Attempts to recover field descriptors that are missing because the original mappings format did not specify them.
+ * [nodeProvider] is responsible for providing all of the [ClassNode]s that might be referenced in this [Mappings] object,
+ * such that the descriptors can be recovered based on named (fields can be uniquely identified by an owner-name pair).
+ * When field descriptors were not found, field mappings will not be passed onto the new [Mappings] as field mappings
+ * without descriptors will be considered invalid.
+ */
 @JvmName("recoverDescsByNode")
 @OverloadResolutionByLambdaReturnType
 public fun Mappings.recoverFieldDescriptors(nodeProvider: (name: String) -> ClassNode?): Mappings = GenericMappings(

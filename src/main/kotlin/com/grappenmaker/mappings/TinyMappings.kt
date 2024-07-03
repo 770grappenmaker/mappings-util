@@ -2,7 +2,9 @@ package com.grappenmaker.mappings
 
 /**
  * Represents either a tiny v1 or a tiny v2 mappings file, which does not have a definition anywhere.
- * The serialization method of these mappings is governed by [isV2].
+ * The serialization method of these mappings is governed by [isV2]
+ *
+ * @property isV2 whether this mappings file is Tiny version 2.
  */
 public data class TinyMappings(
     override val namespaces: List<String>,
@@ -195,11 +197,9 @@ internal class TinyMappingsFormat(private val isV2: Boolean) : MappingsFormat<Ti
                 }
 
                 "v" -> {
-                    val (idx, offset, lvtIndex) = parts.take(3).map {
-                        it.toIntOrNull() ?: error("Invalid index $it for local")
-                    }
-
-                    locals += MappedLocal(idx, offset, lvtIndex, parts.drop(3))
+                    val (idx, offset) = parts.take(2).map { it.toIntOrNull() ?: error("Invalid index $it for local") }
+                    val lvtIndex = parts.getOrNull(2)?.toIntOrNull()
+                    locals += MappedLocal(idx, offset, lvtIndex ?: -1, parts.drop(if (lvtIndex != null) 3 else 2))
                 }
 
                 else -> error("Illegal type in method $type")
@@ -274,6 +274,9 @@ public interface TinyMappingsWriter : MappingsFormat<TinyMappings> {
     /**
      * Context for writing [TinyMappings], see [write]. If [compact] is set, a more compact format will be used,
      * which is unsupported by mappings-io but supported by tiny-mappings-parser and this library.
+     *
+     * @property mappings the mappings that will be written by this [Context]
+     * @property compact whether a compact format will be used
      */
     public data class Context(val mappings: TinyMappings, val compact: Boolean) {
         /**

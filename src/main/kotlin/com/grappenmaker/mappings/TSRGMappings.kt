@@ -3,6 +3,8 @@ package com.grappenmaker.mappings
 /**
  * Represents either a TSRG v1 or a TSRG v2 mappings file, which does not have a definition anywhere.
  * The serialization method of these mappings is governed by [isV2]
+ *
+ * @property isV2 whether this mappings file is TSRG version 2
  */
 public data class TSRGMappings(
     override val namespaces: List<String>,

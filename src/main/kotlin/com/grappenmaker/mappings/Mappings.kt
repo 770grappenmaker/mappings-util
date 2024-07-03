@@ -2,6 +2,8 @@ package com.grappenmaker.mappings
 
 /**
  * Represents any entity that can have different mapped names
+ *
+ * @property names The names of this named entity, which should correspond to some namespaces in [Mappings.namespaces]
  */
 public sealed interface Mapped {
     public val names: List<String>
@@ -9,6 +11,8 @@ public sealed interface Mapped {
 
 /**
  * Represents any entity that can have comments (commonly used in Tiny mappings)
+ *
+ * @property comments All comments that the author of some [Mappings] file wrote
  */
 public sealed interface Commented {
     public val comments: List<String>
@@ -16,6 +20,9 @@ public sealed interface Commented {
 
 /**
  * Represents a mapped class (containing [fields] and [methods])
+ *
+ * @property fields Mapping information for member fields
+ * @property methods Mapping information for member methods
  */
 public data class MappedClass(
     override val names: List<String>,
@@ -26,6 +33,10 @@ public data class MappedClass(
 
 /**
  * Represents a mapped method
+ *
+ * @property desc The JVMS method descriptor in the "first namespace" of a [Mappings] file
+ * @property parameters Deobfuscation information regarding parameter names
+ * @property variables Deobfuscation information regarding local variable names
  */
 public data class MappedMethod(
     override val names: List<String>,
@@ -38,6 +49,10 @@ public data class MappedMethod(
 /**
  * Represents a mapped local variable. This is different to a [MappedParameter], because it carries
  * data about LVT and usage in the bytecode.
+ *
+ * @property index the index (starting at zero) of this local variable
+ * @property startOffset the offset of this local variable in the local variable table
+ * @property lvtIndex the index of this local variable in the local variable table (less than zero if omitted)
  */
 public data class MappedLocal(
     val index: Int,
@@ -48,6 +63,8 @@ public data class MappedLocal(
 
 /**
  * Represents a mapped parameter of a [MappedMethod], which is different from a [MappedLocal] (see docs)
+ *
+ * @property index the index (starting at zero) of this parameter
  */
 public data class MappedParameter(
     override val names: List<String>,
@@ -56,6 +73,8 @@ public data class MappedParameter(
 
 /**
  * Represents a mapped field
+ *
+ * @property desc The JVMS field descriptor in the "first namespace" of a [Mappings] file
  */
 public data class MappedField(
     override val names: List<String>,
@@ -64,8 +83,11 @@ public data class MappedField(
 ) : Mapped, Commented
 
 /**
- * Represents any type of mappings. The names in all of the [Named] entities are in the order of the [namespaces],
+ * Represents any type of mappings. The names in all of the [Mapped] entities are in the order of the [namespaces],
  * and should have equal length arrays.
+ *
+ * @property namespaces All namespaces (in order) that this mappings file supports/contains
+ * @property classes All mapped classes in this mappings file (in order, not important)
  */
 public sealed interface Mappings {
     public val namespaces: List<String>

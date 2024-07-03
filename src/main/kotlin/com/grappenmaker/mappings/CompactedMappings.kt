@@ -4,6 +4,8 @@ import java.io.*
 
 /**
  * Represents a compacted mappings file. See [CompactedMappingsFormat]
+ *
+ * @property version The version of this mappings file. Currently, this is always 1.
  */
 public data class CompactedMappings(
     override val namespaces: List<String>,
@@ -102,6 +104,9 @@ public data object CompactedMappingsFormat {
         error("varint too large")
     }
 
+    /**
+     * Parses some [CompactedMappings] that is an equivalent representation of the given a buffer as [bytes]
+     */
     public fun parse(bytes: ByteArray): CompactedMappings = with(DataInputStream(ByteArrayInputStream(bytes))) {
         require(readInt() == magicEncoded) { "Invalid magic: expected $magic" }
 
@@ -169,6 +174,9 @@ public data object CompactedMappingsFormat {
         }
     }
 
+    /**
+     * Writes some [mappings] to a buffer that is an equivalent representation of the [mappings]
+     */
     public fun write(mappings: CompactedMappings): ByteArray = ByteArrayOutputStream().also { baos ->
         with(DataOutputStream(baos)) {
             require(mappings.version == 1) { "Version 1 expected, found ${mappings.version}" }

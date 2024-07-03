@@ -8,6 +8,9 @@ import org.objectweb.asm.commons.Remapper
 import org.objectweb.asm.commons.SimpleRemapper
 import java.util.jar.JarFile
 
+/**
+ * An alias for a function that returns class file buffers given an internal/JVMS class name
+ */
 public typealias ClasspathLoader = (name: String) -> ByteArray?
 
 // Optimization (presumably)

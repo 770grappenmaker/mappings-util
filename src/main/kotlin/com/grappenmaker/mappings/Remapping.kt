@@ -9,38 +9,6 @@ import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
 
-public class AccessWideningVisitor(parent: ClassVisitor) : ClassVisitor(Opcodes.ASM9, parent) {
-    private fun Int.widen() = this and (Opcodes.ACC_PRIVATE or Opcodes.ACC_PROTECTED).inv() or Opcodes.ACC_PUBLIC
-    private fun Int.removeFinal() = this and Opcodes.ACC_FINAL.inv()
-
-    override fun visit(
-        version: Int,
-        access: Int,
-        name: String,
-        signature: String?,
-        superName: String?,
-        interfaces: Array<String>?
-    ) {
-        super.visit(version, access.widen().removeFinal(), name, signature, superName, interfaces)
-    }
-
-    override fun visitMethod(
-        access: Int,
-        name: String,
-        descriptor: String,
-        signature: String?,
-        exceptions: Array<String>?
-    ): MethodVisitor = super.visitMethod(access.widen().removeFinal(), name, descriptor, signature, exceptions)
-
-    override fun visitField(
-        access: Int,
-        name: String,
-        descriptor: String,
-        signature: String?,
-        value: Any?
-    ): FieldVisitor = super.visitField(access.widen(), name, descriptor, signature, value)
-}
-
 /**
  * A [ClassRemapper] that is aware of the remapping of Invoke Dynamic instructions for lambdas.
  */
@@ -95,6 +63,11 @@ public open class LambdaAwareMethodRemapper(
  * this JVMs system class loader, or another resource. If [loader] returns `null`, the remapper considers the
  * class file not present/missing/irrelevant.
  *
+ * @property mappings the mappings used for remapping
+ * @property from the namespace to remap from
+ * @property to the namespace to remap to
+ * @property shouldRemapDesc whether this [MappingsRemapper] will remap the descriptors of methods
+ * @property loader returns class file buffers that can be used to perform inheritance lookups
  * @see [ClasspathLoaders] for default implementations of [loader]
  */
 public class MappingsRemapper(
@@ -102,7 +75,7 @@ public class MappingsRemapper(
     public val from: String,
     public val to: String,
     private val shouldRemapDesc: Boolean = mappings.namespaces.indexOf(from) != 0,
-    private val loader: (name: String) -> ByteArray?
+    private val loader: ClasspathLoader
 ) : Remapper() {
     private val map = mappings.asASMMapping(from, to)
     private val baseMapper by lazy {
@@ -161,7 +134,7 @@ public fun remapJar(
     output: File,
     from: String = "official",
     to: String = "named",
-    loader: ((name: String) -> ByteArray?) = { null },
+    loader: ClasspathLoader = { null },
     visitor: ((parent: ClassVisitor) -> ClassVisitor)? = null,
 ): Unit = JarFile(input).use { jar ->
     val commonCache = mutableMapOf<String, ByteArray?>()
