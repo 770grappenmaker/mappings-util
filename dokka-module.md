@@ -30,7 +30,7 @@ Several mappings formats are supported, like SRG, XSRG, Tiny (v1 and v2), Progua
 |------------------------------------------------------------------------|------------------------------------------------------------------------------|
 | Any type of [MappingsFormat][com.grappenmaker.mappings.MappingsFormat] | [Mappings.write][com.grappenmaker.mappings.write]                            |
 | An [AccessWidener][com.grappenmaker.mappings.AccessWidener]            | [AccessWidener.write][com.grappenmaker.mappings.write]                       |
-| [CompactedMappings][com.grappenmaker.mappings.CompactedMappings]       | [CompactedMappings.write][com.grappenmaker.mappings.CompactedMappings.write] |
+| [CompactedMappings][com.grappenmaker.mappings.CompactedMappings]       | [CompactedMappings.write][com.grappenmaker.mappings.write]                   |
 
 ## Common [Mappings][com.grappenmaker.mappings.Mappings] operations
 

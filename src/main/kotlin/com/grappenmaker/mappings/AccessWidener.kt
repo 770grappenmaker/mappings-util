@@ -83,6 +83,16 @@ public value class AccessMask(public val value: Int) : Iterable<AccessType> {
     override fun iterator(): Iterator<AccessType> = iterator {
         AccessType.entries.forEach { if (it in this@AccessMask) yield(it) }
     }
+
+    /**
+     * Utility for constructing an [AccessMask]
+     */
+    public companion object {
+        /**
+         * An [AccessMask] without any [AccessType]s containing it
+         */
+        public val EMPTY: AccessMask = AccessMask(0)
+    }
 }
 
 /**
@@ -294,13 +304,16 @@ public data class AccessedClass(
 public fun AccessWidener.toTree(): AccessWidenerTree {
     val fieldsByOwner = fields.toList().groupBy { it.first.owner }.withDefault { emptyList() }
     val methodsByOwner = methods.toList().groupBy { it.first.owner }.withDefault { emptyList() }
+    val allOwners = fieldsByOwner.keys + methodsByOwner.keys + classes.keys
 
     fun Map<String, List<Pair<AccessedMember, AccessMask>>>.transform(c: String) =
         getValue(c).associate { (member, memberMask) -> MemberIdentifier(member.name, member.desc) to memberMask }
 
     return AccessWidenerTree(
         namespace,
-        classes.mapValues { (c, m) -> AccessedClass(m, methodsByOwner.transform(c), fieldsByOwner.transform(c)) }
+        allOwners.associateWith { c ->
+            AccessedClass(classes[c] ?: AccessMask.EMPTY, methodsByOwner.transform(c), fieldsByOwner.transform(c))
+        }
     )
 }
 
@@ -500,14 +513,26 @@ public operator fun AccessWidener.plus(other: AccessWidener): AccessWidener {
     )
 }
 
+private fun throwEmptyAWsError(): Nothing =
+    throw IllegalArgumentException("iterable/sequence was empty, cannot create an AccessWidener")
+
 /**
  * Combines [AccessWidener]s using the [AccessWidener.plus] operator, producing a new [AccessWidener] that,
- * when applied, produces the same result as applying all of the wideners sequentially
+ * when applied, produces the same result as applying all of the wideners sequentially. If this [Iterable]
+ * would be considered empty (its [Iterator.hasNext] would return false on the first iteration),
+ * [IllegalArgumentException] is thrown
+ *
+ * @throws IllegalArgumentException if the [Iterable] is empty.
  */
-public fun Iterable<AccessWidener>.join(): AccessWidener = reduce { acc, curr -> acc + curr }
+public fun Iterable<AccessWidener>.join(): AccessWidener =
+    reduceOrNull { acc, curr -> acc + curr } ?: throwEmptyAWsError()
 
 /**
  * Combines this sequence of [AccessWidener]s using the [AccessWidener.plus] operator, producing a new [AccessWidener]
- * that, when applied, produces the same result as applying all of the wideners sequentially
+ * that, when applied, produces the same result as applying all of the wideners sequentially. If this [Sequence]
+ * would be considered empty, [IllegalArgumentException] is thrown
+ *
+ * @throws IllegalArgumentException if the [Iterable] is empty.
  */
-public fun Sequence<AccessWidener>.join(): AccessWidener = reduce { acc, curr -> acc + curr }
+public fun Sequence<AccessWidener>.join(): AccessWidener =
+    reduceOrNull { acc, curr -> acc + curr } ?: throwEmptyAWsError()

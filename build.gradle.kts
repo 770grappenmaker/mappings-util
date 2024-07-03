@@ -14,7 +14,7 @@ repositories {
 }
 
 group = "com.grappenmaker"
-version = "0.1.5"
+version = "0.1.6"
 
 kotlin {
     jvmToolchain(8)
@@ -127,5 +127,12 @@ tasks {
                 packageListUrl = project.layout.projectDirectory.file("asm.package-list").asFile.toURI().toURL()
             }
         }
+    }
+
+    val dokkaHtml by getting
+    val deployDocs by registering(Copy::class) {
+        dependsOn(dokkaHtml)
+        from(dokkaHtml)
+        into(projectDir.resolve("docs"))
     }
 }

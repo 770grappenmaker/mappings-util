@@ -45,6 +45,21 @@ class TestAW {
     }
 
     @Test
+    fun `widener to tree no classes`() {
+        assertEquals(AccessWidenerTree(
+            namespace = "official",
+            classes = mapOf("a" to AccessedClass(
+                mask = AccessMask(0b000),
+                fields = mapOf(MemberIdentifier("b", "Ld;") to AccessMask(0b100)),
+                methods = mapOf(
+                    MemberIdentifier("c", "()Le;") to AccessMask(0b011),
+                    MemberIdentifier("d", "()Le;") to AccessMask(0b010),
+                ),
+            ))
+        ), loadAccessWidener(testDocument).copy(classes = emptyMap()).toTree())
+    }
+
+    @Test
     fun `apply widener to visitor`() {
         val node = ClassNode()
         with(node) {

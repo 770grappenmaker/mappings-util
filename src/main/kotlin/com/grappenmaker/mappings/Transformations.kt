@@ -93,7 +93,8 @@ public fun Mappings.reorderNamespaces(order: List<String>): Mappings {
 private fun <T> Set<T>.disjointTo(other: Set<T>) = (this - other) + (other - this)
 
 /**
- * Joins together this [Mappings] with [otherMappings], by matching on [intermediateNamespace].
+ * Joins together this [Mappings] with [otherMappings], by matching on [intermediateNamespace], producing new [Mappings]
+ * that contain all entries from this [Mappings] and [otherMappings].
  * If [requireMatch] is true, this method will throw an exception when no method or field or class is found
  */
 public fun Mappings.join(
@@ -208,16 +209,18 @@ public fun Mappings.join(
 }
 
 /**
- * Joins together a list of [Mappings].
+ * Joins together an [Iterable] of [Mappings], producing new [Mappings] that contain all entries from all [Mappings].
  * Note: all namespaces are kept, in order to be able to reduce the mappings nicely without a lot of overhead.
- * If you want to exclude certain namespaces, use [Mappings.filterNamespaces]
+ * If you want to exclude certain namespaces, use [Mappings.filterNamespaces]. If this [Iterable]
+ * would be considered empty (its [Iterator.hasNext] would return false on the first iteration), [EmptyMappings] is
+ * returned.
  *
  * @see [Mappings.join]
  */
-public fun List<Mappings>.join(
+public fun Iterable<Mappings>.join(
     intermediateNamespace: String,
     requireMatch: Boolean = false
-): Mappings = reduce { acc, curr -> acc.join(curr, intermediateNamespace, requireMatch) }
+): Mappings = reduceOrNull { acc, curr -> acc.join(curr, intermediateNamespace, requireMatch) } ?: EmptyMappings
 
 /**
  * Filters these [Mappings] to only contain namespaces that are in [allowed]
@@ -271,7 +274,7 @@ public inline fun Mappings.mapClasses(block: (MappedClass) -> MappedClass): Mapp
  * without descriptors will be considered invalid.
  */
 @OverloadResolutionByLambdaReturnType
-public fun Mappings.recoverFieldDescriptors(bytesProvider: ClasspathLoader): Mappings =
+public fun Mappings.recoverFieldDescriptors(bytesProvider: (name: String) -> ByteArray?): Mappings =
     recoverFieldDescriptors { name ->
         bytesProvider(name)?.let { b -> ClassNode().also { ClassReader(b).accept(it, 0) } }
     }
