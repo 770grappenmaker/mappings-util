@@ -6,14 +6,10 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TestAW {
-    private fun String.getResource() = this@TestAW.javaClass.classLoader
-        .getResourceAsStream(this)?.readBytes()?.decodeToString()
-        ?: error("Could not find resource $this")
-
     private val testDocument = "test.accesswidener".getResource().lines()
     private val otherTestDocument = "test2.accesswidener".getResource().lines()
     private val testDocumentMapped = "test-mapped.accesswidener".getResource().lines()
-    private val testMappings = "aw-mappings.tiny".getResource().lines()
+    private val testMappings = "test.tiny".getResource().lines()
 
     @Test
     fun `parse widener`() {

@@ -114,6 +114,8 @@ tasks {
 
     withType<DokkaTask>().configureEach {
         dokkaSourceSets.configureEach {
+            reportUndocumented = true
+
             sourceLink {
                 localDirectory = rootDir
                 remoteUrl = URL("https://github.com/770grappenmaker/mappings-util/tree/main")

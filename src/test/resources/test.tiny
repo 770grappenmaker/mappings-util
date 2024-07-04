@@ -1,7 +1,11 @@
 tiny	2	0	official	named
 c	a	Main
+	c	Test comment
 	f	Ld;	b	state
+		c	Electric boogaloo
 	m	()Le;	c	action
+		c	Crazy
+		c	Two comments!
 	m	()Le;	d	anotherAction
 c	d	SomeState
 c	e	SomeOtherState

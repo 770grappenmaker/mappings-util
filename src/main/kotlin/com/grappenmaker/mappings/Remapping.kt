@@ -4,6 +4,7 @@ import org.objectweb.asm.*
 import org.objectweb.asm.commons.ClassRemapper
 import org.objectweb.asm.commons.MethodRemapper
 import org.objectweb.asm.commons.Remapper
+import org.objectweb.asm.tree.*
 import java.io.File
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
@@ -203,4 +204,212 @@ public fun remapJar(
 
     remapJar(mappings, input, output, from, to, loader, visitor)
     jars.forEach { it.close() }
+}
+
+/**
+ * Utility that can apply a [Remapper] to an [AbstractInsnNode], remapping it in place.
+ * If [lambdaAware] is `true`, the remapping will behave like a [LambdaAwareRemapper]
+ */
+public fun AbstractInsnNode.remap(remapper: Remapper, lambdaAware: Boolean = true) {
+    visibleTypeAnnotations?.remap(remapper)
+    invisibleTypeAnnotations?.remap(remapper)
+
+    when (this) {
+        is FrameNode -> {
+            // DRY?
+            local?.mapInPlace { if (it is String) remapper.mapType(it) else it }
+            stack?.mapInPlace { if (it is String) remapper.mapType(it) else it }
+        }
+
+        is FieldInsnNode -> {
+            name = remapper.mapFieldName(owner, name, desc)
+            desc = remapper.mapDesc(desc)
+            owner = remapper.map(owner)
+        }
+
+        is MethodInsnNode -> {
+            name = remapper.mapMethodName(owner, name, desc)
+            desc = remapper.mapMethodDesc(desc)
+            owner = remapper.mapType(owner)
+        }
+
+        is InvokeDynamicInsnNode -> {
+            name = if (
+                lambdaAware &&
+                bsm.owner == "java/lang/invoke/LambdaMetafactory" &&
+                (bsm.name == "metafactory" || bsm.name == "altMetafactory")
+            ) remapper.mapMethodName(
+                Type.getReturnType(desc).internalName,
+                name,
+                (bsmArgs.first() as Type).descriptor
+            ) else remapper.mapInvokeDynamicMethodName(name, desc)
+
+            desc = remapper.mapMethodDesc(desc)
+            bsm = remapper.mapValue(bsm) as Handle
+            bsmArgs.mapInPlace { remapper.mapValue(it) }
+        }
+
+        is TypeInsnNode -> desc = remapper.mapType(desc)
+        is LdcInsnNode -> cst = remapper.mapValue(cst)
+        is MultiANewArrayInsnNode -> desc = remapper.mapDesc(desc)
+    }
+}
+
+/**
+ * Utility that can apply a [Remapper] to a [MethodNode] inside of an owner represented by [ownerName],
+ * remapping it in place.
+ * If [lambdaAware] is `true`, the remapping will behave like a [LambdaAwareRemapper]
+ */
+public fun MethodNode.remap(ownerName: String, remapper: Remapper, lambdaAware: Boolean = true) {
+    name = remapper.mapMethodName(ownerName, name, desc)
+    desc = remapper.mapMethodDesc(desc)
+    signature = signature?.let { remapper.mapSignature(it, false) }
+    exceptions.mapInPlace { remapper.map(it) }
+    visibleAnnotations?.remap(remapper)
+    invisibleAnnotations?.remap(remapper)
+    visibleTypeAnnotations?.remap(remapper)
+    invisibleTypeAnnotations?.remap(remapper)
+    invisibleLocalVariableAnnotations?.remap(remapper)
+    visibleLocalVariableAnnotations?.remap(remapper)
+    invisibleParameterAnnotations?.remap(remapper)
+    visibleParameterAnnotations?.remap(remapper)
+    annotationDefault = annotationDefault?.let { remapAnnotationValue(it, remapper) }
+    tryCatchBlocks.forEach { tcb ->
+        tcb.type = tcb.type?.let { remapper.map(it) }
+        tcb.visibleTypeAnnotations?.remap(remapper)
+        tcb.invisibleTypeAnnotations?.remap(remapper)
+    }
+
+    localVariables?.forEach { lv ->
+        lv.desc = remapper.mapDesc(lv.desc)
+        lv.signature = lv.signature?.let { remapper.mapSignature(it, true) }
+    }
+
+    instructions.forEach { it.remap(remapper, lambdaAware) }
+}
+
+/**
+ * Utility that can apply a [Remapper] to a [FieldNode] inside of an owner represented by [ownerName],
+ * remapping it in place
+ */
+public fun FieldNode.remap(ownerName: String, remapper: Remapper) {
+    name = remapper.mapFieldName(ownerName, name, desc)
+    desc = remapper.mapDesc(desc)
+    value = remapper.mapValue(value)
+    visibleAnnotations?.remap(remapper)
+    invisibleAnnotations?.remap(remapper)
+    visibleTypeAnnotations?.remap(remapper)
+    invisibleTypeAnnotations?.remap(remapper)
+    signature = signature?.let { remapper.mapSignature(it, true) }
+}
+
+/**
+ * Utility that can apply a [Remapper] to a [ClassNode], remapping it in place.
+ * If [lambdaAware] is `true`, the remapping will behave like a [LambdaAwareRemapper]
+ */
+public fun ClassNode.remap(remapper: Remapper, lambdaAware: Boolean = true) {
+    // this would have been a lot simpler if there was an AnnotationHolder interface or something
+    visibleAnnotations?.remap(remapper)
+    invisibleAnnotations?.remap(remapper)
+    visibleTypeAnnotations?.remap(remapper)
+    invisibleTypeAnnotations?.remap(remapper)
+
+    methods.forEach { it.remap(name, remapper, lambdaAware) }
+    fields.forEach { it.remap(name, remapper) }
+
+    innerClasses.forEach { ic ->
+        ic.outerName = ic.outerName?.let { remapper.map(it) }
+        ic.name = remapper.map(ic.name)
+        if (ic.innerName != null) ic.innerName = ic.name.substringAfterLast('$')
+    }
+
+    if (outerMethod != null) {
+        outerMethod = remapper.mapMethodName(outerClass!!, outerMethod, outerMethodDesc)
+        outerMethodDesc = remapper.mapMethodDesc(outerMethodDesc)
+    }
+
+    outerClass = outerClass?.let { remapper.map(it) }
+
+    superName = superName?.let { remapper.map(it) }
+    interfaces.mapInPlace { remapper.map(it) }
+
+    if (module != null) {
+        module.name = remapper.map(module.name.replace('.', '/')).replace('/', '.')
+        module.mainClass = module.mainClass?.let { remapper.map(it) }
+        module.packages?.mapInPlace { remapper.mapPackageName(it.replace('/', '.')).replace('.', '/') }
+        module.uses?.mapInPlace { remapper.map(it) }
+    }
+
+    signature = signature?.let { remapper.mapSignature(it, false) }
+    nestHostClass = nestHostClass?.let { remapper.map(it) }
+    nestMembers?.mapInPlace { remapper.map(it) }
+    permittedSubclasses?.mapInPlace { remapper.map(it) }
+
+    recordComponents?.forEach { rc ->
+        rc.name = remapper.mapRecordComponentName(name, rc.name, rc.descriptor)
+        rc.descriptor = remapper.mapDesc(rc.descriptor)
+        rc.visibleAnnotations?.remap(remapper)
+        rc.invisibleAnnotations?.remap(remapper)
+        rc.visibleTypeAnnotations?.remap(remapper)
+        rc.invisibleTypeAnnotations?.remap(remapper)
+        rc.signature = rc.signature?.let { remapper.mapSignature(it, true) }
+    }
+
+    // do last so the original name is preserved for as long as we need it
+    // boy do I hate mutability lol
+    name = remapper.map(name)
+}
+
+/**
+ * Remaps an array of lists of annotations, which is typically used to represent parameter annotations
+ * @see MutableList.remap
+ */
+public fun Array<MutableList<out AnnotationNode>?>.remap(remapper: Remapper): Unit = forEach { it?.remap(remapper) }
+
+/**
+ * Remaps a list of annotations, which is typically used to represent a set of annotations that are applied / present
+ * on a parameter, field, method, or class
+ */
+public fun MutableList<out AnnotationNode>.remap(remapper: Remapper): Unit = forEach { it.remap(remapper) }
+
+// Gross descriptor because I don't want to make an extension on Any
+private fun remapAnnotationValue(v: Any, remapper: Remapper): Any = when (v) {
+    is Type -> v.map(remapper)
+    is Array<*> -> {
+        val desc = v[0] as String
+        val name = v[1] as String
+        val owner = desc.dropBoth(1)
+        arrayOf("L${remapper.map(owner)};", remapper.mapFieldName(owner, name, desc))
+    }
+
+    is List<*> -> v.map { remapAnnotationValue(it ?: error("Invalid list entry null in annotation"), remapper) }
+    is AnnotationNode -> v.remap(remapper)
+    else -> v
+}
+
+/**
+ * Remaps an [AnnotationNode] using a given [remapper]
+ */
+public fun AnnotationNode.remap(remapper: Remapper) {
+    values = values?.chunked(2)?.flatMap { (k, v) ->
+        // TODO: use mapMethodName instead, and try to detect descriptor of annotation value?
+        listOf(remapper.mapAnnotationAttributeName(desc, k as String), remapAnnotationValue(v, remapper))
+    }
+
+    desc = "L${remapper.map(desc.dropBoth(1))};" // assuming valid annotation of course
+}
+
+private fun String.dropBoth(n: Int) = substring(n, length - n)
+private fun <T> MutableList<T>.mapInPlace(block: (T) -> T) = forEachIndexed { idx, v -> this[idx] = block(v) }
+private fun <T> Array<T>.mapInPlace(block: (T) -> T) = forEachIndexed { idx, v -> this[idx] = block(v) }
+
+// Why is mapType private?
+/**
+ * Remaps a given [Type] using a given [remapper]
+ */
+public fun Type.map(remapper: Remapper): Type = when (sort) {
+    Type.ARRAY -> Type.getType("[".repeat(dimensions) + elementType.map(remapper).descriptor)
+    Type.OBJECT -> remapper.map(internalName)?.let { Type.getObjectType(it) } ?: this
+    Type.METHOD -> Type.getMethodType(remapper.mapMethodDesc(descriptor))
+    else -> this
 }
