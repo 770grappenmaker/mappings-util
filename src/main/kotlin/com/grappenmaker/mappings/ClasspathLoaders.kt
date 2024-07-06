@@ -1,7 +1,6 @@
 package com.grappenmaker.mappings
 
 import org.objectweb.asm.ClassReader
-import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.commons.ClassRemapper
 import org.objectweb.asm.commons.Remapper
@@ -30,7 +29,7 @@ public object ClasspathLoaders {
      * Attempts to load classes using resources in [loader]
      */
     public fun fromLoader(loader: ClassLoader): ClasspathLoader =
-        { loader.getResourceAsStream("$it.class")?.readBytes() }
+        { name -> loader.getResourceAsStream("$name.class")?.use { it.readBytes() } }
 
     /**
      * Attempts to load classes using resources in the system class loader
@@ -42,6 +41,8 @@ public object ClasspathLoaders {
      * when they are no longer relevant / used in the remapper
      */
     public fun fromJars(jars: List<JarFile>): ClasspathLoader {
+        if (jars.size == 1) return fromJar(jars.single())
+
         val index = jars.flatMap { f ->
             f.entries().asSequence()
                 .filter { it.name.endsWith(".class") }
@@ -50,6 +51,13 @@ public object ClasspathLoaders {
 
         return { index[it]?.let { (f, e) -> f.getInputStream(e).readBytes() } }
     }
+
+    /**
+     * Attempts to load classes a [jar], the caller is responsible for closing [jar] when it is no longer
+     * relevant / used in the remapper
+     */
+    public fun fromJar(jar: JarFile): ClasspathLoader =
+        a@ { jar.getInputStream(jar.getJarEntry("$it.class") ?: return@a null).readBytes() }
 
     /**
      * Combines several [loaders] into a single classpath loader,
@@ -63,6 +71,12 @@ public object ClasspathLoaders {
      */
     public fun compound(vararg loaders: ClasspathLoader): ClasspathLoader =
         CompoundClasspathLoader(loaders.toList().flatten())
+
+    /**
+     * Creates a [ClasspathLoader] from a [lookup], which should have JVMS internal names as keys, and class file
+     * buffers as values
+     */
+    public fun fromLookup(lookup: Map<String, ByteArray>): ClasspathLoader = { lookup[it] }
 }
 
 /**

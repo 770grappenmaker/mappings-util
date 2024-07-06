@@ -16,16 +16,6 @@ public fun Mappings.namespace(name: String): Int =
 public fun Mappings.asSimpleRemapper(from: String, to: String): SimpleRemapper = SimpleRemapper(asASMMapping(from, to))
 
 /**
- * Returns the ASM-style string index representing a [MappedField]
- */
-public fun MappedField.index(owner: String, namespace: Int): String = "$owner.${names[namespace]}"
-
-/**
- * Returns the ASM-style string index representing a [MappedMethod]
- */
-public fun MappedMethod.index(owner: String, namespace: Int): String = "$owner.${names[namespace]}$desc"
-
-/**
  * Returns a simple mapping representing all of the [Mappings], mapping between the namespaces [from] and [to].
  * If [includeMethods] is true, then methods will be included in the mapping.
  * If [includeFields] is true, then fields will be included in the mapping.
@@ -42,11 +32,22 @@ public fun Mappings.asASMMapping(
     require(fromIndex >= 0) { "Namespace $from does not exist!" }
     require(toIndex >= 0) { "Namespace $to does not exist!" }
 
+    val shouldRemapDesc = fromIndex != 0
+    val descClassMap = mutableMapOf<String, String>()
+
     classes.forEach { clz ->
         val owner = clz.names[fromIndex]
         put(owner, clz.names[toIndex])
-        if (includeFields) clz.fields.forEach { put(it.index(owner, fromIndex), it.names[toIndex]) }
-        if (includeMethods) clz.methods.forEach { put(it.index(owner, fromIndex), it.names[toIndex]) }
+        if (includeMethods && shouldRemapDesc) descClassMap[clz.names.first()] = clz.names[fromIndex]
+        if (includeFields) clz.fields.forEach { put("$owner.${it.names[fromIndex]}", it.names[toIndex]) }
+    }
+
+    if (includeMethods) classes.forEach { clz ->
+        val owner = clz.names[fromIndex]
+        clz.methods.forEach {
+            val desc = if (shouldRemapDesc) mapMethodDesc(it.desc, descClassMap) else it.desc
+            put("$owner.${it.names[fromIndex]}$desc", it.names[toIndex])
+        }
     }
 }
 

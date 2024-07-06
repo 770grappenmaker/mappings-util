@@ -1,3 +1,4 @@
+import org.jetbrains.dokka.Platform
 import org.jetbrains.dokka.gradle.DokkaTask
 import java.net.URL
 
@@ -34,6 +35,7 @@ java {
 
 dependencies {
     api(libs.bundles.asm)
+    api(libs.coroutines.core)
     testImplementation(kotlin("test"))
 }
 
@@ -114,6 +116,8 @@ tasks {
 
     withType<DokkaTask>().configureEach {
         dokkaSourceSets.configureEach {
+            val test by project(":samples").sourceSets.getting
+            samples.from(test.kotlin)
             reportUndocumented = true
 
             sourceLink {

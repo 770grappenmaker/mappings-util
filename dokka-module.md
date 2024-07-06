@@ -3,6 +3,9 @@
 A small JVM mappings library designed to load, modify, and use mappings, for runtime and pre-runtime remapping.
 Several mappings formats are supported, like SRG, XSRG, Tiny (v1 and v2), Proguard.
 
+**Important:** some documentation entries will have seemingly runnable samples. They are, in fact, not runnable.
+This is a known Dokka issue which will be addressed in a future release of Dokka. See [this issue](https://github.com/Kotlin/dokka/issues/3041).
+
 ## Supported [MappingsFormat][com.grappenmaker.mappings.MappingsFormat]s
 
 | **Name**                                                                     | **Description**                                                                               |
@@ -32,6 +35,17 @@ Several mappings formats are supported, like SRG, XSRG, Tiny (v1 and v2), Progua
 | An [AccessWidener][com.grappenmaker.mappings.AccessWidener]            | [AccessWidener.write][com.grappenmaker.mappings.write]                       |
 | [CompactedMappings][com.grappenmaker.mappings.CompactedMappings]       | [CompactedMappings.write][com.grappenmaker.mappings.write]                   |
 
+## Mappings transformations
+
+| **Name**                                                                          | **Description**                                                           |
+|-----------------------------------------------------------------------------------|---------------------------------------------------------------------------|
+| [Mappings.renameNamespaces][com.grappenmaker.mappings.renameNamespaces]           | Renames namespaces                                                        |
+| [Mappings.reorderNamespaces][com.grappenmaker.mappings.reorderNamespaces]         | Reorders/duplicates namespaces                                            |
+| [Mappings.join][com.grappenmaker.mappings.join]                                   | Joins two [Mappings][com.grappenmaker.mappings.Mappings] objects together |
+| [Mappings.filterNamespaces][com.grappenmaker.mappings.filterNamespaces]           | Filters certain namespaces by a set of allowed names, or a predicate      |
+| [Mappings.deduplicateNamespaces][com.grappenmaker.mappings.deduplicateNamespaces] | Removes duplicate namespaces                                              |
+
+
 ## Common [Mappings][com.grappenmaker.mappings.Mappings] operations
 
 ```kt
@@ -53,6 +67,11 @@ val reader = ClassReader(bytes)
 val writer = ClassWriter(reader)
 reader.accept(LambdaAwareRemapper(writer, remapper), 0)
 
+// Or remapping a ClassNode
+val node = ClassNode()
+reader.accept(node)
+node.remap(remapper)
+
 // Or for remapping a full jar
 remapJar(mappings, inputFile, outputFile, "fromNamespace", "toNamespace")
 
@@ -60,7 +79,7 @@ remapJar(mappings, inputFile, outputFile, "fromNamespace", "toNamespace")
 val extracted = mappings.extractNamespaces("newFrom", "newTo")
 val renamed = mappings.renameNamespaces("newFirst", "newSecond", "newThird")
 val reordered = mappings.reorderNamespaces("c", "b", "a")
-val joined = mappings.join("fromA", otherMappings, "fromB", "intermediary")
+val joined = mappings.join(otherMappings, "intermediary")
 val filtered = mappings.filterNamespaces("b", "c")
 val tinyMappings = mappings.asTinyMappings(v2 = true)
 

@@ -175,43 +175,45 @@ public fun loadAccessWidener(lines: List<String>): AccessWidener {
     val methods = hashMapOf<AccessedMember, AccessMask>()
     val fields = hashMapOf<AccessedMember, AccessMask>()
 
-    for (line in lines.drop(1)) {
+    for ((lineIdx, line) in lines.drop(1).withIndex()) {
+        fun parseError(msg: String): Nothing = error("Access widener parse error at line ${lineIdx + 1}: $msg")
+
         val commentless = line.removeComment()
         if (commentless.isEmpty()) continue
-        if (commentless.first().isWhitespace()) error("Leading whitespace is not allowed")
+        if (commentless.first().isWhitespace()) parseError("Leading whitespace is not allowed")
 
         val parts = commentless.parts()
         check(parts.size >= 2) { "Invalid entry $parts" }
 
         val accessPart = parts.first()
         val accessType = (AccessType.getOrNull(if (version >= 2) accessPart.removePrefix("transitive-") else accessPart)
-            ?: error("Invalid access type $accessPart"))
+            ?: parseError("Invalid access type $accessPart"))
 
         val access = accessType.toMask()
 
         val partsLeft = parts.drop(2)
         when (val type = parts[1]) {
             "class" -> {
-                val name = partsLeft.singleOrNull() ?: error("Expected <name> after class, got $partsLeft")
-                if (accessType == AccessType.MUTABLE) error("Cannot make class $name mutable")
+                val name = partsLeft.singleOrNull() ?: parseError("Expected <name> after class, got $partsLeft")
+                if (accessType == AccessType.MUTABLE) parseError("Cannot make class $name mutable")
                 classes[name] = access + classes[name]
             }
 
             "method", "field" -> {
-                check(partsLeft.size == 3) { "Expected <owner> <name> <desc> after $type, got $partsLeft" }
+                if (partsLeft.size != 3) parseError("Expected <owner> <name> <desc> after $type, got $partsLeft")
 
                 val isMethod = type == "method"
                 val target = if (isMethod) methods else fields
                 val (owner, name, desc) = partsLeft
 
-                if (accessType == AccessType.MUTABLE && isMethod) error("Cannot make method $name$desc mutable")
-                if (accessType == AccessType.EXTENDABLE && !isMethod) error("Cannot make field $name$desc extendable")
+                if (accessType == AccessType.MUTABLE && isMethod) parseError("Cannot make method $name$desc mutable")
+                if (accessType == AccessType.EXTENDABLE && !isMethod) parseError("Cannot make field $name$desc extendable")
 
                 val member = AccessedMember(owner, name, desc)
                 target[member] = access + target[member]
             }
 
-            else -> error("Invalid type $type (expected one of {class, method, field})")
+            else -> parseError("Invalid type $type (expected one of {class, method, field})")
         }
     }
 

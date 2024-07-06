@@ -31,15 +31,10 @@ class TestMappings {
                             names = listOf("c", "action"),
                             comments = listOf("Crazy", "Two comments!"),
                             desc = "()Le;",
-                            parameters = emptyList(),
-                            variables = emptyList()
                         ),
                         MappedMethod(
                             names = listOf("d", "anotherAction"),
-                            comments = emptyList(),
                             desc = "()Le;",
-                            parameters = emptyList(),
-                            variables = emptyList()
                         )
                     )
                 ),

@@ -3,7 +3,7 @@ package com.grappenmaker.mappings
 import org.objectweb.asm.ClassReader
 
 // DFS-inspired inheritance tree search
-internal inline fun walkInheritance(crossinline loader: (name: String) -> ByteArray?, start: String) = sequence {
+internal inline fun walkInheritance(crossinline loader: ClasspathLoader, start: String) = sequence {
     val queue = ArrayDeque<String>()
     val seen = hashSetOf<String>()
     queue.addLast(start)

@@ -67,7 +67,6 @@ public open class LambdaAwareMethodRemapper(
  * @property mappings the mappings used for remapping
  * @property from the namespace to remap from
  * @property to the namespace to remap to
- * @property shouldRemapDesc whether this [MappingsRemapper] will remap the descriptors of methods
  * @property loader returns class file buffers that can be used to perform inheritance lookups
  * @see [ClasspathLoaders] for default implementations of [loader]
  */
@@ -75,26 +74,42 @@ public class MappingsRemapper(
     public val mappings: Mappings,
     public val from: String,
     public val to: String,
-    private val shouldRemapDesc: Boolean = mappings.namespaces.indexOf(from) != 0,
     private val loader: ClasspathLoader
+) : LoaderSimpleRemapper(mappings.asASMMapping(from, to), loader) {
+    /**
+     * Returns a [MappingsRemapper] that reverses the changes of this [MappingsRemapper].
+     *
+     * Note that [loader] is by default set to the already passed loader, but it might be incorrect
+     * depending on the implementation of [loader] in the original [MappingsRemapper]. Make sure to pass a new
+     * implementation if inheritance data matters to you and the original [loader] could not handle different
+     * namespaced names.
+     */
+    public fun reverse(loader: (name: String) -> ByteArray? = this.loader): MappingsRemapper =
+        MappingsRemapper(mappings, to, from, loader = loader)
+}
+
+/**
+ * A [Remapper] that can use a [ClasspathLoader] for inheritance information to apply a certain [map], that should
+ * be in an equivalent format as the one produced by [Mappings.asASMMapping]
+ */
+public open class LoaderSimpleRemapper(
+    private val map: Map<String, String>,
+    private val loader: ClasspathLoader,
+    private val memoizeInheritance: Boolean = true,
 ) : Remapper() {
-    private val map = mappings.asASMMapping(from, to)
-    private val baseMapper by lazy {
-        MappingsRemapper(mappings, from, mappings.namespaces.first(), shouldRemapDesc = false, loader)
-    }
+    private val inheritanceMemo = mutableMapOf<String, List<String>>()
 
     override fun map(internalName: String): String = map[internalName] ?: if ('$' in internalName) {
-        map(internalName.substringBefore('$')) + '$' + internalName.substringAfter('$')
+        val dollarIdx = internalName.lastIndexOf('$')
+        if (dollarIdx < 0) internalName else map(internalName.take(dollarIdx)) + '$' + internalName.drop(dollarIdx + 1)
     } else internalName
 
     override fun mapMethodName(owner: String, name: String, desc: String): String {
         if (name == "<init>" || name == "<clinit>") return name
 
         // Source: https://github.com/FabricMC/tiny-remapper/blob/d14e8f99800e7f6f222f820bed04732deccf5109/src/main/java/net/fabricmc/tinyremapper/AsmRemapper.java#L74
-        return if (desc.startsWith("(")) {
-            val actualDesc = if (shouldRemapDesc) baseMapper.mapMethodDesc(desc) else desc
-            walk(owner, name) { map["$it.$name$actualDesc"] }
-        } else mapFieldName(owner, name, desc)
+        return if (desc.startsWith('(')) walk(owner, name) { map["$it.$name$desc"] }
+        else mapFieldName(owner, name, desc)
     }
 
     override fun mapFieldName(owner: String, name: String, desc: String?): String =
@@ -110,18 +125,42 @@ public class MappingsRemapper(
         owner: String,
         name: String,
         applicator: (owner: String) -> String?
-    ) = walkInheritance(loader, owner).firstNotNullOfOrNull(applicator) ?: name
+    ) = inheritanceProvider(owner).firstNotNullOfOrNull(applicator) ?: name
 
-    /**
-     * Returns a [MappingsRemapper] that reverses the changes of this [MappingsRemapper].
-     *
-     * Note that [loader] is by default set to the already passed loader, but it might be incorrect
-     * depending on the implementation of [loader] in the original [MappingsRemapper]. Make sure to pass a new
-     * implementation if inheritance data matters to you and the original [loader] could not handle different
-     * namespaced names.
-     */
-    public fun reverse(loader: (name: String) -> ByteArray? = this.loader): MappingsRemapper =
-        MappingsRemapper(mappings, to, from, loader = loader)
+    private fun inheritanceProvider(owner: String) =
+        if (memoizeInheritance) memoizedInheritance(owner) else walkInheritance(loader, owner)
+
+    // bad code probably
+    private fun memoizedInheritance(owner: String) = sequence {
+        val queue = ArrayDeque<String>()
+        val seen = hashSetOf<String>()
+        queue.addLast(owner)
+
+        while (queue.isNotEmpty()) {
+            val curr = queue.removeLast()
+            yield(curr)
+
+            val exMemo = inheritanceMemo[curr]
+            if (exMemo != null) {
+                queue += exMemo
+                continue
+            }
+
+            val memo = mutableListOf<String>()
+            inheritanceMemo[curr] = memo
+
+            val bytes = loader(curr) ?: continue
+            val reader = ClassReader(bytes)
+
+            reader.superName?.let {
+                if (seen.add(it)) queue.addLast(it)
+                memo += it
+            }
+
+            queue += reader.interfaces.filter { seen.add(it) }
+            memo += reader.interfaces
+        }
+    }
 }
 
 /**
@@ -153,7 +192,7 @@ public fun remapJar(
 
         val remapper = MappingsRemapper(
             mappings, from, to,
-            loader = ClasspathLoaders.compound(ClasspathLoaders.fromJars(listOf(jar)).memoizedTo(commonCache), loader)
+            loader = ClasspathLoaders.compound(ClasspathLoaders.fromJar(jar).memoizedTo(commonCache), loader)
         )
 
         classes.forEach { entry ->
@@ -403,6 +442,8 @@ private fun String.dropBoth(n: Int) = substring(n, length - n)
 private fun <T> MutableList<T>.mapInPlace(block: (T) -> T) = forEachIndexed { idx, v -> this[idx] = block(v) }
 private fun <T> Array<T>.mapInPlace(block: (T) -> T) = forEachIndexed { idx, v -> this[idx] = block(v) }
 
+// Lower level util
+
 // Why is mapType private?
 /**
  * Remaps a given [Type] using a given [remapper]
@@ -413,3 +454,35 @@ public fun Type.map(remapper: Remapper): Type = when (sort) {
     Type.METHOD -> Type.getMethodType(remapper.mapMethodDesc(descriptor))
     else -> this
 }
+
+/**
+ * Remaps a given [Type], using a map of class [names]
+ */
+public fun Type.map(names: Map<String, String>): Type = when (sort) {
+    Type.ARRAY -> Type.getType("[".repeat(dimensions) + elementType.map(names).descriptor)
+    Type.OBJECT -> names[internalName]?.let { Type.getObjectType(it) } ?: this
+    Type.METHOD -> Type.getMethodType(mapMethodDesc(descriptor, names))
+    else -> this
+}
+
+/**
+ * Remaps a given method descriptor [desc], using a map of class [names]
+ */
+public fun mapMethodDesc(desc: String, names: Map<String, String>): String = buildString {
+    append('(')
+    for (type in Type.getArgumentTypes(desc)) append(type.map(names).descriptor)
+    append(')')
+
+    val returnType = Type.getReturnType(desc)
+    append(if (returnType.isPrimitive) returnType.descriptor else returnType.map(names).descriptor)
+}
+
+/**
+ * Remaps a given descriptor [desc], using a map of class [names]
+ */
+public fun mapDesc(desc: String, names: Map<String, String>): String = Type.getType(desc).map(names).descriptor
+
+/**
+ * Whether a given [Type] represents a JVM primitive type
+ */
+public val Type.isPrimitive: Boolean get() = sort != Type.OBJECT && sort != Type.METHOD && sort != Type.ARRAY

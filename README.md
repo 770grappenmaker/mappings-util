@@ -52,6 +52,11 @@ val reader = ClassReader(bytes)
 val writer = ClassWriter(reader)
 reader.accept(LambdaAwareRemapper(writer, remapper), 0)
 
+// Or remapping a ClassNode
+val node = ClassNode()
+reader.accept(node)
+node.remap(remapper)
+
 // Or for remapping a full jar
 remapJar(mappings, inputFile, outputFile, "fromNamespace", "toNamespace")
 
@@ -59,7 +64,7 @@ remapJar(mappings, inputFile, outputFile, "fromNamespace", "toNamespace")
 val extracted = mappings.extractNamespaces("newFrom", "newTo")
 val renamed = mappings.renameNamespaces("newFirst", "newSecond", "newThird")
 val reordered = mappings.reorderNamespaces("c", "b", "a")
-val joined = mappings.join("fromA", otherMappings, "fromB", "intermediary")
+val joined = mappings.join(otherMappings, "intermediary")
 val filtered = mappings.filterNamespaces("b", "c")
 val tinyMappings = mappings.asTinyMappings(v2 = true)
 

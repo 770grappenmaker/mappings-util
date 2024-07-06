@@ -26,9 +26,9 @@ public sealed interface Commented {
  */
 public data class MappedClass(
     override val names: List<String>,
-    override val comments: List<String>,
-    val fields: List<MappedField>,
-    val methods: List<MappedMethod>
+    override val comments: List<String> = emptyList(),
+    val fields: List<MappedField> = emptyList(),
+    val methods: List<MappedMethod> = emptyList()
 ) : Mapped, Commented
 
 /**
@@ -40,10 +40,10 @@ public data class MappedClass(
  */
 public data class MappedMethod(
     override val names: List<String>,
-    override val comments: List<String>,
+    override val comments: List<String> = emptyList(),
     val desc: String,
-    val parameters: List<MappedParameter>,
-    val variables: List<MappedLocal>,
+    val parameters: List<MappedParameter> = emptyList(),
+    val variables: List<MappedLocal> = emptyList(),
 ) : Mapped, Commented
 
 /**
@@ -78,7 +78,7 @@ public data class MappedParameter(
  */
 public data class MappedField(
     override val names: List<String>,
-    override val comments: List<String>,
+    override val comments: List<String> = emptyList(),
     val desc: String?,
 ) : Mapped, Commented
 

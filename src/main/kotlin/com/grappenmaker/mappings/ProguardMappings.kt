@@ -35,16 +35,19 @@ public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
     private fun String.asResourceName() = replace('.', '/')
     private fun String.asBinaryName() = replace('/', '.')
 
-    private fun String.parseType() = when (this) {
-        "void" -> Type.VOID_TYPE
-        "int" -> Type.INT_TYPE
-        "boolean" -> Type.BOOLEAN_TYPE
-        "short" -> Type.SHORT_TYPE
-        "long" -> Type.LONG_TYPE
-        "float" -> Type.FLOAT_TYPE
-        "double" -> Type.DOUBLE_TYPE
-        "char" -> Type.CHAR_TYPE
-        else -> Type.getObjectType(asResourceName())
+    private fun String.parseType(): Type = when {
+        endsWith("[]") -> Type.getType("[${removeSuffix("[]").parseType().descriptor}")
+        else -> when (this) {
+            "void" -> Type.VOID_TYPE
+            "int" -> Type.INT_TYPE
+            "boolean" -> Type.BOOLEAN_TYPE
+            "short" -> Type.SHORT_TYPE
+            "long" -> Type.LONG_TYPE
+            "float" -> Type.FLOAT_TYPE
+            "double" -> Type.DOUBLE_TYPE
+            "char" -> Type.CHAR_TYPE
+            else -> Type.getObjectType(asResourceName())
+        }
     }
 
     private fun Type.unparse() = when (this) {
