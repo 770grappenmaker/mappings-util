@@ -1,4 +1,0 @@
-[submodule "docs"]
-	path = docs
-	url = https://github.com/770grappenmaker/mappings-util.git
-	branch = docs
