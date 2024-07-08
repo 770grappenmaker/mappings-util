@@ -60,3 +60,5 @@ public fun MappedMethod.isData(): Boolean = desc == "(Ljava/lang/Object;)Z" && n
         desc == "()I" && names.first() == "hashCode" ||
         desc == "()Ljava/lang/String;" && names.first() == "toString" ||
         names.first() == "<init>" || names.first() == "<clinit>"
+
+internal fun <T> Iterator<T>.nextOrNull(): T? = if (hasNext()) next() else null

@@ -1,0 +1,6 @@
+CL: a Main
+FD: a/b Ld; Main/state LSomeState;
+MD: a/c ()Le; Main/action ()LSomeOtherState;
+MD: a/d ()Le; Main/anotherAction ()LSomeOtherState;
+CL: d SomeState
+CL: e SomeOtherState

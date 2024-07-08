@@ -9,6 +9,7 @@ import org.objectweb.asm.commons.Remapper
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.InvokeDynamicInsnNode
 import org.objectweb.asm.tree.MethodInsnNode
+import java.io.EOFException
 
 /**
  * Represents a field or method that is being widened
@@ -158,10 +159,15 @@ private fun String.splitWhitespaceStrict() = split('\t', ' ')
 /**
  * Reads a file represented by [lines] as an [AccessWidener]
  */
-public fun loadAccessWidener(lines: List<String>): AccessWidener {
-    require(lines.isNotEmpty()) { "Empty file" }
+public fun loadAccessWidener(lines: List<String>): AccessWidener = loadAccessWidener(lines.iterator())
 
-    val (id, versionPart, namespace) = lines.first().splitWhitespace()
+/**
+ * Reads a file represented by [lines] (an iterator of every line in an access widener file) as an [AccessWidener]
+ */
+public fun loadAccessWidener(lines: Iterator<String>): AccessWidener {
+    if (!lines.hasNext()) throw EOFException()
+
+    val (id, versionPart, namespace) = lines.next().splitWhitespace()
     check(id == "accessWidener") { "Invalid accessWidener file" }
     check(versionPart.first() == 'v') { "Expected access widener version to start with 'v'" }
 
@@ -175,7 +181,7 @@ public fun loadAccessWidener(lines: List<String>): AccessWidener {
     val methods = hashMapOf<AccessedMember, AccessMask>()
     val fields = hashMapOf<AccessedMember, AccessMask>()
 
-    for ((lineIdx, line) in lines.drop(1).withIndex()) {
+    for ((lineIdx, line) in lines.withIndex()) {
         fun parseError(msg: String): Nothing = error("Access widener parse error at line ${lineIdx + 1}: $msg")
 
         val commentless = line.removeComment()
@@ -183,7 +189,7 @@ public fun loadAccessWidener(lines: List<String>): AccessWidener {
         if (commentless.first().isWhitespace()) parseError("Leading whitespace is not allowed")
 
         val parts = commentless.parts()
-        check(parts.size >= 2) { "Invalid entry $parts" }
+        if (parts.size < 2) parseError("Invalid entry $parts")
 
         val accessPart = parts.first()
         val accessType = (AccessType.getOrNull(if (version >= 2) accessPart.removePrefix("transitive-") else accessPart)
@@ -250,17 +256,22 @@ public fun AccessWidener.remap(remapper: Remapper, toNamespace: String): AccessW
 /**
  * Writes this [AccessWidener] structure to a file representing this [AccessWidener]
  */
-public fun AccessWidener.write(): List<String> = buildList {
-    fun line(vararg parts: String) = add(parts.joinToString("\t"))
+public fun AccessWidener.write(): List<String> = writeLazy().toList()
+
+/**
+ * Writes this [AccessWidener] structure to a lazily generated sequence representing this [AccessWidener]
+ */
+public fun AccessWidener.writeLazy(): Sequence<String> = sequence {
+    suspend fun SequenceScope<String>.line(vararg parts: String) = yield(parts.joinToString("\t"))
 
     line("accessWidener", "v$version", namespace)
     classes.forEach { (k, v) -> v.forEach { line(it.name.lowercase(), "class", k) } }
 
-    fun Map<AccessedMember, AccessMask>.write(name: String) =
-        forEach { (k, v) -> v.forEach { line(it.name.lowercase(), name, k.owner, k.name, k.desc) } }
+    suspend fun SequenceScope<String>.write(map: Map<AccessedMember, AccessMask>, name: String) =
+        map.forEach { (k, v) -> v.forEach { line(it.name.lowercase(), name, k.owner, k.name, k.desc) } }
 
-    fields.write("field")
-    methods.write("method")
+    write(fields, "field")
+    write(methods, "method")
 }
 
 /**

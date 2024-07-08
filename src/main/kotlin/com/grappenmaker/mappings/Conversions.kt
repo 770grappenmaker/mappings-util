@@ -40,3 +40,8 @@ public fun Mappings.asTSRGMappings(v2: Boolean): TSRGMappings = TSRGMappings(nam
  * @sample samples.Mappings.conversions
  */
 public fun Mappings.asCompactedMappings(): CompactedMappings = CompactedMappings(namespaces, classes)
+
+/**
+ * Converts these [Mappings] to [GenericMappings]
+ */
+public fun Mappings.asGenericMappings(): GenericMappings = GenericMappings(namespaces, classes)

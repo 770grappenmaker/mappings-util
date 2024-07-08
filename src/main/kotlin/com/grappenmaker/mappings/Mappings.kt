@@ -1,5 +1,9 @@
 package com.grappenmaker.mappings
 
+import kotlin.io.path.Path
+import kotlin.io.path.readText
+import kotlin.io.path.writeLines
+
 /**
  * Represents any entity that can have different mapped names
  *
@@ -113,18 +117,36 @@ public sealed interface MappingsFormat<T : Mappings> {
      */
     public fun detect(lines: List<String>): Boolean
 
+    // TODO: consider whether it is safe to make this an extension
     /**
      * Parses [lines] (representing a mappings file) into a mappings data structure. Throws an
      * [IllegalStateException] when [lines] is not a valid input for this mappings format.
      * To check if [lines] can be parsed, you could invoke [detect].
      */
-    public fun parse(lines: List<String>): T
+    public fun parse(lines: List<String>): T = parse(lines.iterator())
 
     /**
      * Writes mappings compatible with this [MappingsFormat] back to a list of lines representing a mappings file
      */
-    public fun write(mappings: T): List<String>
+    public fun write(mappings: T): List<String> = writeLazy(mappings).toList()
+
+    /**
+     * Parses [lines] (an iterator of lines in a mappings file) into a mappings data structure. Throws an
+     * [IllegalStateException] when [lines] is not a valid input for this mappings format.
+     */
+    public fun parse(lines: Iterator<String>): T
+
+    /**
+     * Writes mappings compatible with this [MappingsFormat] to a lazily evaluated [Sequence]
+     */
+    public fun writeLazy(mappings: T): Sequence<String>
 }
+
+/**
+ * Parses [lines] (a [Sequence] of lines in a mappings file) into a mappings data structure. Throws an
+ * [IllegalStateException] when [lines] is not a valid input for this mappings format.
+ */
+public fun <T : Mappings> MappingsFormat<T>.parse(lines: Sequence<String>): T = parse(lines.iterator())
 
 /**
  * Represents an empty mappings object, with no data.
@@ -167,3 +189,9 @@ internal fun Mappings.assertValidDescs() {
                 "Consider calling recoverFieldDescriptors"
     }
 }
+
+// Parsing error handling
+internal data class LineAndNumber(val line: String, val number: Int)
+
+internal fun LineAndNumber.parseError(msg: String): Nothing =
+    throw IllegalArgumentException("Parsing failed at line $number: $msg")

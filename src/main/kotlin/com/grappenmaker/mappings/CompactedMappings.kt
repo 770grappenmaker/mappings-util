@@ -105,9 +105,14 @@ public data object CompactedMappingsFormat {
     }
 
     /**
-     * Parses some [CompactedMappings] that is an equivalent representation of the given a buffer as [bytes]
+     * Parses some [CompactedMappings] that is an equivalent representation of the given buffer as [bytes]
      */
-    public fun parse(bytes: ByteArray): CompactedMappings = with(DataInputStream(ByteArrayInputStream(bytes))) {
+    public fun parse(bytes: ByteArray): CompactedMappings = parse(ByteArrayInputStream(bytes))
+
+    /**
+     * Parses some [CompactedMappings] that is an equivalent representation of a given [InputStream] (when fully read)
+     */
+    public fun parse(input: InputStream): CompactedMappings = with(DataInputStream(input)) {
         require(readInt() == magicEncoded) { "Invalid magic: expected $magic" }
 
         val version = read()
@@ -121,7 +126,6 @@ public data object CompactedMappingsFormat {
 
             MappedClass(
                 names = names,
-                comments = emptyList(),
                 fields = fields.map { (n, d) -> MappedField(n, emptyList(), d) },
                 methods = methods.map { (n, d) -> MappedMethod(n, emptyList(), d, emptyList(), emptyList()) },
             )
@@ -177,23 +181,27 @@ public data object CompactedMappingsFormat {
     /**
      * Writes some [mappings] to a buffer that is an equivalent representation of the [mappings]
      */
-    public fun write(mappings: CompactedMappings): ByteArray = ByteArrayOutputStream().also { baos ->
-        with(DataOutputStream(baos)) {
-            require(mappings.version == 1) { "Version 1 expected, found ${mappings.version}" }
-            writeInt(magicEncoded)
-            write(mappings.version)
+    public fun write(mappings: CompactedMappings): ByteArray =
+        ByteArrayOutputStream().also { writeTo(mappings, it) }.toByteArray()
 
-            write(mappings.namespaces.size)
-            mappings.namespaces.forEach { writeString(it) }
+    /**
+     * Writes some [mappings] to a buffer that is an equivalent representation of the [mappings]
+     */
+    public fun writeTo(mappings: CompactedMappings, stream: OutputStream): Unit = with(DataOutputStream(stream)) {
+        require(mappings.version == 1) { "Version 1 expected, found ${mappings.version}" }
+        writeInt(magicEncoded)
+        write(mappings.version)
 
-            writeInt(mappings.classes.size)
-            mappings.classes.forEach { c ->
-                c.names.unfixNames().forEach { writeString(it) }
+        write(mappings.namespaces.size)
+        mappings.namespaces.forEach { writeString(it) }
 
-                writeVarInt(c.methods.size + c.fields.size)
-                c.methods.forEach { writeMapped(it.asMapped()) }
-                c.fields.forEach { writeMapped(it.asMapped()) }
-            }
+        writeInt(mappings.classes.size)
+        mappings.classes.forEach { c ->
+            c.names.unfixNames().forEach { writeString(it) }
+
+            writeVarInt(c.methods.size + c.fields.size)
+            c.methods.forEach { writeMapped(it.asMapped()) }
+            c.fields.forEach { writeMapped(it.asMapped()) }
         }
-    }.toByteArray()
+    }
 }

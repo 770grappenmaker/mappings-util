@@ -23,6 +23,9 @@ import kotlin.io.path.outputStream
 @Retention
 public annotation class JarRemapperDSL
 
+/**
+ * Marker annotation that declares that the annotated type is experimental Jar Remapper API
+ */
 @RequiresOptIn("Jar Remapper DSL is experimental and not at all guaranteed to work")
 @Retention
 public annotation class ExperimentalJarRemapper

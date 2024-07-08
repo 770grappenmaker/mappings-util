@@ -177,7 +177,7 @@ public fun Mappings.join(
     )
 
     val secondBaseMap = otherMappings.asASMMapping(
-        from = namespaces.first(),
+        from = otherMappings.namespaces.first(),
         to = intermediateNamespace,
         includeMethods = false,
         includeFields = false

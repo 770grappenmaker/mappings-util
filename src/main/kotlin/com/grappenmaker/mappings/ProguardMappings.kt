@@ -1,7 +1,6 @@
 package com.grappenmaker.mappings
 
 import org.objectweb.asm.Type
-import java.net.URL
 
 /**
  * Represents Proguard debug deobfuscation mappings. Note that Proguard only supports two mappings namespaces.
@@ -22,7 +21,7 @@ public fun ProguardMappings.write(): List<String> = ProguardMappingsFormat.write
 
 /**
  * Implements the Proguard mappings format, disregarding line number information,
- * which is written as 0:0 when serialized.
+ * which is written as 1:1 when serialized.
  */
 public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
     private val testRegex = """^(\w|\.)+ -> (\w|\.)+:$""".toRegex()
@@ -50,7 +49,7 @@ public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
         }
     }
 
-    private fun Type.unparse() = when (this) {
+    private fun Type.unparse(): String = when (this) {
         Type.VOID_TYPE -> "void"
         Type.INT_TYPE -> "int"
         Type.BOOLEAN_TYPE -> "boolean"
@@ -59,12 +58,26 @@ public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
         Type.FLOAT_TYPE -> "float"
         Type.DOUBLE_TYPE -> "double"
         Type.CHAR_TYPE -> "char"
-        else -> className
+        else -> when {
+            sort == Type.ARRAY -> elementType.unparse() + "[]".repeat(dimensions)
+            else -> className
+        }
     }
 
-    override fun parse(lines: List<String>): ProguardMappings {
+    override fun parse(lines: Iterator<String>): ProguardMappings {
         var state: ProguardState = MappingState()
-        lines.filterNot { it.startsWith('#') }.forEach { state = state.update(it) }
+
+        for ((idx, line) in lines.withIndex()) {
+            if (line.isBlank()) continue
+
+            val commentIdx = line.indexOf('#').takeIf { it >= 0 } ?: line.length
+            val content = line.take(commentIdx).trimEnd()
+            val comment = line.drop(commentIdx + 1).trimStart()
+
+            if (content.isNotEmpty()) state = with (LineAndNumber(content, idx + 1)) { state.update() }
+            if (comment.isNotEmpty()) state.comment(comment)
+        }
+
         state = state.end()
 
         return ProguardMappings(
@@ -74,35 +87,51 @@ public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
     }
 
     private sealed interface ProguardState {
-        fun update(line: String): ProguardState
+        context(LineAndNumber)
+        fun update(): ProguardState
         fun end(): ProguardState
+        fun comment(msg: String)
     }
 
+    context(LineAndNumber)
     private fun String.asMapping(): List<String> {
         val result = split(" -> ")
-        require(result.size == 2) { "invalid mappings: expected 2 values, got ${result.size}" }
+        if (result.size != 2) parseError("expected mapping (2 values, got ${result.size}): $this")
         return result
     }
 
     private class MappingState : ProguardState {
         val classes = mutableListOf<MappedClass>()
+        val comments = mutableListOf<String>()
 
-        override fun update(line: String): ProguardState {
-            require(!line.startsWith(indent)) { "invalid mappings: $line" }
-            return ClassState(this, line.removeSuffix(":").asMapping().map { it.asResourceName() })
+        context(LineAndNumber)
+        override fun update(): ProguardState {
+            if (line.startsWith(indent)) parseError("Invalid top level indent")
+            return ClassState(this, line.removeSuffix(":").asMapping().map { it.asResourceName() }, comments.toList())
+                .also { comments.clear() }
         }
 
         override fun end() = this
+
+        override fun comment(msg: String) {
+            comments += msg
+        }
     }
 
-    private class ClassState(val owner: MappingState, val names: List<String>) : ProguardState {
+    private class ClassState(
+        val owner: MappingState,
+        val names: List<String>,
+        val comments: List<String>
+    ) : ProguardState {
         val fields = mutableListOf<MappedField>()
         val methods = mutableListOf<MappedMethod>()
+        val memberComments = mutableListOf<String>()
 
-        override fun update(line: String): ProguardState {
+        context(LineAndNumber)
+        override fun update(): ProguardState {
             if (!line.startsWith(indent)) {
                 end()
-                return owner.update(line)
+                return owner.update()
             }
 
             val trimmed = line.trim()
@@ -119,10 +148,8 @@ public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
 
                 methods += MappedMethod(
                     names = listOf(rest.substringBefore('('), name),
-                    comments = emptyList(),
                     desc = Type.getMethodType(returnType, *params.toTypedArray()).descriptor,
-                    parameters = emptyList(),
-                    variables = emptyList()
+                    comments = memberComments.toList()
                 )
             } else {
                 val (desc, name) = trimmed.asMapping()
@@ -130,27 +157,43 @@ public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
 
                 fields += MappedField(
                     names = listOf(rest, name),
-                    comments = emptyList(),
-                    desc = type.parseType().descriptor
+                    desc = type.parseType().descriptor,
+                    comments = memberComments.toList()
                 )
             }
+
+            memberComments.clear()
 
             return this
         }
 
         override fun end(): ProguardState {
-            owner.classes += MappedClass(names, emptyList(), fields, methods)
+            owner.classes += MappedClass(names, comments, fields, methods)
             return owner.end()
+        }
+
+        override fun comment(msg: String) {
+            memberComments += msg
         }
     }
 
-    override fun write(mappings: ProguardMappings): List<String> = mappings.classes.flatMap { c ->
-        listOf("${c.names.first().asBinaryName()} -> ${c.names.last().asBinaryName()}:") + (c.methods.map { m ->
-            val type = Type.getMethodType(m.desc)
-            val args = type.argumentTypes.joinToString(",") { it.unparse() }
-            "${indent}1:1:${type.returnType.unparse()} ${m.names.first()}($args) -> ${m.names.last()}"
-        } + c.fields.map {
-            "$indent${Type.getType(it.desc!!).unparse()} ${it.names.first()} -> ${it.names.last()}"
-        })
+    override fun writeLazy(mappings: ProguardMappings): Sequence<String> = sequence {
+        for (c in mappings.classes) {
+            c.comments.forEach { yield("# $it") }
+            yield("${c.names[0].asBinaryName()} -> ${c.names[1].asBinaryName()}:")
+
+            for (f in c.fields) {
+                f.comments.forEach { yield("$indent# $it") }
+                yield("$indent${Type.getType(f.desc!!).unparse()} ${f.names[0]} -> ${f.names[1]}")
+            }
+
+            for (m in c.methods) {
+                m.comments.forEach { yield("$indent# $it") }
+
+                val type = Type.getMethodType(m.desc)
+                val args = type.argumentTypes.joinToString(",") { it.unparse() }
+                yield("${indent}1:1:${type.returnType.unparse()} ${m.names[0]}($args) -> ${m.names[1]}")
+            }
+        }
     }
 }

@@ -4,10 +4,13 @@ import org.junit.jupiter.api.Test
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.tree.ClassNode
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 
 class TestMappings {
     private val testDocument = "test.tiny".getResource().lines()
+    private val proguardTestDocument = "test.proguard".getResource().lines()
+    private val allTests = listOf("test.tiny", "test.tsrg", "test.xsrg", "test-v1.tiny", "test.proguard")
 
     @Test
     fun `parse tiny mappings`() {
@@ -74,5 +77,38 @@ class TestMappings {
         val methodD = node.methods[1]
         assertEquals("anotherAction", methodD.name)
         assertEquals("()LSomeOtherState;", methodD.desc)
+    }
+
+    @Test
+    fun `mappings parse error`() {
+        val erroneousDocument = buildList<String> {
+            addAll(testDocument)
+            this[1] = this[1].replaceFirstChar { 'b' }
+        }
+
+        val errorMsg = "Parsing failed at line 2: Invalid top-level member type b"
+        val fail = assertFailsWith<IllegalArgumentException> { MappingsLoader.loadMappings(erroneousDocument) }
+        assertEquals(errorMsg, fail.message)
+    }
+
+    private fun <T : Mappings> MappingsFormat<T>.test(doc: List<String>) {
+        val parsed = parse(doc)
+        assertEquals(parsed, parse(write(parsed)))
+    }
+
+    @Test
+    fun `parse and write to self`() {
+        allTests.forEach { test ->
+            val doc = test.getResource().lines()
+            val format = MappingsLoader.findMappingsFormat(doc)
+            format.test(doc)
+        }
+    }
+
+    @Test
+    fun `proguard and tiny are the same`() {
+        val proguard = MappingsLoader.loadMappings(proguardTestDocument)
+        val expected = MappingsLoader.loadMappings(testDocument)
+        assertEquals(expected.asGenericMappings(), proguard.renameNamespaces("official", "named").asGenericMappings())
     }
 }

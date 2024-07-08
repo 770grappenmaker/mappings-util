@@ -42,19 +42,19 @@ internal class TSRGMappingsFormat(private val isV2: Boolean) : MappingsFormat<TS
         }
     }
 
-    override fun parse(lines: List<String>): TSRGMappings {
-        require(detect(lines)) { "Invalid mappings" }
-
+    override fun parse(lines: Iterator<String>): TSRGMappings {
         // TODO: standardize default namespaces if the mapping format omits them
         // Currently, default mapping namespaces differ per mapping format, which might not be desirable
-        val namespaces = if (isV2) (lines.firstOrNull() ?: error("Mappings are empty!")).parts().drop(1)
+        val namespaces = if (isV2) (lines.nextOrNull() ?: error("Mappings are empty!")).parts().drop(1)
         else listOf("obf", "srg")
 
-        val mapLines = (if (isV2) lines.drop(1) else lines)
-            .dropWhile { it.countStart() != 0 }.filter { it.isNotBlank() }
-
         var state: TSRGState = MappingState()
-        mapLines.forEach { state = state.update(it) }
+
+        for ((idx, line) in lines.withIndex()) {
+            if (line.isBlank()) continue
+            state = with(LineAndNumber(line, idx + 2)) { state.update() }
+        }
+
         repeat(2) { state = state.end() }
 
         val end = (state as? MappingState ?: error("Did not finish walking tree, parsing failed (ended in $state)"))
@@ -62,18 +62,20 @@ internal class TSRGMappingsFormat(private val isV2: Boolean) : MappingsFormat<TS
     }
 
     private sealed interface TSRGState {
-        fun update(line: String): TSRGState
+        context(LineAndNumber)
+        fun update(): TSRGState
         fun end(): TSRGState
     }
 
     private inner class MappingState : TSRGState {
         val classes = mutableListOf<MappedClass>()
 
-        override fun update(line: String): TSRGState {
+        context(LineAndNumber)
+        override fun update(): TSRGState {
             val ident = line.countStart()
             val parts = line.parts()
 
-            require(ident == 0) { "Invalid indent top-level" }
+            if (ident != 0) parseError("Invalid indent top-level")
             return ClassState(this, parts)
         }
 
@@ -85,11 +87,12 @@ internal class TSRGMappingsFormat(private val isV2: Boolean) : MappingsFormat<TS
         val fields = mutableListOf<MappedField>()
         val methods = mutableListOf<MappedMethod>()
 
-        override fun update(line: String): TSRGState {
+        context(LineAndNumber)
+        override fun update(): TSRGState {
             val ident = line.countStart()
             if (ident < 1) {
                 end()
-                return owner.update(line)
+                return owner.update()
             }
 
             val parts = line.parts()
@@ -111,15 +114,16 @@ internal class TSRGMappingsFormat(private val isV2: Boolean) : MappingsFormat<TS
     private inner class MethodState(val owner: ClassState, val desc: String, val names: List<String>) : TSRGState {
         val parameters = mutableListOf<MappedParameter>()
 
-        override fun update(line: String): TSRGState {
+        context(LineAndNumber)
+        override fun update(): TSRGState {
             val ident = line.countStart()
             if (ident < 2) {
                 end()
-                return owner.update(line)
+                return owner.update()
             }
 
             val parts = line.parts()
-            if (parts.size == 1) require(parts.single() == "static") { "Unrecognized method meta: $parts" }
+            if (parts.size == 1) if (parts.single() != "static") parseError("Unrecognized method meta: $parts")
             else parameters += MappedParameter(parts.drop(1), parts.first().toInt())
 
             return this
@@ -136,19 +140,21 @@ internal class TSRGMappingsFormat(private val isV2: Boolean) : MappingsFormat<TS
 
     private fun String.parts() = trimIndent().split(' ')
     private fun List<String>.join() = joinToString(" ")
-    private fun List<String>.indent() = map { "\t" + it }
 
-    override fun write(mappings: TSRGMappings): List<String> {
+    override fun writeLazy(mappings: TSRGMappings): Sequence<String> = sequence {
+        require(mappings.isV2 == isV2) { "Cannot write v1 mappings with v2 format and vice versa" }
         if (!isV2) require(mappings.namespaces.size == 2) {
             "TSRG v1 supports exactly 2 mapping namespaces, found: ${mappings.namespaces}"
         }
 
-        val header = if (isV2) "tsrg2 ${mappings.namespaces.join()}" else null
-        return listOfNotNull(header) + mappings.classes.flatMap { c ->
-            listOf(c.names.join()) + (c.fields.map { it.names.join() } + c.methods.flatMap { m ->
-                listOf((listOf(m.names.first()) + m.desc + m.names.drop(1)).join()) +
-                        m.parameters.map { "${it.index} ${it.names.join()}" }.indent()
-            }).indent()
+        if (isV2) yield("tsrg2 ${mappings.namespaces.join()}")
+        for (c in mappings.classes) {
+            yield(c.names.join())
+            for (f in c.fields) yield('\t' + f.names.join())
+            for (m in c.methods) {
+                yield("\t${m.names.first()} ${m.desc} ${m.names.drop(1).join()}")
+                for (p in m.parameters) yield("\t\t${p.index} ${p.names.join()}")
+            }
         }
     }
 }

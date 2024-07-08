@@ -1,0 +1,7 @@
+v1	official	named
+CLASS	a	Main
+METHOD	a	()Le;	c	action
+METHOD	a	()Le;	d	anotherAction
+FIELD	a	Ld;	b	state
+CLASS	d	SomeState
+CLASS	e	SomeOtherState

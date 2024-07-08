@@ -1,4 +1,3 @@
-import org.jetbrains.dokka.Platform
 import org.jetbrains.dokka.gradle.DokkaTask
 import java.net.URL
 
@@ -15,11 +14,12 @@ repositories {
 }
 
 group = "com.grappenmaker"
-version = "0.1.6"
+version = "0.1.7"
 
 kotlin {
     jvmToolchain(8)
     explicitApi()
+    compilerOptions { freeCompilerArgs.add("-Xcontext-receivers") }
 }
 
 val dokkaJavadoc by tasks.getting(DokkaTask::class)
