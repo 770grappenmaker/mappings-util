@@ -187,6 +187,14 @@ class Mappings {
                         names = listOf("equals", "equals"),
                         desc = "(Ljava/lang/Object;)Z"
                     ),
+                    MappedMethod(
+                        names = listOf("sameName", "sameName"),
+                        desc = "()V"
+                    ),
+                    MappedMethod(
+                        names = listOf("<init>", "<init>"),
+                        desc = "()V"
+                    ),
                 )
             ))
         )

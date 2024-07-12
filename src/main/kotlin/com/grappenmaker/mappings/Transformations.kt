@@ -352,6 +352,12 @@ public inline fun Mappings.filterClasses(predicate: (MappedClass) -> Boolean): M
     GenericMappings(namespaces, classes.filter(predicate))
 
 /**
+ * Filters methods matching the [predicate]
+ */
+public inline fun Mappings.filterMethods(predicate: (owner: MappedClass, method: MappedMethod) -> Boolean): Mappings =
+    GenericMappings(namespaces, classes.map { c -> c.copy(methods = c.methods.filter { predicate(c, it) }) })
+
+/**
  * Maps classes according to the given [predicate]
  */
 public inline fun Mappings.mapClasses(predicate: (MappedClass) -> MappedClass): Mappings =
@@ -399,6 +405,15 @@ public fun Mappings.recoverFieldDescriptors(file: JarFile): Mappings = recoverFi
     file.getInputStream(file.getJarEntry("$it.class") ?: return@a null).readBytes()
 }
 
+private fun <T> Iterable<T>.allIdentical(): Boolean {
+    val iter = iterator()
+    if (!iter.hasNext()) return true
+
+    val obj = iter.next()
+    for (element in iter) if (element != obj) return false
+    return true
+}
+
 /**
  * Removes redundant or straight up incorrect data from this [Mappings] object, by looking at the inheritance
  * information present in class files, presented by the [loader].
@@ -409,13 +424,14 @@ public fun Mappings.recoverFieldDescriptors(file: JarFile): Mappings = recoverFi
  * - Abstract methods are populated to interfaces (this can happen when using proguard mappings). This is usually
  * straight up wrong information, when a mapped method entry is not present on the actual class.
  * - a method being a data method ([MappedMethod.isData])
+ * - a method whose names are all identical
  *
  * @sample samples.Mappings.redundancy
  */
 public fun Mappings.removeRedundancy(loader: ClasspathLoader): Mappings =
     if (namespaces.isEmpty()) EmptyMappings else GenericMappings(
         namespaces,
-        classes.map { oc ->
+        classes.asSequence().map { oc ->
             val name = oc.names.first()
             val ourSigs = hashSetOf<String>()
             val superSigs = hashSetOf<String>()
@@ -433,11 +449,14 @@ public fun Mappings.removeRedundancy(loader: ClasspathLoader): Mappings =
                 }
             }
 
-            oc.copy(methods = oc.methods.filter {
-                val sig = it.names.first() + it.desc
-                sig in ourSigs && sig !in superSigs && !it.isData()
-            })
-        }
+            oc.copy(
+                methods = oc.methods.filter {
+                    val sig = it.names.first() + it.desc
+                    sig in ourSigs && sig !in superSigs && !it.isData() && !it.names.allIdentical()
+                },
+                fields = oc.fields.filter { !it.names.allIdentical() }
+            )
+        }.filterNot { it.methods.isEmpty() && it.fields.isEmpty() && it.names.allIdentical() }.toList()
     )
 
 /**
@@ -447,5 +466,20 @@ public fun Mappings.removeRedundancy(loader: ClasspathLoader): Mappings =
  *
  * @sample samples.Mappings.redundancy
  */
-public fun Mappings.removeRedundancy(file: JarFile): Mappings =
-    removeRedundancy(ClasspathLoaders.fromJar(file).memoized())
+public fun Mappings.removeRedundancy(file: JarFile): Mappings = removeRedundancy(
+    ClasspathLoaders.compound(
+        ClasspathLoaders.fromJar(file).memoized(),
+        ClasspathLoaders.fromSystemLoader()
+    )
+)
+
+/**
+ * Returns new [Mappings] that are identical to these [Mappings], except the comments will be removed
+ */
+public fun Mappings.removeComments(): Mappings = mapClasses { c ->
+    c.copy(
+        comments = emptyList(),
+        fields = c.fields.map { f -> f.copy(comments = emptyList()) },
+        methods = c.methods.map { f -> f.copy(comments = emptyList()) },
+    )
+}

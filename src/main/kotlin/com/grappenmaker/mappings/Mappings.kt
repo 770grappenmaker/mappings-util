@@ -122,6 +122,8 @@ public sealed interface MappingsFormat<T : Mappings> {
      * Parses [lines] (representing a mappings file) into a mappings data structure. Throws an
      * [IllegalStateException] when [lines] is not a valid input for this mappings format.
      * To check if [lines] can be parsed, you could invoke [detect].
+     *
+     * If detection is not required, [parse] with an [Iterator] should be preferred
      */
     public fun parse(lines: List<String>): T = parse(lines.iterator())
 
@@ -140,6 +142,16 @@ public sealed interface MappingsFormat<T : Mappings> {
      * Writes mappings compatible with this [MappingsFormat] to a lazily evaluated [Sequence]
      */
     public fun writeLazy(mappings: T): Sequence<String>
+
+    /**
+     * Represents a mappings format that does not support detecting inputs, because of ambiguities or similarities with
+     * other formats. [detect] will always return `false`. If you want to use this mappings format, it should either
+     * be known ahead of time or stored somewhere that this is the case, this library won't handle that for you.
+     */
+    public sealed interface Undetectable<T : Mappings> : MappingsFormat<T> {
+        @Deprecated("This mappings format does not support detection", replaceWith = ReplaceWith("false"))
+        override fun detect(lines: List<String>): Boolean = false
+    }
 }
 
 /**
@@ -157,7 +169,12 @@ public data object EmptyMappings : Mappings {
 }
 
 /**
- * The entry point for loading [Mappings]
+ * The entry point for loading [Mappings].
+ *
+ * Note that it should be preferred that it is known in advance which mappings format is being dealt with,
+ * as the detection mechanism can be inaccurate due to it not fully parsing the input file. It can also slow the entire
+ * process down, since it requires the caller to read some probably large resource into a List<String> first,
+ * which costs allocations.
  */
 public object MappingsLoader {
     /**
@@ -166,12 +183,18 @@ public object MappingsLoader {
     public val allMappingsFormats: List<MappingsFormat<*>> = listOf(
         TinyMappingsV1Format, TinyMappingsV2Format,
         SRGMappingsFormat, XSRGMappingsFormat,
-        ProguardMappingsFormat, TSRGV1MappingsFormat, TSRGV2MappingsFormat
+        ProguardMappingsFormat, TSRGV1MappingsFormat, TSRGV2MappingsFormat,
+        CSRGMappingsFormat, EnigmaMappingsFormat, RecafMappingsFormat
     )
 
     /**
      * Finds the correct [MappingsFormat] for the mappings file represented by [lines]. Throws an
      * [IllegalStateException] when an invalid mappings sequence is provided (or not supported).
+     *
+     * Note that mappings formats that do not support detection (inheritors of [MappingsFormat.Undetectable]) will not
+     * be returned by this function.
+     *
+     * @see [MappingsFormat.detect]
      */
     public fun findMappingsFormat(lines: List<String>): MappingsFormat<*> =
         allMappingsFormats.find { it.detect(lines) } ?: error("No format was found for mappings")
@@ -179,6 +202,11 @@ public object MappingsLoader {
     /**
      * Attempts to load the mappings represented by [lines] as [Mappings]. Throws an [IllegalStateException] when an
      * invalid mappings sequence is provided (or not supported).
+     *
+     * Note that mappings in formats that do not support detection (inheritors of [MappingsFormat.Undetectable]) will
+     * not be parsed correctly, and an [IllegalStateException] will be thrown.
+     *
+     * @see [MappingsFormat.parse]
      */
     public fun loadMappings(lines: List<String>): Mappings = findMappingsFormat(lines).parse(lines)
 }
@@ -195,3 +223,18 @@ internal data class LineAndNumber(val line: String, val number: Int)
 
 internal fun LineAndNumber.parseError(msg: String): Nothing =
     throw IllegalArgumentException("Parsing failed at line $number: $msg")
+
+internal fun fixupHoles(
+    methods: Map<String, List<MappedMethod>>,
+    fields: Map<String, List<MappedField>>,
+    classes: MutableList<MappedClass>
+) {
+    val missingClasses = methods.keys + fields.keys - classes.mapTo(hashSetOf()) { it.names.first() }
+    classes += missingClasses.map { name ->
+        MappedClass(
+            names = listOf(name, name),
+            fields = fields[name] ?: listOf(),
+            methods = methods[name] ?: listOf()
+        )
+    }
+}

@@ -18,6 +18,12 @@ public data class TSRGMappings(
 public fun TSRGMappings.write(): List<String> = (if (isV2) TSRGV2MappingsFormat else TSRGV1MappingsFormat).write(this)
 
 /**
+ * Writes [TSRGMappings] as a lazily evaluated [Sequence]
+ */
+public fun TSRGMappings.writeLazy(): Sequence<String> =
+    (if (isV2) TSRGV2MappingsFormat else TSRGV1MappingsFormat).writeLazy(this)
+
+/**
  * Represents the TSRG v1 mappings format
  */
 public data object TSRGV1MappingsFormat : MappingsFormat<TSRGMappings> by TSRGMappingsFormat(false)

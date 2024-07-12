@@ -39,9 +39,25 @@ public fun Mappings.asTSRGMappings(v2: Boolean): TSRGMappings = TSRGMappings(nam
  *
  * @sample samples.Mappings.conversions
  */
-public fun Mappings.asCompactedMappings(): CompactedMappings = CompactedMappings(namespaces, classes)
+public fun Mappings.asCompactedMappings(version: Int = 2): CompactedMappings =
+    CompactedMappings(namespaces, classes, version)
 
 /**
  * Converts these [Mappings] to [GenericMappings]
  */
 public fun Mappings.asGenericMappings(): GenericMappings = GenericMappings(namespaces, classes)
+
+/**
+ * Converts these [Mappings] to [CSRGMappings]
+ */
+public fun Mappings.asCSRGMappings(): CSRGMappings = CSRGMappings(classes)
+
+/**
+ * Converts these [Mappings] to [EnigmaMappings]
+ */
+public fun Mappings.asEnigmaMappings(): EnigmaMappings = EnigmaMappings(classes)
+
+/**
+ * Converts these [Mappings] to [RecafMappings]
+ */
+public fun Mappings.asRecafMappings(): RecafMappings = RecafMappings(classes)

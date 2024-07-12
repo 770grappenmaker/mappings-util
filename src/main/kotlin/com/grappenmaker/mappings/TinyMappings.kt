@@ -33,12 +33,16 @@ public data object TinyMappingsV2Format : TinyMappingsWriter by TinyMappingsForm
 public fun TinyMappings.write(compact: Boolean = isV2): List<String> =
     (if (isV2) TinyMappingsV2Format else TinyMappingsV1Format).write(this, compact).toList()
 
+/**
+ * Writes [TinyMappings] as a lazily evaluated [Sequence]. If [compact] is set, a more compact
+ * format of tiny mappings will be used, see [TinyMappingsWriter.write].
+ */
+public fun TinyMappings.writeLazy(compact: Boolean = isV2): Sequence<String> =
+    (if (isV2) TinyMappingsV2Format else TinyMappingsV1Format).write(this, compact)
+
 internal class TinyMappingsFormat(private val isV2: Boolean) : TinyMappingsWriter {
-    // TODO: rethink this mechanism
     override fun detect(lines: List<String>): Boolean =
-        lines.firstOrNull()?.parts()?.first() == (if (isV2) "tiny" else "v1") && (isV2 || lines.drop(1).all {
-            it.startsWith("CLASS") || it.startsWith("FIELD") || it.startsWith("METHOD") || it.isEmpty()
-        })
+        lines.firstOrNull()?.parts()?.first() == (if (isV2) "tiny" else "v1")
 
     // Quirk: empty name means take the last name
     private fun List<String>.fixNames() = buildList {
@@ -77,8 +81,8 @@ internal class TinyMappingsFormat(private val isV2: Boolean) : TinyMappingsWrite
                     when (val t = parts.firstOrNull() ?: parseError("Missing member type")) {
                         "CLASS" -> classes += MappedClass(
                             names = parts.drop(1).fixNames(),
-                            fields = fields[parts[1]] ?: listOf(),
-                            methods = methods[parts[1]] ?: listOf(),
+                            fields = fields.getOrPut(parts[1]) { mutableListOf() },
+                            methods = methods.getOrPut(parts[1]) { mutableListOf() },
                         )
 
                         "FIELD" -> fields.getOrPut(parts[1]) { mutableListOf() } += MappedField(
@@ -96,6 +100,7 @@ internal class TinyMappingsFormat(private val isV2: Boolean) : TinyMappingsWrite
                 }
             }
 
+            fixupHoles(methods, fields, classes)
             classes
         }, isV2)
     }

@@ -10,6 +10,7 @@ import kotlin.test.assertIs
 class TestMappings {
     private val testDocument = "test.tiny".getResource().lines()
     private val proguardTestDocument = "test.proguard".getResource().lines()
+    private val csrgTestDocument = "test.csrg".getResource().lines()
     private val allTests = listOf("test.tiny", "test.tsrg", "test.xsrg", "test-v1.tiny", "test.proguard")
 
     @Test
@@ -93,7 +94,9 @@ class TestMappings {
 
     private fun <T : Mappings> MappingsFormat<T>.test(doc: List<String>) {
         val parsed = parse(doc)
-        assertEquals(parsed, parse(write(parsed)))
+        val written = write(parsed)
+        assertEquals(parsed, parse(written))
+        if (this != ProguardMappingsFormat) assertEqualMappings(doc, written)
     }
 
     @Test
@@ -103,6 +106,18 @@ class TestMappings {
             val format = MappingsLoader.findMappingsFormat(doc)
             format.test(doc)
         }
+
+        CSRGMappingsFormat.test(csrgTestDocument)
+    }
+
+    private fun assertEqualMappings(expected: List<String>, actual: List<String>) {
+        assertEquals(expected.first(), actual.first())
+
+        val left = expected.filterTo(mutableListOf()) { it.isNotEmpty() }
+        val right = actual.filterTo(mutableListOf()) { it.isNotEmpty() }
+
+        for (element in left) assert(right.remove(element)) { "\"$element\" was not in actual but was in expected" }
+        assert(right.isEmpty()) { "actual contains lines $right, were not found in expected" }
     }
 
     @Test
@@ -110,5 +125,13 @@ class TestMappings {
         val proguard = MappingsLoader.loadMappings(proguardTestDocument)
         val expected = MappingsLoader.loadMappings(testDocument)
         assertEquals(expected.asGenericMappings(), proguard.renameNamespaces("official", "named").asGenericMappings())
+    }
+
+    @Test
+    fun `compacting and decompacting works`() {
+        val mappings = MappingsLoader.loadMappings(testDocument).removeComments()
+        val toTest = mappings.asCompactedMappings()
+        val actual = CompactedMappingsFormat.parse(toTest.write())
+        assertEquals(toTest, actual)
     }
 }

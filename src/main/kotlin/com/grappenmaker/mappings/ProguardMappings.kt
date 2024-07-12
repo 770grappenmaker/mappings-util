@@ -20,6 +20,11 @@ public data class ProguardMappings(override val classes: List<MappedClass>) : Ma
 public fun ProguardMappings.write(): List<String> = ProguardMappingsFormat.write(this)
 
 /**
+ * Writes [ProguardMappings] as a lazily evaluated [Sequence]
+ */
+public fun ProguardMappings.writeLazy(): Sequence<String> = ProguardMappingsFormat.writeLazy(this)
+
+/**
  * Implements the Proguard mappings format, disregarding line number information,
  * which is written as 1:1 when serialized.
  */

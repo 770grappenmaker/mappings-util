@@ -122,10 +122,20 @@ public class JarRemapper {
         tasks += JarRemapTask(input, output, fromNamespace, toNamespace)
     }
 
+    /**
+     * Adds a [JarClassVisitor] to the pipeline of visitors that will be applied to each remapped class
+     *
+     * @see [JarClassVisitor]
+     */
     public fun visitClasses(visitor: JarClassVisitor) {
         classVisitors += visitor
     }
 
+    /**
+     * Adds a [JarResourceVisitor] to the pipeline of visitors that will be applied to each copied resource
+     *
+     * @see [JarResourceVisitor]
+     */
     public fun visitResources(visitor: JarResourceVisitor) {
         resourceVisitors += visitor
     }

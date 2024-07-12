@@ -25,6 +25,12 @@ public fun SRGMappings.asSimpleRemapper(): SimpleRemapper = asSimpleRemapper(nam
 public fun SRGMappings.write(): List<String> = (if (isExtended) XSRGMappingsFormat else SRGMappingsFormat).write(this)
 
 /**
+ * Writes [SRGMappings] as a lazily evaluated [Sequence]
+ */
+public fun SRGMappings.writeLazy(): Sequence<String> =
+    (if (isExtended) XSRGMappingsFormat else SRGMappingsFormat).writeLazy(this)
+
+/**
  * Represents the SRG mappings format
  */
 public data object SRGMappingsFormat : MappingsFormat<SRGMappings> by BasicSRGParser(false)
@@ -36,8 +42,10 @@ public data object XSRGMappingsFormat : MappingsFormat<SRGMappings> by BasicSRGP
 
 internal class BasicSRGParser(private val isExtended: Boolean) : MappingsFormat<SRGMappings> {
     private val entryTypes = setOf("CL", "FD", "MD", "PK")
+
     override fun detect(lines: List<String>): Boolean {
-        if (!lines.all { it.substringBefore(':') in entryTypes || it.isEmpty() }) return false
+        if (lines.isEmpty()) return false
+        if ((lines.firstOrNull { it.isNotEmpty() } ?: return false).substringBefore(':') !in entryTypes) return false
         return lines.find { it.startsWith("FD:") }?.let { l -> l.split(" ").size > 3 == isExtended } ?: true
     }
 
@@ -50,12 +58,12 @@ internal class BasicSRGParser(private val isExtended: Boolean) : MappingsFormat<
             if (line.isBlank()) continue
             val parts = line.split(' ')
 
-            with(LineAndNumber(line, idx + 2)) {
+            with(LineAndNumber(line, idx + 1)) {
                 when (val t = parts.firstOrNull() ?: parseError("Missing member type")) {
                     "CL:" -> classes += MappedClass(
                         names = parts.subList(1, 3),
-                        fields = fields[parts[1]] ?: listOf(),
-                        methods = methods[parts[1]] ?: listOf()
+                        fields = fields.getOrPut(parts[1]) { mutableListOf() },
+                        methods = methods.getOrPut(parts[1]) { mutableListOf() },
                     )
 
                     "FD:" -> fields.getOrPut(parts[1].substringBeforeLast('/')) { mutableListOf() } += MappedField(
@@ -78,15 +86,7 @@ internal class BasicSRGParser(private val isExtended: Boolean) : MappingsFormat<
             }
         }
 
-        val missingClasses = methods.keys + fields.keys - classes.mapTo(hashSetOf()) { it.names.first() }
-        classes += missingClasses.map { name ->
-            MappedClass(
-                names = listOf(name, name),
-                fields = fields[name] ?: listOf(),
-                methods = methods[name] ?: listOf()
-            )
-        }
-
+        fixupHoles(methods, fields, classes)
         return SRGMappings(classes, isExtended)
     }
 
