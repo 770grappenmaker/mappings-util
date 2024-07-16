@@ -1,0 +1,6 @@
+a Main
+a.b Ld; state
+a.c()Le; action
+a.d()Le; anotherAction
+d SomeState
+e SomeOtherState

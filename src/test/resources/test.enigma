@@ -1,0 +1,12 @@
+CLASS a Main
+	COMMENT Test comment
+	FIELD b state Ld;
+		COMMENT Electric boogaloo
+	METHOD c action ()Le;
+		COMMENT Crazy
+		COMMENT Two comments!
+	METHOD d anotherAction ()Le;
+	CLASS a Nested
+		FIELD a state Ld;
+CLASS d SomeState
+CLASS e SomeOtherState

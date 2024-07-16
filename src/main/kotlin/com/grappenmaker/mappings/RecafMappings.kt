@@ -1,8 +1,5 @@
 package com.grappenmaker.mappings
 
-import kotlin.io.path.Path
-import kotlin.io.path.useLines
-
 /**
  * Represents a Recaf Mappings file
  */

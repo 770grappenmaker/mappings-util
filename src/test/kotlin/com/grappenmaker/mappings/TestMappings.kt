@@ -10,8 +10,16 @@ import kotlin.test.assertIs
 class TestMappings {
     private val testDocument = "test.tiny".getResource().lines()
     private val proguardTestDocument = "test.proguard".getResource().lines()
-    private val csrgTestDocument = "test.csrg".getResource().lines()
-    private val allTests = listOf("test.tiny", "test.tsrg", "test.xsrg", "test-v1.tiny", "test.proguard")
+
+    private val undetectableTests = listOf(
+        "test.csrg" to CSRGMappingsFormat,
+        "test.recaf" to RecafMappingsFormat
+    )
+
+    private val allTests = listOf(
+        "test.tiny", "test.tsrg", "test.xsrg",
+        "test-v1.tiny", "test.proguard", "test.enigma"
+    )
 
     @Test
     fun `parse tiny mappings`() {
@@ -94,6 +102,7 @@ class TestMappings {
 
     private fun <T : Mappings> MappingsFormat<T>.test(doc: List<String>) {
         val parsed = parse(doc)
+        println(parsed)
         val written = write(parsed)
         assertEquals(parsed, parse(written))
         if (this != ProguardMappingsFormat) assertEqualMappings(doc, written)
@@ -107,7 +116,7 @@ class TestMappings {
             format.test(doc)
         }
 
-        CSRGMappingsFormat.test(csrgTestDocument)
+        undetectableTests.forEach { (k, v) -> v.test(k.getResource().trim().lines()) }
     }
 
     private fun assertEqualMappings(expected: List<String>, actual: List<String>) {

@@ -96,7 +96,7 @@ public data object EnigmaMappingsFormat : MappingsFormat<EnigmaMappings> {
                 "FIELD" -> FieldState(this, indent + 1, parts.last(), parts.dropLast(1))
                 "METHOD" -> MethodState(this, indent + 1, parts.last(), parts.dropLast(1))
                 "COMMENT" -> {
-                    comments += parts.joinToString("\t")
+                    comments += parts.join()
                     this
                 }
 
@@ -128,7 +128,7 @@ public data object EnigmaMappingsFormat : MappingsFormat<EnigmaMappings> {
 
             val (type, parts) = line.prepare()
             if (type != "COMMENT") parseError("Invalid field member type $type!")
-            comments += parts.joinToString("\t")
+            comments += parts.join()
 
             return this
         }
@@ -160,7 +160,7 @@ public data object EnigmaMappingsFormat : MappingsFormat<EnigmaMappings> {
             val (type, parts) = line.prepare()
             return when (type) {
                 "COMMENT" -> {
-                    comments += parts.joinToString("\t")
+                    comments += parts.join()
                     this
                 }
 
@@ -240,7 +240,7 @@ public data object EnigmaMappingsFormat : MappingsFormat<EnigmaMappings> {
             yield("${prefix}CLASS ${names.join()}")
 
             for (nested in entry.children.values) write(nested, indent + 1, v.names)
-            for (cm in v.comments) yield("${prefix}\tCOMMENT\t$cm")
+            for (cm in v.comments) yield("${prefix}\tCOMMENT $cm")
 
             for (m in v.methods) {
                 yield("${prefix}\tMETHOD ${m.names.join()} ${m.desc}")
