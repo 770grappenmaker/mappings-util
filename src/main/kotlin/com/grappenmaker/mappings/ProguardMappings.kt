@@ -142,9 +142,10 @@ public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
             val trimmed = line.trim()
 
             if ('(' in trimmed) {
-                val withoutJunk = trimmed.substringAfterLast(':')
+                val secondIndex = trimmed.indexOf(':', trimmed.indexOf(':') + 1)
+                val withoutJunk = if (secondIndex >= 0) trimmed.drop(secondIndex + 1) else trimmed
                 val (desc, name) = withoutJunk.asMapping()
-                val (returnName, rest) = desc.split(' ')
+                val (returnName, rest) = desc.substringBeforeLast(':').split(' ')
 
                 val params = rest.substringAfter('(').substringBefore(')').split(",")
                     .filter { it.isNotEmpty() }.map { it.parseType() }
@@ -197,7 +198,7 @@ public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
 
                 val type = Type.getMethodType(m.desc)
                 val args = type.argumentTypes.joinToString(",") { it.unparse() }
-                yield("${indent}1:1:${type.returnType.unparse()} ${m.names[0]}($args) -> ${m.names[1]}")
+                yield("$indent${type.returnType.unparse()} ${m.names[0]}($args) -> ${m.names[1]}")
             }
         }
     }

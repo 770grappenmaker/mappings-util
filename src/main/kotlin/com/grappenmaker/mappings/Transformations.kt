@@ -426,51 +426,66 @@ private fun <T> Iterable<T>.allIdentical(): Boolean {
  * - a method being a data method ([MappedMethod.isData])
  * - a method whose names are all identical
  *
+ * If [removeDuplicates] is `true` (`false` by default), this method will also look for methods and fields with the
+ * same obfuscated/first name and descriptor. This is `false` by default since this might be expensive, and most of the
+ * time, there will not be any duplicates in the first place, since that could be seen as an invalid mappings file.
+ *
  * @sample samples.Mappings.redundancy
  */
-public fun Mappings.removeRedundancy(loader: ClasspathLoader): Mappings =
-    if (namespaces.isEmpty()) EmptyMappings else GenericMappings(
-        namespaces,
-        classes.asSequence().map { oc ->
-            val name = oc.names.first()
-            val ourSigs = hashSetOf<String>()
-            val superSigs = hashSetOf<String>()
+public fun Mappings.removeRedundancy(
+    loader: ClasspathLoader,
+    removeDuplicates: Boolean = false,
+): Mappings = if (namespaces.isEmpty()) EmptyMappings else GenericMappings(
+    namespaces,
+    classes.asSequence().map { oc ->
+        val name = oc.names.first()
+        val ourSigs = hashSetOf<String>()
+        val superSigs = hashSetOf<String>()
 
-            walkInheritance(loader, name).forEach { curr ->
-                val target = if (curr == name) ourSigs else superSigs
-                val bytes = loader(curr)
+        walkInheritance(loader, name).forEach { curr ->
+            val target = if (curr == name) ourSigs else superSigs
+            val bytes = loader(curr)
 
-                if (bytes != null) {
-                    val methods = ClassNode().also { ClassReader(bytes).accept(it, 0) }.methods
-                    val toConsider = if (curr == name) methods
-                    else methods.filter { it.access and Opcodes.ACC_PRIVATE == 0 }
+            if (bytes != null) {
+                val methods = ClassNode().also { ClassReader(bytes).accept(it, 0) }.methods
+                val toConsider = if (curr == name) methods
+                else methods.filter { it.access and Opcodes.ACC_PRIVATE == 0 }
 
-                    target += toConsider.map { it.name + it.desc }
-                }
+                target += toConsider.map { it.name + it.desc }
             }
+        }
 
-            oc.copy(
-                methods = oc.methods.filter {
-                    val sig = it.names.first() + it.desc
-                    sig in ourSigs && sig !in superSigs && !it.isData() && !it.names.allIdentical()
-                },
-                fields = oc.fields.filter { !it.names.allIdentical() }
-            )
-        }.filterNot { it.methods.isEmpty() && it.fields.isEmpty() && it.names.allIdentical() }.toList()
-    )
+        oc.copy(
+            methods = oc.methods.filter {
+                val sig = it.names.first() + it.desc
+                sig in ourSigs && sig !in superSigs && !it.isData() && !it.names.allIdentical()
+            }.let { m -> if (removeDuplicates) m.distinctBy { it.names.first() + it.desc } else m },
+            fields = oc.fields.filter { !it.names.allIdentical() }
+                .let { m -> if (removeDuplicates) m.distinctBy { it.names.first() + it.desc } else m }
+        )
+    }.filterNot { it.methods.isEmpty() && it.fields.isEmpty() && it.names.allIdentical() }.toList()
+)
 
 /**
  * See [removeRedundancy]. [file] is a jar file resource (caller is responsible for closing it) that contains the
  * classes that are referenced in the generic overload. Calls with identical names are being cached by this function,
  * the caller is not responsible for this.
  *
+ * If [removeDuplicates] is `true` (`false` by default), this method will also look for methods and fields with the
+ * same obfuscated/first name and descriptor. This is `false` by default since this might be expensive, and most of the
+ * time, there will not be any duplicates in the first place, since that could be seen as an invalid mappings file.
+ *
  * @sample samples.Mappings.redundancy
  */
-public fun Mappings.removeRedundancy(file: JarFile): Mappings = removeRedundancy(
+public fun Mappings.removeRedundancy(
+    file: JarFile,
+    removeDuplicates: Boolean,
+): Mappings = removeRedundancy(
     ClasspathLoaders.compound(
         ClasspathLoaders.fromJar(file).memoized(),
         ClasspathLoaders.fromSystemLoader()
-    )
+    ),
+    removeDuplicates
 )
 
 /**
