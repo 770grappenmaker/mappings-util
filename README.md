@@ -5,7 +5,8 @@ Several mappings formats are supported, like SRG, XSRG, Tiny (v1 and v2), Progua
 **Important: this is a Kotlin-first library.** This means that this library was written in Kotlin and with Kotlin in mind. You can use this library in Java as well, albeit probably with a slightly worse experience (extension functions do not exist in Java, for example). Using Kotlin is highly recommended.
 
 ### Usage
-`mappings-util` is on Maven Central, and can be linked in your project depending on the build system.
+`mappings-util` is on [Maven Central](https://central.sonatype.com/artifact/io.github.770grappenmaker/mappings-util), 
+and can be linked in your project depending on the build system.
 
 #### Gradle (Kotlin DSL)
 ```kotlin
@@ -14,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.770grappenmaker:mappings-util:0.1.5")
+    implementation("io.github.770grappenmaker:mappings-util:0.1.7")
 }
 ```
 #### Maven
@@ -23,13 +24,13 @@ dependencies {
     <dependency>
         <groupId>io.github.770grappenmaker</groupId>
         <artifactId>mappings-util</artifactId>
-        <version>0.1.5</version>
+        <version>0.1.7</version>
     </dependency>
 </dependencies>
 ```
 
 ### Docs
-Available in [Github Pages](https://770grappenmaker.github.io/mappings-util/).
+Available in [GitHub Pages](https://770grappenmaker.github.io/mappings-util/).
 
 ### Examples
 Note: these examples are in Kotlin, but can be applied in Java as well.
