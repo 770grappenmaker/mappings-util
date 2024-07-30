@@ -102,7 +102,6 @@ class TestMappings {
 
     private fun <T : Mappings> MappingsFormat<T>.test(doc: List<String>) {
         val parsed = parse(doc)
-        println(parsed)
         val written = write(parsed)
         assertEquals(parsed, parse(written))
         if (this != ProguardMappingsFormat) assertEqualMappings(doc, written)

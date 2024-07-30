@@ -84,20 +84,26 @@ public class MappingsRemapper(
      * implementation if inheritance data matters to you and the original [loader] could not handle different
      * namespaced names.
      */
-    public fun reverse(loader: (name: String) -> ByteArray? = this.loader): MappingsRemapper =
+    public fun reverse(loader: ClasspathLoader = this.loader): MappingsRemapper =
         MappingsRemapper(mappings, to, from, loader = loader)
 }
 
 /**
- * A [Remapper] that can use a [ClasspathLoader] for inheritance information to apply a certain [map], that should
- * be in an equivalent format as the one produced by [Mappings.asASMMapping]
+ * A [Remapper] that can use a [InheritanceProvider] for inheritance information to apply a certain [map], that should
+ * be in an equivalent format as the one produced by [Mappings.asASMMapping].
+ *
+ * @param memoizeInheritance if `true`, the results of the [InheritanceProvider] will be memoized, see [InheritanceProvider.memoized]
  */
 public open class LoaderSimpleRemapper(
     private val map: Map<String, String>,
-    private val loader: ClasspathLoader,
-    private val memoizeInheritance: Boolean = true,
+    inheritanceProvider: InheritanceProvider,
+    memoizeInheritance: Boolean = true,
 ) : Remapper() {
-    private val inheritanceMemo = mutableMapOf<String, List<String>>()
+    private val backingProvider = if (memoizeInheritance) inheritanceProvider.memoized() else inheritanceProvider
+
+    // For backwards compatibility, this still exists, I guess it serves as a nice utility function as well
+    public constructor(map: Map<String, String>, loader: ClasspathLoader, memoizeInheritance: Boolean = true) :
+            this(map, LoaderInheritanceProvider(loader), memoizeInheritance)
 
     override fun map(internalName: String): String = map[internalName] ?: if ('$' in internalName) {
         val dollarIdx = internalName.lastIndexOf('$')
@@ -127,39 +133,9 @@ public open class LoaderSimpleRemapper(
         applicator: (owner: String) -> String?
     ) = inheritanceProvider(owner).firstNotNullOfOrNull(applicator) ?: name
 
-    private fun inheritanceProvider(owner: String) =
-        if (memoizeInheritance) memoizedInheritance(owner) else walkInheritance(loader, owner)
-
-    // bad code probably
-    private fun memoizedInheritance(owner: String) = sequence {
-        val queue = ArrayDeque<String>()
-        val seen = hashSetOf<String>()
-        queue.addLast(owner)
-
-        while (queue.isNotEmpty()) {
-            val curr = queue.removeLast()
-            yield(curr)
-
-            val exMemo = inheritanceMemo[curr]
-            if (exMemo != null) {
-                queue += exMemo
-                continue
-            }
-
-            val memo = mutableListOf<String>()
-            inheritanceMemo[curr] = memo
-
-            val bytes = loader(curr) ?: continue
-            val reader = ClassReader(bytes)
-
-            reader.superName?.let {
-                if (seen.add(it)) queue.addLast(it)
-                memo += it
-            }
-
-            queue += reader.interfaces.filter { seen.add(it) }
-            memo += reader.interfaces
-        }
+    private fun inheritanceProvider(owner: String) = sequence {
+        yield(owner)
+        yieldAll(backingProvider.getParents(owner))
     }
 }
 

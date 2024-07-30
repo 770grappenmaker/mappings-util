@@ -3,7 +3,6 @@
 package com.grappenmaker.mappings
 
 import org.objectweb.asm.ClassReader
-import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.ClassNode
 import java.util.jar.JarFile
 import kotlin.experimental.ExperimentalTypeInference
@@ -433,7 +432,30 @@ private fun <T> Iterable<T>.allIdentical(): Boolean {
  * @sample samples.Mappings.redundancy
  */
 public fun Mappings.removeRedundancy(
+    removeDuplicates: Boolean = false,
     loader: ClasspathLoader,
+): Mappings = removeRedundancy(LoaderInheritanceProvider(loader), removeDuplicates)
+
+/**
+ * Removes redundant or straight up incorrect data from this [Mappings] object, by looking at the inheritance
+ * information present in class files, presented by the [inheritanceProvider].
+ *
+ * Redundant information is one of the following:
+ * - Overloads are given a mapping again. Since overloads share the same name, they cannot have different info,
+ * therefore this information is duplicate.
+ * - Abstract methods are populated to interfaces (this can happen when using proguard mappings). This is usually
+ * straight up wrong information, when a mapped method entry is not present on the actual class.
+ * - a method being a data method ([MappedMethod.isData])
+ * - a method whose names are all identical
+ *
+ * If [removeDuplicates] is `true` (`false` by default), this method will also look for methods and fields with the
+ * same obfuscated/first name and descriptor. This is `false` by default since this might be expensive, and most of the
+ * time, there will not be any duplicates in the first place, since that could be seen as an invalid mappings file.
+ *
+ * @sample samples.Mappings.redundancy
+ */
+public fun Mappings.removeRedundancy(
+    inheritanceProvider: InheritanceProvider,
     removeDuplicates: Boolean = false,
 ): Mappings = if (namespaces.isEmpty()) EmptyMappings else GenericMappings(
     namespaces,
@@ -442,17 +464,9 @@ public fun Mappings.removeRedundancy(
         val ourSigs = hashSetOf<String>()
         val superSigs = hashSetOf<String>()
 
-        walkInheritance(loader, name).forEach { curr ->
+        inheritanceProvider.getParents(name).forEach { curr ->
             val target = if (curr == name) ourSigs else superSigs
-            val bytes = loader(curr)
-
-            if (bytes != null) {
-                val methods = ClassNode().also { ClassReader(bytes).accept(it, 0) }.methods
-                val toConsider = if (curr == name) methods
-                else methods.filter { it.access and Opcodes.ACC_PRIVATE == 0 }
-
-                target += toConsider.map { it.name + it.desc }
-            }
+            target += inheritanceProvider.getDeclaredMethods(curr, curr == name)
         }
 
         oc.copy(
@@ -479,13 +493,13 @@ public fun Mappings.removeRedundancy(
  */
 public fun Mappings.removeRedundancy(
     file: JarFile,
-    removeDuplicates: Boolean,
+    removeDuplicates: Boolean = false,
 ): Mappings = removeRedundancy(
+    removeDuplicates,
     ClasspathLoaders.compound(
         ClasspathLoaders.fromJar(file).memoized(),
         ClasspathLoaders.fromSystemLoader()
-    ),
-    removeDuplicates
+    )
 )
 
 /**

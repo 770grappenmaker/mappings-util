@@ -19,6 +19,7 @@ This is a known Dokka issue which will be addressed in a future release of Dokka
 | [TinyMappingsV1Format][com.grappenmaker.mappings.TinyMappingsV1Format]       | An obsolete version of Tiny mappings, popularized by [yarn](https://github.com/FabricMC/yarn)                                                      |
 | [TinyMappingsV2Format][com.grappenmaker.mappings.TinyMappingsV2Format]       | Tiny mappings, popularized by [yarn](https://github.com/FabricMC/yarn)                                                                             |
 | [EnigmaMappingsFormat][com.grappenmaker.mappings.EnigmaMappingsFormat]       | Enigma mappings, used in [Enigma](https://github.com/FabricMC/Enigma)                                                                              |
+| [RecafMappingsFormat][com.grappenmaker.mappings.RecafMappingsFormat]         | Enigma mappings, used in [Enigma](https://github.com/FabricMC/Enigma)                                                                              |
 | [CompactedMappingsFormat][com.grappenmaker.mappings.CompactedMappingsFormat] | An experimental mappings format inspired by Tiny, which compresses the format slightly (its docs are in [here][com.grappenmaker.mappings.compact]) |
 
 ## Loading (mappings) files

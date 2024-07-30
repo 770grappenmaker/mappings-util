@@ -10,6 +10,10 @@ import org.objectweb.asm.commons.SimpleRemapper
  */
 public data class SRGMappings(override val classes: List<MappedClass>, val isExtended: Boolean) : Mappings {
     override val namespaces: List<String> = listOf("official", "named")
+
+    init {
+        if (isExtended) assertValidDescs()
+    }
 }
 
 /**
