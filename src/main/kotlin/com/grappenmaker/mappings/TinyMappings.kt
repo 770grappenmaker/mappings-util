@@ -1,8 +1,5 @@
 package com.grappenmaker.mappings
 
-import kotlin.io.path.Path
-import kotlin.io.path.writeLines
-
 /**
  * Represents either a tiny v1 or a tiny v2 mappings file, which does not have a definition anywhere.
  * The serialization method of these mappings is governed by [isV2]
@@ -336,8 +333,3 @@ private fun String.parts() = split('\t')
 
 context(TinyMappingsWriter)
 private fun List<String>.join() = joinToString("\t")
-
-public fun main() {
-    val mappings = TinyMappings(emptyList(), emptyList(), isV2 = true)
-    Path("""/path/to/file""").writeLines(mappings.writeLazy())
-}
