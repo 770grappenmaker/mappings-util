@@ -6,7 +6,10 @@ import org.objectweb.asm.Type
  * Represents Proguard debug deobfuscation mappings. Note that Proguard only supports two mappings namespaces.
  * Line number information is ignored by the parser.
  */
-public data class ProguardMappings(override val classes: List<MappedClass>) : Mappings {
+public data class ProguardMappings(
+    override val classes: List<MappedClass>,
+    override val comments: List<String> = emptyList(),
+) : Mappings, Commented {
     override val namespaces: List<String> = listOf("named", "official")
 
     init {
@@ -50,6 +53,7 @@ public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
             "float" -> Type.FLOAT_TYPE
             "double" -> Type.DOUBLE_TYPE
             "char" -> Type.CHAR_TYPE
+            "byte" -> Type.BYTE_TYPE
             else -> Type.getObjectType(asResourceName())
         }
     }
@@ -63,6 +67,7 @@ public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
         Type.FLOAT_TYPE -> "float"
         Type.DOUBLE_TYPE -> "double"
         Type.CHAR_TYPE -> "char"
+        Type.BYTE_TYPE -> "byte"
         else -> when {
             sort == Type.ARRAY -> elementType.unparse() + "[]".repeat(dimensions)
             else -> className
@@ -79,21 +84,20 @@ public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
             val content = line.take(commentIdx).trimEnd()
             val comment = line.drop(commentIdx + 1).trimStart()
 
-            if (content.isNotEmpty()) state = with (LineAndNumber(content, idx + 1)) { state.update() }
+            if (content.isNotEmpty()) state = with(LineAndNumber(content, idx + 1)) { state.update() }
             if (comment.isNotEmpty()) state.comment(comment)
         }
 
-        state = state.end()
+        repeat(2) { state = state.end() }
 
-        return ProguardMappings(
-            (state as? MappingState
-                ?: error("Did not finish walking tree, parsing failed (ended in $state)")).classes
-        )
+        val result = (state as? MappingState ?: error("Did not finish walking tree, parsing failed (ended in $state)"))
+        return ProguardMappings(result.classes, result.comments)
     }
 
     private sealed interface ProguardState {
         context(LineAndNumber)
         fun update(): ProguardState
+
         fun end(): ProguardState
         fun comment(msg: String)
     }
@@ -112,8 +116,7 @@ public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
         context(LineAndNumber)
         override fun update(): ProguardState {
             if (line.startsWith(indent)) parseError("Invalid top level indent")
-            return ClassState(this, line.removeSuffix(":").asMapping().map { it.asResourceName() }, comments.toList())
-                .also { comments.clear() }
+            return ClassState(this, line.removeSuffix(":").asMapping().map { it.asResourceName() })
         }
 
         override fun end() = this
@@ -126,11 +129,10 @@ public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
     private class ClassState(
         val owner: MappingState,
         val names: List<String>,
-        val comments: List<String>
     ) : ProguardState {
+        val comments = mutableListOf<String>()
         val fields = mutableListOf<MappedField>()
         val methods = mutableListOf<MappedMethod>()
-        val memberComments = mutableListOf<String>()
 
         context(LineAndNumber)
         override fun update(): ProguardState {
@@ -141,9 +143,13 @@ public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
 
             val trimmed = line.trim()
 
-            if ('(' in trimmed) {
-                val secondIndex = trimmed.indexOf(':', trimmed.indexOf(':') + 1)
-                val withoutJunk = if (secondIndex >= 0) trimmed.drop(secondIndex + 1) else trimmed
+            return if ('(' in trimmed) {
+                // generally the maxOf branch should always go to the right,
+                // but we'll try to be as lenient as possible
+                val col1 = trimmed.indexOf(':')
+                val col2 = if (col1 >= 0) trimmed.indexOf(':', col1 + 1).takeIf { it >= 0 } ?: col1 else col1
+
+                val withoutJunk = if (col2 >= 0) trimmed.drop(col2 + 1) else trimmed
                 val (desc, name) = withoutJunk.asMapping()
                 val (returnName, rest) = desc.substringBeforeLast(':').split(' ')
 
@@ -152,25 +158,21 @@ public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
 
                 val returnType = returnName.parseType()
 
-                methods += MappedMethod(
+                MethodState(
+                    owner = this,
                     names = listOf(rest.substringBefore('('), name),
                     desc = Type.getMethodType(returnType, *params.toTypedArray()).descriptor,
-                    comments = memberComments.toList()
                 )
             } else {
                 val (desc, name) = trimmed.asMapping()
                 val (type, rest) = desc.split(' ')
 
-                fields += MappedField(
+                FieldState(
+                    owner = this,
                     names = listOf(rest, name),
                     desc = type.parseType().descriptor,
-                    comments = memberComments.toList()
                 )
             }
-
-            memberComments.clear()
-
-            return this
         }
 
         override fun end(): ProguardState {
@@ -179,26 +181,68 @@ public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
         }
 
         override fun comment(msg: String) {
-            memberComments += msg
+            comments += msg
+        }
+    }
+
+    private class FieldState(
+        owner: ClassState,
+        private val names: List<String>,
+        private val desc: String
+    ) : CommentsDecorator(owner) {
+        override fun store() {
+            owner.fields += MappedField(names, comments, desc)
+        }
+    }
+
+    private class MethodState(
+        owner: ClassState,
+        private val names: List<String>,
+        private val desc: String
+    ) : CommentsDecorator(owner) {
+        override fun store() {
+            owner.methods += MappedMethod(names, comments, desc)
+        }
+    }
+
+    private sealed class CommentsDecorator(protected val owner: ClassState) : ProguardState {
+        protected val comments = mutableListOf<String>()
+
+        context(LineAndNumber)
+        override fun update(): ProguardState {
+            end()
+            return owner.update()
+        }
+
+        override fun end(): ProguardState {
+            store()
+            return owner
+        }
+
+        abstract fun store()
+
+        override fun comment(msg: String) {
+            comments += msg
         }
     }
 
     override fun writeLazy(mappings: ProguardMappings): Sequence<String> = sequence {
+        mappings.comments.forEach { yield("# $it") }
         for (c in mappings.classes) {
-            c.comments.forEach { yield("# $it") }
             yield("${c.names[0].asBinaryName()} -> ${c.names[1].asBinaryName()}:")
+            c.comments.forEach { yield("# $it") }
 
             for (f in c.fields) {
-                f.comments.forEach { yield("$indent# $it") }
                 yield("$indent${Type.getType(f.desc!!).unparse()} ${f.names[0]} -> ${f.names[1]}")
+                f.comments.forEach { yield("$indent  # $it") }
             }
 
             for (m in c.methods) {
-                m.comments.forEach { yield("$indent# $it") }
-
                 val type = Type.getMethodType(m.desc)
                 val args = type.argumentTypes.joinToString(",") { it.unparse() }
                 yield("$indent${type.returnType.unparse()} ${m.names[0]}($args) -> ${m.names[1]}")
+
+                m.comments.forEach { yield("$indent  # $it") }
             }
         }
     }

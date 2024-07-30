@@ -1,5 +1,5 @@
 import org.jetbrains.dokka.gradle.DokkaTask
-import java.net.URL
+import java.net.URI
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -14,7 +14,7 @@ repositories {
 }
 
 group = "com.grappenmaker"
-version = "0.1.8"
+version = "0.1.7"
 
 kotlin {
     jvmToolchain(8)
@@ -122,14 +122,14 @@ tasks {
 
             sourceLink {
                 localDirectory = rootDir
-                remoteUrl = URL("https://github.com/770grappenmaker/mappings-util/tree/main")
+                remoteUrl = URI("https://github.com/770grappenmaker/mappings-util/tree/main").toURL()
                 remoteLineSuffix = "#L"
             }
 
             includes.from("dokka-module.md")
 
             externalDocumentationLink {
-                url = URL("https://asm.ow2.io/javadoc/")
+                url = URI("https://asm.ow2.io/javadoc/").toURL()
                 packageListUrl = project.layout.projectDirectory.file("asm.package-list").asFile.toURI().toURL()
             }
         }

@@ -1,9 +1,10 @@
-# Test comment
 a -> Main:
-    # Electric boogaloo
-    d b -> state # Crazy
-    # Two comments!
+# Test comment
+    d b -> state
+      # Electric boogaloo
     1:1:e c() -> action
+      # Crazy
+      # Two comments!
     1:1:e d() -> anotherAction
 d -> SomeState:
 e -> SomeOtherState:

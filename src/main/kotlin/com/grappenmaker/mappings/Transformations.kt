@@ -357,10 +357,28 @@ public inline fun Mappings.filterMethods(predicate: (owner: MappedClass, method:
     GenericMappings(namespaces, classes.map { c -> c.copy(methods = c.methods.filter { predicate(c, it) }) })
 
 /**
- * Maps classes according to the given [predicate]
+ * Filters methods matching the [predicate]
  */
-public inline fun Mappings.mapClasses(predicate: (MappedClass) -> MappedClass): Mappings =
-    GenericMappings(namespaces, classes.map(predicate))
+public inline fun MappedClass.filterMethods(predicate: (MappedMethod) -> Boolean): MappedClass =
+    copy(methods = methods.filter(predicate))
+
+/**
+ * Maps classes according to the given [block]
+ */
+public inline fun Mappings.mapClasses(block: (MappedClass) -> MappedClass): Mappings =
+    GenericMappings(namespaces, classes.map(block))
+
+/**
+ * Maps methods according to the given [block]
+ */
+public inline fun Mappings.mapMethods(block: (owner: MappedClass, method: MappedMethod) -> MappedMethod): Mappings =
+    GenericMappings(namespaces, classes.map { it.copy(methods = it.methods.map { m -> block(it, m) }) })
+
+/**
+ * Maps methods according to the given [block]
+ */
+public inline fun MappedClass.mapMethods(block: (MappedMethod) -> MappedMethod): MappedClass =
+    copy(methods = methods.map(block))
 
 /**
  * Attempts to recover field descriptors that are missing because the original mappings format did not specify them.
@@ -425,16 +443,24 @@ private fun <T> Iterable<T>.allIdentical(): Boolean {
  * - a method being a data method ([MappedMethod.isData])
  * - a method whose names are all identical
  *
- * If [removeDuplicates] is `true` (`false` by default), this method will also look for methods and fields with the
+ * If [removeDuplicateMethods] is `true` (`false` by default), this function will also look for methods with the
  * same obfuscated/first name and descriptor. This is `false` by default since this might be expensive, and most of the
  * time, there will not be any duplicates in the first place, since that could be seen as an invalid mappings file.
+ * In the case of a duplicate, the last declared one will be kept. The order of mapped methods will be preserved.
  *
  * @sample samples.Mappings.redundancy
  */
 public fun Mappings.removeRedundancy(
-    removeDuplicates: Boolean = false,
+    removeDuplicateMethods: Boolean = false,
     loader: ClasspathLoader,
-): Mappings = removeRedundancy(LoaderInheritanceProvider(loader), removeDuplicates)
+): Mappings = removeRedundancy(LoaderInheritanceProvider(loader), removeDuplicateMethods)
+
+private fun Iterable<MappedMethod>.removeDuplicates(): List<MappedMethod> {
+    // The returned map preserves the entry iteration order.
+    val result = mutableMapOf<String, MappedMethod>()
+    for (element in this) result[element.names.first() + element.desc] = element
+    return result.values.toList()
+}
 
 /**
  * Removes redundant or straight up incorrect data from this [Mappings] object, by looking at the inheritance
@@ -448,34 +474,30 @@ public fun Mappings.removeRedundancy(
  * - a method being a data method ([MappedMethod.isData])
  * - a method whose names are all identical
  *
- * If [removeDuplicates] is `true` (`false` by default), this method will also look for methods and fields with the
+ * If [removeDuplicateMethods] is `true` (`false` by default), this function will also look for methods with the
  * same obfuscated/first name and descriptor. This is `false` by default since this might be expensive, and most of the
  * time, there will not be any duplicates in the first place, since that could be seen as an invalid mappings file.
+ * In the case of a duplicate, the last declared one will be kept. The order of mapped methods will be preserved.
  *
  * @sample samples.Mappings.redundancy
  */
 public fun Mappings.removeRedundancy(
     inheritanceProvider: InheritanceProvider,
-    removeDuplicates: Boolean = false,
+    removeDuplicateMethods: Boolean = false,
 ): Mappings = if (namespaces.isEmpty()) EmptyMappings else GenericMappings(
     namespaces,
     classes.asSequence().map { oc ->
         val name = oc.names.first()
-        val ourSigs = hashSetOf<String>()
+        val ourSigs = inheritanceProvider.getDeclaredMethods(name, false).toSet()
         val superSigs = hashSetOf<String>()
-
-        inheritanceProvider.getParents(name).forEach { curr ->
-            val target = if (curr == name) ourSigs else superSigs
-            target += inheritanceProvider.getDeclaredMethods(curr, curr == name)
-        }
+        for (p in inheritanceProvider.getParents(name)) superSigs += inheritanceProvider.getDeclaredMethods(p, true)
 
         oc.copy(
             methods = oc.methods.filter {
                 val sig = it.names.first() + it.desc
                 sig in ourSigs && sig !in superSigs && !it.isData() && !it.names.allIdentical()
-            }.let { m -> if (removeDuplicates) m.distinctBy { it.names.first() + it.desc } else m },
+            }.let { m -> if (removeDuplicateMethods) m.removeDuplicates() else m },
             fields = oc.fields.filter { !it.names.allIdentical() }
-                .let { m -> if (removeDuplicates) m.distinctBy { it.names.first() + it.desc } else m }
         )
     }.filterNot { it.methods.isEmpty() && it.fields.isEmpty() && it.names.allIdentical() }.toList()
 )
@@ -485,17 +507,18 @@ public fun Mappings.removeRedundancy(
  * classes that are referenced in the generic overload. Calls with identical names are being cached by this function,
  * the caller is not responsible for this.
  *
- * If [removeDuplicates] is `true` (`false` by default), this method will also look for methods and fields with the
+ * If [removeDuplicateMethods] is `true` (`false` by default), this function will also look for methods with the
  * same obfuscated/first name and descriptor. This is `false` by default since this might be expensive, and most of the
  * time, there will not be any duplicates in the first place, since that could be seen as an invalid mappings file.
+ * In the case of a duplicate, the last declared one will be kept. The order of mapped methods will be preserved.
  *
  * @sample samples.Mappings.redundancy
  */
 public fun Mappings.removeRedundancy(
     file: JarFile,
-    removeDuplicates: Boolean = false,
+    removeDuplicateMethods: Boolean = false,
 ): Mappings = removeRedundancy(
-    removeDuplicates,
+    removeDuplicateMethods,
     ClasspathLoaders.compound(
         ClasspathLoaders.fromJar(file).memoized(),
         ClasspathLoaders.fromSystemLoader()

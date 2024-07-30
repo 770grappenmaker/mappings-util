@@ -57,13 +57,15 @@ public interface InheritanceProvider {
      *
      * A declared method is a method that is directly declared in the bytecode of the class.
      *
-     * If [inheritable] is true, this method should only return the signatures of methods that are non-private,
+     * If [filterInheritable] is true, this method should only return the signatures of methods that are non-private,
      * non-static, non-final. That is, access & (ACC_PRIVATE | ACC_STATIC | ACC_FINAL) == 0, where access is the
      * bitset of access flags as defined by the JVMS. The convienience constant [INHERITABLE_MASK] can be used for
      * this computation as well, by comparing access & [INHERITABLE_MASK] == 0
      */
     // TODO: find out if we want to put this into a datastructure
-    public fun getDeclaredMethods(internalName: String, inheritable: Boolean): Iterable<String>
+    // the thing is that these signatures are probably not supposed to be parsed, rather compared
+    // therefore it would probably be nicest not to force api consumers to use those data structures
+    public fun getDeclaredMethods(internalName: String, filterInheritable: Boolean): Iterable<String>
 }
 
 /**
@@ -77,9 +79,9 @@ public class MemoizedInheritanceProvider(private val delegate: InheritanceProvid
     override fun getDirectParents(internalName: String): Iterable<String> =
         inheritanceMemo.getOrPut(internalName) { delegate.getDirectParents(internalName).toList() }
 
-    override fun getDeclaredMethods(internalName: String, inheritable: Boolean): Iterable<String> {
-        val target = if (inheritable) inheritableMethodsMemo else declaredMethodsMemo
-        return target.getOrPut(internalName) { delegate.getDeclaredMethods(internalName, inheritable).toList() }
+    override fun getDeclaredMethods(internalName: String, filterInheritable: Boolean): Iterable<String> {
+        val target = if (filterInheritable) inheritableMethodsMemo else declaredMethodsMemo
+        return target.getOrPut(internalName) { delegate.getDeclaredMethods(internalName, filterInheritable).toList() }
     }
 }
 
@@ -97,7 +99,7 @@ public class LoaderInheritanceProvider(private val loader: ClasspathLoader) : In
         }.asIterable()
     }
 
-    override fun getDeclaredMethods(internalName: String, inheritable: Boolean): Iterable<String> {
+    override fun getDeclaredMethods(internalName: String, filterInheritable: Boolean): Iterable<String> {
         val bytes = loader(internalName) ?: return emptyList()
 
         val result = mutableListOf<String>()
@@ -109,7 +111,7 @@ public class LoaderInheritanceProvider(private val loader: ClasspathLoader) : In
                 signature: String?,
                 exceptions: Array<out String>?
             ): MethodVisitor? {
-                if (!inheritable || access and INHERITABLE_MASK == 0) result += (name + descriptor)
+                if (!filterInheritable || access and INHERITABLE_MASK == 0) result += (name + descriptor)
                 return null
             }
         }
