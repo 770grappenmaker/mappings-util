@@ -1,0 +1,175 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>ClasspathLoaders</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+<a class="library-name--link" href="../../../index.html">
+                            mappings-util
+                    </a>            </div>
+            <div class="library-version">0.1.7
+            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":lib:dokkaHtmlPartial/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="lib::com.grappenmaker.mappings/ClasspathLoaders///PointingToDeclaration//1014633269">
+  <div class="breadcrumbs"><a href="../../index.html">lib</a><span class="delimiter">/</span><a href="../index.html">com.grappenmaker.mappings</a><span class="delimiter">/</span><span class="current">ClasspathLoaders</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Classpath</span><wbr><span><span>Loaders</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="index.html">ClasspathLoaders</a></div><p class="paragraph">Provides default implementations for the classpath loaders in <a href="../-mappings-remapper/index.html">MappingsRemapper</a></p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-382251500%2FFunctions%2F1014633269" anchor-label="compound" id="-382251500%2FFunctions%2F1014633269" data-filterable-set=":lib:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":lib:dokkaHtmlPartial/main" data-filterable-set=":lib:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="compound.html"><span><span>compound</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-382251500%2FFunctions%2F1014633269"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="compound.html"><span class="token function">compound</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>loaders<span class="token operator">: </span><a href="../-classpath-loader/index.html">ClasspathLoader</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-classpath-loader/index.html">ClasspathLoader</a></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="compound.html"><span class="token function">compound</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">loaders<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-classpath-loader/index.html">ClasspathLoader</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-classpath-loader/index.html">ClasspathLoader</a></div><div class="brief "><p class="paragraph">Combines several <a href="compound.html">loaders</a> into a single classpath loader, that queries each loader in order, returning the first nonnull value</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1973742068%2FFunctions%2F1014633269" anchor-label="fromJar" id="1973742068%2FFunctions%2F1014633269" data-filterable-set=":lib:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":lib:dokkaHtmlPartial/main" data-filterable-set=":lib:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="from-jar.html"><span>from</span><wbr><span><span>Jar</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1973742068%2FFunctions%2F1014633269"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="from-jar.html"><span class="token function">fromJar</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">jar<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/util/jar/JarFile.html">JarFile</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-classpath-loader/index.html">ClasspathLoader</a></div><div class="brief "><p class="paragraph">Attempts to load classes a <a href="from-jar.html">jar</a>, the caller is responsible for closing <a href="from-jar.html">jar</a> when it is no longer relevant / used in the remapper</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="798379341%2FFunctions%2F1014633269" anchor-label="fromJars" id="798379341%2FFunctions%2F1014633269" data-filterable-set=":lib:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":lib:dokkaHtmlPartial/main" data-filterable-set=":lib:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="from-jars.html"><span>from</span><wbr><span><span>Jars</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="798379341%2FFunctions%2F1014633269"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="from-jars.html"><span class="token function">fromJars</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">jars<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/javase/8/docs/api/java/util/jar/JarFile.html">JarFile</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-classpath-loader/index.html">ClasspathLoader</a></div><div class="brief "><p class="paragraph">Attempts to load classes from <a href="from-jars.html">jars</a>, the caller is responsible for closing those jar files when they are no longer relevant / used in the remapper</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1701900119%2FFunctions%2F1014633269" anchor-label="fromLoader" id="-1701900119%2FFunctions%2F1014633269" data-filterable-set=":lib:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":lib:dokkaHtmlPartial/main" data-filterable-set=":lib:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="from-loader.html"><span>from</span><wbr><span><span>Loader</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1701900119%2FFunctions%2F1014633269"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="from-loader.html"><span class="token function">fromLoader</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">loader<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/ClassLoader.html">ClassLoader</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-classpath-loader/index.html">ClasspathLoader</a></div><div class="brief "><p class="paragraph">Attempts to load classes using resources in <a href="from-loader.html">loader</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1775702827%2FFunctions%2F1014633269" anchor-label="fromLookup" id="-1775702827%2FFunctions%2F1014633269" data-filterable-set=":lib:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":lib:dokkaHtmlPartial/main" data-filterable-set=":lib:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="from-lookup.html"><span>from</span><wbr><span><span>Lookup</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1775702827%2FFunctions%2F1014633269"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="from-lookup.html"><span class="token function">fromLookup</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">lookup<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-classpath-loader/index.html">ClasspathLoader</a></div><div class="brief "><p class="paragraph">Creates a <a href="../-classpath-loader/index.html">ClasspathLoader</a> from a <a href="from-lookup.html">lookup</a>, which should have JVMS internal names as keys, and class file buffers as values</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="24878643%2FFunctions%2F1014633269" anchor-label="fromSystemLoader" id="24878643%2FFunctions%2F1014633269" data-filterable-set=":lib:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":lib:dokkaHtmlPartial/main" data-filterable-set=":lib:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="from-system-loader.html"><span>from</span><wbr><span>System</span><wbr><span><span>Loader</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="24878643%2FFunctions%2F1014633269"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="from-system-loader.html"><span class="token function">fromSystemLoader</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-classpath-loader/index.html">ClasspathLoader</a></div><div class="brief "><p class="paragraph">Attempts to load classes using resources in the system class loader</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

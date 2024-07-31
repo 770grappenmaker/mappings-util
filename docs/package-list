@@ -1,0 +1,7 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+
+module:mappings-util
+com.grappenmaker.mappings
+module:tiny-remapper-provider
+com.grappenmaker.mappings

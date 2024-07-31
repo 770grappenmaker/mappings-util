@@ -1,17 +1,9 @@
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-}
-
-repositories {
-    mavenCentral()
-}
-
-kotlin {
-    jvmToolchain(8)
+    id("kotlin-convention")
 }
 
 dependencies {
-    testImplementation(project(":"))
+    testImplementation(projects.mappingsUtil)
     testImplementation(kotlin("test"))
 }
 

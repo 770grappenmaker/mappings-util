@@ -1,1 +1,1 @@
-sourceset_dependencies='{":dokkaHtml/main":[]}'
+sourceset_dependencies = '{":tiny-remapper-provider:dokkaHtmlPartial/main":[],":mappings-util:dokkaHtmlPartial/main":[]}'

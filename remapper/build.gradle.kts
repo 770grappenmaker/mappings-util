@@ -1,18 +1,10 @@
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    `application`
-}
-
-repositories {
-    mavenCentral()
-}
-
-kotlin {
-    jvmToolchain(8)
+    id("kotlin-convention")
+    application
 }
 
 dependencies {
-    implementation(project(":"))
+    implementation(projects.mappingsUtil)
 }
 
 application {

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>removeRedundancy</title>
+<!--[+]cmd:{"@class":"org.jetbrains.dokka.base.templating.PathToRootSubstitutionCommand","pattern":"###","default":"../"}-->    <link href="###images/logo-icon.svg" rel="icon" type="image/svg">
+<!--[-]cmd-->    <!--[+]cmd:{"@class":"org.jetbrains.dokka.base.templating.PathToRootSubstitutionCommand","pattern":"###","default":"../"}--><script>var pathToRoot = "###";</script><!--[-]cmd-->
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<!--[+]cmd:{"@class":"org.jetbrains.dokka.base.templating.PathToRootSubstitutionCommand","pattern":"###","default":"../"}--><script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="###scripts/sourceset_dependencies.js" async="async"></script>
+<link href="###styles/style.css" rel="Stylesheet">
+<link href="###styles/main.css" rel="Stylesheet">
+<link href="###styles/prism.css" rel="Stylesheet">
+<link href="###styles/logo-styles.css" rel="Stylesheet">
+<link href="###styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="###scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="###scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="###scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="###scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="###scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="###scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+<!--[-]cmd--></head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+<!--[+]cmd:{"@class":"org.jetbrains.dokka.base.templating.PathToRootSubstitutionCommand","pattern":"###","default":"../"}-->                    <a class="library-name--link" href="###index.html">
+<!--[+]cmd:{"@class":"org.jetbrains.dokka.base.templating.ProjectNameSubstitutionCommand","pattern":"###","default":"lib"}-->                            ###
+<!--[-]cmd-->                    </a>
+<!--[-]cmd-->            </div>
+            <div class="library-version">
+<dokka-template-command data="{&quot;@class&quot;:&quot;org.jetbrains.dokka.base.templating.ReplaceVersionsCommand&quot;,&quot;location&quot;:&quot;com.grappenmaker.mappings/remove-redundancy.html&quot;}"></dokka-template-command>            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":lib:dokkaHtmlPartial/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="member" id="content" pageIds="lib::com.grappenmaker.mappings//removeRedundancy/com.grappenmaker.mappings.Mappings#kotlin.Boolean#kotlin.Function1[kotlin.String,kotlin.ByteArray?]/PointingToDeclaration//1014633269">
+  <div class="breadcrumbs"><a href="../index.html">lib</a><span class="delimiter">/</span><a href="index.html">com.grappenmaker.mappings</a><span class="delimiter">/</span><span class="current">removeRedundancy</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>remove</span><wbr></wbr><span><span>Redundancy</span></span></h1>
+  </div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-mappings/index.html">Mappings</a><span class="token punctuation">.</span><a href="remove-redundancy.html"><span class="token function">removeRedundancy</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">removeDuplicateMethods<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter ">loader<span class="token operator">: </span><a href="-classpath-loader/index.html">ClasspathLoader</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-mappings/index.html">Mappings</a></div><p class="paragraph">Removes redundant or straight up incorrect data from this <a href="-mappings/index.html">Mappings</a> object, by looking at the inheritance information present in class files, presented by the <a href="remove-redundancy.html">loader</a>.</p><p class="paragraph">Redundant information is one of the following:</p><ul><li><p class="paragraph">Overloads are given a mapping again. Since overloads share the same name, they cannot have different info, therefore this information is duplicate.</p></li><li><p class="paragraph">Abstract methods are populated to interfaces (this can happen when using proguard mappings). This is usually straight up wrong information, when a mapped method entry is not present on the actual class.</p></li><li><p class="paragraph">a method being a data method (<a href="is-data.html">MappedMethod.isData</a>)</p></li><li><p class="paragraph">a method whose names are all identical</p></li></ul><p class="paragraph">If <a href="remove-redundancy.html">removeDuplicateMethods</a> is <code class="lang-kotlin">true</code> (<code class="lang-kotlin">false</code> by default), this function will also look for methods with the same obfuscated/first name and descriptor. This is <code class="lang-kotlin">false</code> by default since this might be expensive, and most of the time, there will not be any duplicates in the first place, since that could be seen as an invalid mappings file. In the case of a duplicate, the last declared one will be kept. The order of mapped methods will be preserved.</p><h4 class="">Samples</h4>samples.Mappings.redundancy<hr><div class="symbol monospace"><span class="token keyword">fun </span><a href="-mappings/index.html">Mappings</a><span class="token punctuation">.</span><a href="remove-redundancy.html"><span class="token function">removeRedundancy</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">inheritanceProvider<span class="token operator">: </span><a href="-inheritance-provider/index.html">InheritanceProvider</a><span class="token punctuation">, </span></span><span class="parameter ">removeDuplicateMethods<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-mappings/index.html">Mappings</a></div><p class="paragraph">Removes redundant or straight up incorrect data from this <a href="-mappings/index.html">Mappings</a> object, by looking at the inheritance information present in class files, presented by the <a href="remove-redundancy.html">inheritanceProvider</a>.</p><p class="paragraph">Redundant information is one of the following:</p><ul><li><p class="paragraph">Overloads are given a mapping again. Since overloads share the same name, they cannot have different info, therefore this information is duplicate.</p></li><li><p class="paragraph">Abstract methods are populated to interfaces (this can happen when using proguard mappings). This is usually straight up wrong information, when a mapped method entry is not present on the actual class.</p></li><li><p class="paragraph">a method being a data method (<a href="is-data.html">MappedMethod.isData</a>)</p></li><li><p class="paragraph">a method whose names are all identical</p></li></ul><p class="paragraph">If <a href="remove-redundancy.html">removeDuplicateMethods</a> is <code class="lang-kotlin">true</code> (<code class="lang-kotlin">false</code> by default), this function will also look for methods with the same obfuscated/first name and descriptor. This is <code class="lang-kotlin">false</code> by default since this might be expensive, and most of the time, there will not be any duplicates in the first place, since that could be seen as an invalid mappings file. In the case of a duplicate, the last declared one will be kept. The order of mapped methods will be preserved.</p><h4 class="">Samples</h4>samples.Mappings.redundancy<hr><div class="symbol monospace"><span class="token keyword">fun </span><a href="-mappings/index.html">Mappings</a><span class="token punctuation">.</span><a href="remove-redundancy.html"><span class="token function">removeRedundancy</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">file<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/util/jar/JarFile.html">JarFile</a><span class="token punctuation">, </span></span><span class="parameter ">removeDuplicateMethods<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-mappings/index.html">Mappings</a></div><p class="paragraph">See <a href="remove-redundancy.html">removeRedundancy</a>. <a href="remove-redundancy.html">file</a> is a jar file resource (caller is responsible for closing it) that contains the classes that are referenced in the generic overload. Calls with identical names are being cached by this function, the caller is not responsible for this.</p><p class="paragraph">If <a href="remove-redundancy.html">removeDuplicateMethods</a> is <code class="lang-kotlin">true</code> (<code class="lang-kotlin">false</code> by default), this function will also look for methods with the same obfuscated/first name and descriptor. This is <code class="lang-kotlin">false</code> by default since this might be expensive, and most of the time, there will not be any duplicates in the first place, since that could be seen as an invalid mappings file. In the case of a duplicate, the last declared one will be kept. The order of mapped methods will be preserved.</p><h4 class="">Samples</h4>samples.Mappings.redundancy</div></div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

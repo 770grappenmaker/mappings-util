@@ -30,7 +30,7 @@ dependencies {
 ```
 
 ### Docs
-Available in [GitHub Pages](https://770grappenmaker.github.io/mappings-util/).
+Available in [GitHub Pages](https://770grappenmaker.github.io/mappings-util/mappings-util/).
 
 ### Examples
 Note: these examples are in Kotlin, but can be applied in Java as well.
