@@ -8,10 +8,6 @@ repositories {
     mavenCentral()
 }
 
-publishedLibrary {
-    enablePackages = true
-}
-
 kotlin {
     explicitApi()
 }

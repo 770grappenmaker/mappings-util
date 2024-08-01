@@ -25,7 +25,7 @@ public fun Mappings.asProguardMappings(): ProguardMappings {
  *
  * @sample samples.Mappings.conversions
  */
-public fun Mappings.asTinyMappings(v2: Boolean): TinyMappings = TinyMappings(namespaces, classes, v2)
+public fun Mappings.asTinyMappings(v2: Boolean): TinyMappings = TinyMappings(namespaces, classes, isV2 = v2)
 
 /**
  * Converts these [Mappings] to [TSRGMappings], enabling TSRG v2 when [v2] is true.

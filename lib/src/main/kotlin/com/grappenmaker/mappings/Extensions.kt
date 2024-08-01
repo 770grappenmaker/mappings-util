@@ -15,10 +15,20 @@ public fun Mappings.namespace(name: String): Int =
  */
 public fun Mappings.asSimpleRemapper(from: String, to: String): SimpleRemapper = SimpleRemapper(asASMMapping(from, to))
 
+private inline fun MutableMap<String, String>.putOptional(
+    f: String,
+    t: String,
+    key: () -> String = { f }
+) {
+    if (f != t) put(key(), t)
+}
+
 /**
  * Returns a simple mapping representing all of the [Mappings], mapping between the namespaces [from] and [to].
  * If [includeMethods] is true, then methods will be included in the mapping.
  * If [includeFields] is true, then fields will be included in the mapping.
+ *
+ * Mappings with an identical "from and to name" are excluded since they only increase the memory usage needlessly.
  */
 public fun Mappings.asASMMapping(
     from: String,
@@ -26,6 +36,8 @@ public fun Mappings.asASMMapping(
     includeMethods: Boolean = true,
     includeFields: Boolean = true,
 ): Map<String, String> = buildMap {
+    if (from == to) return@buildMap
+
     val fromIndex = namespaces.indexOf(from)
     val toIndex = namespaces.indexOf(to)
 
@@ -37,16 +49,24 @@ public fun Mappings.asASMMapping(
 
     classes.forEach { clz ->
         val owner = clz.names[fromIndex]
-        put(owner, clz.names[toIndex])
-        if (includeMethods && shouldRemapDesc) descClassMap[clz.names.first()] = clz.names[fromIndex]
-        if (includeFields) clz.fields.forEach { put("$owner.${it.names[fromIndex]}", it.names[toIndex]) }
+        putOptional(owner, clz.names[toIndex])
+
+        if (includeMethods && shouldRemapDesc) descClassMap.putOptional(clz.names.first(), clz.names[fromIndex])
+        if (includeFields) clz.fields.forEach {
+            val f = it.names[fromIndex]
+            putOptional(f, it.names[toIndex]) { "$owner.$f" }
+        }
     }
 
     if (includeMethods) classes.forEach { clz ->
         val owner = clz.names[fromIndex]
+
         clz.methods.forEach {
-            val desc = if (shouldRemapDesc) mapMethodDesc(it.desc, descClassMap) else it.desc
-            put("$owner.${it.names[fromIndex]}$desc", it.names[toIndex])
+            val f = it.names[fromIndex]
+
+            putOptional(f, it.names[toIndex]) {
+                "$owner.$f${if (shouldRemapDesc) mapMethodDesc(it.desc, descClassMap) else it.desc}"
+            }
         }
     }
 }

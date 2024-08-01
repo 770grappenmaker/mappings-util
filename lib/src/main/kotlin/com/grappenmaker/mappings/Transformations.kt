@@ -80,6 +80,7 @@ public fun Mappings.reorderNamespaces(vararg order: String): Mappings = reorderN
  */
 public fun Mappings.reorderNamespaces(order: List<String>): Mappings {
     if (order.isEmpty()) return EmptyMappings
+    if (order == namespaces) return this
 
     val indices = order.map { n ->
         namespaces.indexOf(n).also { if (it < 0) throw IllegalArgumentException("Namespace $n was not found") }

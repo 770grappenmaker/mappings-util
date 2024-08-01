@@ -2,13 +2,17 @@ package com.grappenmaker.mappings
 
 /**
  * Represents either a tiny v1 or a tiny v2 mappings file, which does not have a definition anywhere.
- * The serialization method of these mappings is governed by [isV2]
+ * The serialization method of these mappings is governed by [isV2].
+ *
+ * Tiny V2 mappings support "mappings metadata", which will be stored in the [metadata] map, where the values
+ * are the tab-separated values after the keys declared in the mappings file.
  *
  * @property isV2 whether this mappings file is Tiny version 2.
  */
 public data class TinyMappings(
     override val namespaces: List<String>,
     override val classes: List<MappedClass>,
+    val metadata: Map<String, List<String>> = emptyMap(),
     val isV2: Boolean
 ) : Mappings {
     init {
@@ -24,7 +28,6 @@ public data object TinyMappingsV1Format : TinyMappingsWriter {
         lines.firstOrNull()?.parts()?.first() == "v1"
 
     override fun parse(lines: Iterator<String>): TinyMappings {
-        // FIXME: Skip meta for now
         val info = (lines.nextOrNull() ?: error("Invalid / missing Tiny v1 header")).parts()
         val namespaces = info.drop(1)
 
@@ -96,9 +99,13 @@ public data object TinyMappingsV2Format : TinyMappingsWriter {
 
         repeat(2) { state = state.end() }
 
+        val finalState =
+            state as? MappingState ?: error("Did not finish walking tree, parsing failed (ended in $state)")
+
         return TinyMappings(
             namespaces,
-            (state as? MappingState ?: error("Did not finish walking tree, parsing failed (ended in $state)")).classes,
+            finalState.classes,
+            finalState.metadata,
             isV2 = true
         )
     }
@@ -112,13 +119,19 @@ public data object TinyMappingsV2Format : TinyMappingsWriter {
 
     private class MappingState : TinyV2State {
         val classes = mutableListOf<MappedClass>()
+        val metadata = hashMapOf<String, List<String>>()
 
         context(LineAndNumber)
         override fun update(): TinyV2State {
             val ident = line.countStart()
             val (type, parts) = line.prepare()
 
-            if (ident != 0) parseError("Invalid indent top-level")
+            if (ident != 0) {
+                // TODO: handle duplicate keys
+                metadata[type] = parts
+                return this
+            }
+
             if (type != "c") parseError("Invalid top-level member type $type")
 
             return ClassState(this, parts.fixNames())
@@ -226,7 +239,7 @@ public data object TinyMappingsV2Format : TinyMappingsWriter {
         }
     }
 
-    private fun String.prepare() = trimIndent().parts().splitFirst()
+    private fun String.prepare() = trimStart().parts().splitFirst()
     private fun String.countStart(sequence: String = "\t") =
         windowedSequence(sequence.length, sequence.length).takeWhile { it == sequence }.count()
 
@@ -234,6 +247,7 @@ public data object TinyMappingsV2Format : TinyMappingsWriter {
         require(mappings.isV2) { "Expected Tiny v2 mappings, found v1" }
 
         yield("tiny\t2\t0\t${mappings.namespaces.join()}")
+        for ((k, v) in mappings.metadata) yield("\t$k\t${v.join()}")
         for (c in mappings.classes) {
             yield("c\t${c.names.unfixNames().join()}")
             for (cm in c.comments) yield("\tc\t$cm")

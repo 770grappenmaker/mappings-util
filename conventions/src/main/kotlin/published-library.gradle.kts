@@ -24,76 +24,51 @@ val dokkaAsJavadoc by tasks.registering(Jar::class) {
 java { withSourcesJar() }
 kotlin { explicitApi() }
 
-interface PublishingConventionExtension {
-    val enablePackages: Property<Boolean>
-}
+publishing {
+    publications {
+        create<MavenPublication>("central") {
+            groupId = "io.github.770grappenmaker"
 
-val libraryExtension = project.extensions.create<PublishingConventionExtension>("publishedLibrary").apply {
-    enablePackages.convention(false)
-}
+            artifact(dokkaAsJavadoc)
+            from(components["java"])
 
-afterEvaluate {
-    publishing {
-        publications {
-            fun MavenPublication.setup() {
-                artifact(dokkaAsJavadoc)
-                from(components["java"])
+            pom {
+                name = project.name
+                description = "A library for handling and using JVM name mappings (SRG, Tiny, Proguard)"
+                url = "https://github.com/770grappenmaker/mappings-util"
+                packaging = "jar"
 
-                pom {
-                    name = project.name
-                    description = "A library for handling and using JVM name mappings (SRG, Tiny, Proguard)"
-                    url = "https://github.com/770grappenmaker/mappings-util"
-                    packaging = "jar"
-
-                    licenses {
-                        license {
-                            name = "The MIT License"
-                            url = "https://opensource.org/license/mit/"
-                            distribution = "repo"
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id = "770grappenmaker"
-                            name = "NotEvenJoking"
-                            email = "770grappenmaker@gmail.com"
-                            url = "https://github.com/770grappenmaker/"
-                        }
-                    }
-
-                    scm {
-                        connection = "scm:git:git://github.com/770grappenmaker/mappings-util.git"
-                        developerConnection = "scm:git:ssh://github.com:770grappenmaker/mappings-util.git"
-                        url = "https://github.com/770grappenmaker/mappings-util/tree/main"
+                licenses {
+                    license {
+                        name = "The MIT License"
+                        url = "https://opensource.org/license/mit/"
+                        distribution = "repo"
                     }
                 }
-            }
 
-            create<MavenPublication>("central") {
-                groupId = "io.github.770grappenmaker"
-                setup()
-            }
+                developers {
+                    developer {
+                        id = "770grappenmaker"
+                        name = "NotEvenJoking"
+                        email = "770grappenmaker@gmail.com"
+                        url = "https://github.com/770grappenmaker/"
+                    }
+                }
 
-            if (libraryExtension.enablePackages.get()) create<MavenPublication>("packages", MavenPublication::setup)
+                scm {
+                    connection = "scm:git:git://github.com/770grappenmaker/mappings-util.git"
+                    developerConnection = "scm:git:ssh://github.com:770grappenmaker/mappings-util.git"
+                    url = "https://github.com/770grappenmaker/mappings-util/tree/main"
+                }
+            }
         }
+    }
 
-        repositories {
-            if (libraryExtension.enablePackages.get()) maven {
-                name = "Packages"
-                url = uri("https://maven.pkg.github.com/770grappenmaker/mappings-util")
-
-                credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
-                }
-            }
-
-            maven {
-                name = "Central"
-                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-                credentials(PasswordCredentials::class)
-            }
+    repositories {
+        maven {
+            name = "Central"
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials(PasswordCredentials::class)
         }
     }
 }
