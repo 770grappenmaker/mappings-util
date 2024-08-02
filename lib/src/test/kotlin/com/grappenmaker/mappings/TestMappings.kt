@@ -1,5 +1,11 @@
 package com.grappenmaker.mappings
 
+import com.grappenmaker.mappings.format.CSRGMappingsFormat
+import com.grappenmaker.mappings.format.RecafMappingsFormat
+import com.grappenmaker.mappings.format.ProguardMappingsFormat
+import com.grappenmaker.mappings.format.TinyMappings
+import com.grappenmaker.mappings.format.CompactedMappingsFormat
+import com.grappenmaker.mappings.format.write
 import com.grappenmaker.mappings.remap.MappingsRemapper
 import com.grappenmaker.mappings.remap.remap
 import org.objectweb.asm.Opcodes.*

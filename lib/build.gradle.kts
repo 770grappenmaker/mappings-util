@@ -1,8 +1,8 @@
 plugins {
     id("kotlin-convention")
     id("published-library")
+    id("relocator-convention")
     alias(libs.plugins.dokka)
-    alias(libs.plugins.ksp)
 }
 
 repositories {
@@ -18,7 +18,4 @@ dependencies {
     api(libs.bundles.asm)
     api(libs.coroutines.core)
     testImplementation(kotlin("test"))
-
-    implementation(projects.relocator)
-    ksp(projects.relocator)
 }

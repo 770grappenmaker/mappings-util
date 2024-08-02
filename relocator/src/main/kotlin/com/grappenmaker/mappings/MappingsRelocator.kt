@@ -15,35 +15,70 @@ class MappingsRelocatorProvider : SymbolProcessorProvider {
     override fun create(environment: SymbolProcessorEnvironment) = MappingsRelocatorProcessor(environment.codeGenerator)
 }
 
-private const val originalMonoPackage = "com.grappenmaker.mappings"
-
 class MappingsRelocatorProcessor(private val generator: CodeGenerator) : SymbolProcessor {
-    private val KSAnnotated.level
-        get() = getAnnotationsByType(Relocated::class).singleOrNull()?.level ?: DeprecationLevel.WARNING
+    private var ranOnce = false
+        get() {
+            val temp = field
+            field = true
+            return temp
+        }
 
+    private val KSAnnotated.relocated get() = getAnnotationsByType(Relocated::class).singleOrNull()
     private fun maxOf(lhs: DeprecationLevel, rhs: DeprecationLevel) = if (lhs > rhs) lhs else rhs
 
+    private val KSDeclaration.internalName: String
+        get() = parentDeclaration?.let { "${it.internalName}$${simpleName.asString()}" }
+            ?: "${packageName.asString().replace('.', '/')}/${simpleName.asString()}"
+
     override fun process(resolver: Resolver): List<KSAnnotated> {
+        if (ranOnce) return emptyList()
+
         val symbols = resolver.getSymbolsWithAnnotation(Relocated::class.java.name)
         val toProcess = symbols.toMutableList()
         for (symbol in symbols) if (symbol is KSFile) toProcess += symbol.declarations
+        if (toProcess.isEmpty()) return emptyList()
 
         val groups = toProcess.groupBy { it.containingFile }
-        for ((file, children) in groups) {
-            if (file == null || file.packageName.asString() == originalMonoPackage) continue
+        val incompatibleWriter = generator.createNewFile(
+            dependencies = Dependencies(false, *groups.keys.filterNotNull().toTypedArray()),
+            packageName = "",
+            fileName = "incompatible-types",
+            extensionName = "txt"
+        ).writer()
 
-            val baseDeprecation = file.level
+        fun KSClassDeclaration.recurse(prefix: String, sep: Char = '/') {
+            if (classKind == ClassKind.ENUM_ENTRY) return
+
+            val newPrefix = prefix + sep + simpleName.asString()
+            incompatibleWriter.appendLine("$newPrefix=$internalName")
+            for (member in declarations) if (member is KSClassDeclaration) member.recurse(newPrefix, '$')
+        }
+
+        for ((file, children) in groups) {
+            if (file == null) continue
+
+            val baseAnnotation = file.relocated
+            val originalBasePackage = baseAnnotation?.originalPackage ?: originalMonoPackage
+            if (file.packageName.asString() == originalBasePackage) continue
+
+            val baseDeprecation = baseAnnotation?.level ?: DeprecationLevel.WARNING
             val builder = FileSpec.builder(originalMonoPackage, file.fileName.removeSuffix(".kt"))
                 .indent("    ")
                 .addFileComment("This file contains auto-generated binary compatibility-preserving delegates\n")
                 .addFileComment("Do not modify!")
 
+            val internalBasePackage = originalBasePackage.replace('.', '/')
+
             children.fold(builder) { acc, curr ->
-                curr.process(acc, maxOf(baseDeprecation, curr.level))
+                if (curr is KSClassDeclaration) curr.recurse(internalBasePackage)
+
+                curr.process(acc, maxOf(baseDeprecation, curr.relocated?.level ?: DeprecationLevel.WARNING))
             }.build().writeTo(generator, aggregating = false)
         }
 
-        return (groups[null] ?: emptyList()).filterNot { it is KSFile }
+        incompatibleWriter.close()
+
+        return emptyList()
     }
 
     private fun <T : Annotatable.Builder<T>> T.deprecate(
@@ -213,6 +248,8 @@ class MappingsRelocatorProcessor(private val generator: CodeGenerator) : SymbolP
     }
 }
 
+private const val originalMonoPackage = "com.grappenmaker.mappings"
+
 @Retention
 @Target(
     AnnotationTarget.FILE,
@@ -222,4 +259,7 @@ class MappingsRelocatorProcessor(private val generator: CodeGenerator) : SymbolP
     AnnotationTarget.FUNCTION,
     AnnotationTarget.PROPERTY,
 )
-annotation class Relocated(val level: DeprecationLevel = DeprecationLevel.WARNING)
+annotation class Relocated(
+    val originalPackage: String = originalMonoPackage,
+    val level: DeprecationLevel = DeprecationLevel.WARNING
+)

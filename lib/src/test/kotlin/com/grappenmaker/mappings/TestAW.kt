@@ -1,6 +1,18 @@
 package com.grappenmaker.mappings
 
-import com.grappenmaker.mappings.aw.*
+import com.grappenmaker.mappings.aw.AccessMask
+import com.grappenmaker.mappings.aw.AccessWidener
+import com.grappenmaker.mappings.aw.AccessWidenerVisitor
+import com.grappenmaker.mappings.aw.AccessedMember
+import com.grappenmaker.mappings.aw.AccessedClass
+import com.grappenmaker.mappings.aw.AccessWidenerTree
+import com.grappenmaker.mappings.aw.MemberIdentifier
+import com.grappenmaker.mappings.aw.loadAccessWidener
+import com.grappenmaker.mappings.aw.remap
+import com.grappenmaker.mappings.aw.toTree
+import com.grappenmaker.mappings.aw.applyWidener
+import com.grappenmaker.mappings.aw.plus
+import com.grappenmaker.mappings.aw.write
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.tree.ClassNode
 import kotlin.test.Test
