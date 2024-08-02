@@ -1,10 +1,9 @@
 package com.grappenmaker.mappings.remapper
 
-import com.grappenmaker.mappings.ClasspathLoader
 import com.grappenmaker.mappings.ClasspathLoaders
-import com.grappenmaker.mappings.ExperimentalJarRemapper
+import com.grappenmaker.mappings.remap.ExperimentalJarRemapper
 import com.grappenmaker.mappings.MappingsLoader
-import com.grappenmaker.mappings.performRemap
+import com.grappenmaker.mappings.remap.performRemap
 import kotlinx.coroutines.runBlocking
 import java.util.jar.JarFile
 import kotlin.io.path.Path

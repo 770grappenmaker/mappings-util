@@ -6,37 +6,24 @@ Several mappings formats are supported, like SRG, XSRG, Tiny (v1 and v2), Progua
 **Important:** some documentation entries will have seemingly runnable samples. They are, in fact, not runnable.
 This is a known Dokka issue which will be addressed in a future release of Dokka. See [this issue](https://github.com/Kotlin/dokka/issues/3041).
 
-## Supported [MappingsFormat][com.grappenmaker.mappings.MappingsFormat]s
-
-| **Name**                                                                     | **Description**                                                                                                                                    |
-|------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| [ProguardMappingsFormat][com.grappenmaker.mappings.ProguardMappingsFormat]   | Emitted by [Proguard](https://www.guardsquare.com/proguard) as debug symbols                                                                       |
-| [SRGMappingsFormat][com.grappenmaker.mappings.SRGMappingsFormat]             | Searge mappings commonly used in the [ModCoderPack](http://www.modcoderpack.com/)                                                                  |
-| [XSRGMappingsFormat][com.grappenmaker.mappings.XSRGMappingsFormat]           | An extension of the [SRGMappingsFormat][com.grappenmaker.mappings.SRGMappingsFormat]                                                               |
-| [CSRGMappingsFormat][com.grappenmaker.mappings.CSRGMappingsFormat]           | A simplification of the [SRGMappingsFormat][com.grappenmaker.mappings.SRGMappingsFormat]                                                           |
-| [TSRGV1MappingsFormat][com.grappenmaker.mappings.TSRGV1MappingsFormat]       | A variation on the [SRGMappingsFormat][com.grappenmaker.mappings.SRGMappingsFormat]                                                                |
-| [TSRGV2MappingsFormat][com.grappenmaker.mappings.TSRGV2MappingsFormat]       | A variation on the [SRGMappingsFormat][com.grappenmaker.mappings.SRGMappingsFormat]                                                                |
-| [TinyMappingsV1Format][com.grappenmaker.mappings.TinyMappingsV1Format]       | An obsolete version of Tiny mappings, popularized by [yarn](https://github.com/FabricMC/yarn)                                                      |
-| [TinyMappingsV2Format][com.grappenmaker.mappings.TinyMappingsV2Format]       | Tiny mappings, popularized by [yarn](https://github.com/FabricMC/yarn)                                                                             |
-| [EnigmaMappingsFormat][com.grappenmaker.mappings.EnigmaMappingsFormat]       | Enigma mappings, used in [Enigma](https://github.com/FabricMC/Enigma)                                                                              |
-| [RecafMappingsFormat][com.grappenmaker.mappings.RecafMappingsFormat]         | Enigma mappings, used in [Enigma](https://github.com/FabricMC/Enigma)                                                                              |
-| [CompactedMappingsFormat][com.grappenmaker.mappings.CompactedMappingsFormat] | An experimental mappings format inspired by Tiny, which compresses the format slightly (its docs are in [here][com.grappenmaker.mappings.compact]) |
+# Package com.grappenmaker.mappings
+Several utilities and general definitions, forming the base of this library.
 
 ## Loading (mappings) files
 
-| **Type**                                                               | **Snippet**                                                                              |
-|------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
-| Any type of [MappingsFormat][com.grappenmaker.mappings.MappingsFormat] | [MappingsLoader.loadMappings][com.grappenmaker.mappings.MappingsLoader.loadMappings]     |
-| An [AccessWidener][com.grappenmaker.mappings.AccessWidener]            | [loadAccessWidener][com.grappenmaker.mappings.loadAccessWidener]                         |
-| [CompactedMappings][com.grappenmaker.mappings.CompactedMappings]       | [CompactedMappingsFormat.parse][com.grappenmaker.mappings.CompactedMappingsFormat.parse] |
+| **Type**                                                                | **Snippet**                                                                                     |
+|-------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
+| Any type of [MappingsFormat][com.grappenmaker.mappings.MappingsFormat]  | [MappingsLoader.loadMappings][com.grappenmaker.mappings.MappingsLoader.loadMappings]            |
+| An [AccessWidener][com.grappenmaker.mappings.aw.AccessWidener]          | [loadAccessWidener][com.grappenmaker.mappings.aw.loadAccessWidener]                             |
+| [CompactedMappings][com.grappenmaker.mappings.format.CompactedMappings] | [CompactedMappingsFormat.parse][com.grappenmaker.mappings.format.CompactedMappingsFormat.parse] |
 
 ## Writing (mappings) files
 
-| **Type**                                                               | **Snippet**                                                                  |
-|------------------------------------------------------------------------|------------------------------------------------------------------------------|
-| Any type of [MappingsFormat][com.grappenmaker.mappings.MappingsFormat] | [Mappings.write][com.grappenmaker.mappings.write]                            |
-| An [AccessWidener][com.grappenmaker.mappings.AccessWidener]            | [AccessWidener.write][com.grappenmaker.mappings.write]                       |
-| [CompactedMappings][com.grappenmaker.mappings.CompactedMappings]       | [CompactedMappings.write][com.grappenmaker.mappings.write]                   |
+| **Type**                                                                | **Snippet**                                                                  |
+|-------------------------------------------------------------------------|------------------------------------------------------------------------------|
+| Any type of [MappingsFormat][com.grappenmaker.mappings.MappingsFormat]  | [Mappings.write][com.grappenmaker.mappings.write]                            |
+| An [AccessWidener][com.grappenmaker.mappings.aw.AccessWidener]          | [AccessWidener.write][com.grappenmaker.mappings.write]                       |
+| [CompactedMappings][com.grappenmaker.mappings.format.CompactedMappings] | [CompactedMappings.write][com.grappenmaker.mappings.write]                   |
 
 ## Mappings transformations
 
@@ -90,7 +77,10 @@ val tinyMappings = mappings.asTinyMappings(v2 = true)
 File("/path/to/some/mappings/file").writeText(tinyMappings.write().joinToString("\n"))
 ```
 
-## Common [AccessWidener][com.grappenmaker.mappings.AccessWidener] operations
+# Package com.grappenmaker.mappings.aw
+Utilities for working with access wideners.
+
+## Common [AccessWidener][com.grappenmaker.mappings.aw.AccessWidener] operations
 ```kt
 // Parsing
 val lines = File("/path/to/some/file.accesswidener").readText().trim().lines()
@@ -123,7 +113,26 @@ val joined = listOf(aw, otherAW, yetAnotherAW).join()
 aw.write()
 ```
 
-## Compacted mappings specification ([CompactedMappingsFormat][com.grappenmaker.mappings.CompactedMappingsFormat])
+# Package com.grappenmaker.mappings.format
+Supported mappings and their parsers/[formats][com.grappenmaker.mappings.MappingsFormat].
+
+## Supported [MappingsFormat][com.grappenmaker.mappings.MappingsFormat]s
+
+| **Name**                                                                            | **Description**                                                                                             |
+|-------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| [ProguardMappingsFormat][com.grappenmaker.mappings.format.ProguardMappingsFormat]   | Emitted by [Proguard](https://www.guardsquare.com/proguard) as debug symbols                                |
+| [SRGMappingsFormat][com.grappenmaker.mappings.format.SRGMappingsFormat]             | Searge mappings commonly used in the [ModCoderPack](http://www.modcoderpack.com/)                           |
+| [XSRGMappingsFormat][com.grappenmaker.mappings.format.XSRGMappingsFormat]           | An extension of the [SRGMappingsFormat][com.grappenmaker.mappings.format.SRGMappingsFormat]                 |
+| [CSRGMappingsFormat][com.grappenmaker.mappings.format.CSRGMappingsFormat]           | A simplification of the [SRGMappingsFormat][com.grappenmaker.mappings.format.SRGMappingsFormat]             |
+| [TSRGV1MappingsFormat][com.grappenmaker.mappings.format.TSRGV1MappingsFormat]       | A variation on the [SRGMappingsFormat][com.grappenmaker.mappings.format.SRGMappingsFormat]                  |
+| [TSRGV2MappingsFormat][com.grappenmaker.mappings.format.TSRGV2MappingsFormat]       | A variation on the [SRGMappingsFormat][com.grappenmaker.mappings.format.SRGMappingsFormat]                  |
+| [TinyMappingsV1Format][com.grappenmaker.mappings.format.TinyMappingsV1Format]       | An obsolete version of Tiny mappings, popularized by [yarn](https://github.com/FabricMC/yarn)               |
+| [TinyMappingsV2Format][com.grappenmaker.mappings.format.TinyMappingsV2Format]       | Tiny mappings, popularized by [yarn](https://github.com/FabricMC/yarn)                                      |
+| [EnigmaMappingsFormat][com.grappenmaker.mappings.format.EnigmaMappingsFormat]       | Enigma mappings, used in [Enigma](https://github.com/FabricMC/Enigma)                                       |
+| [RecafMappingsFormat][com.grappenmaker.mappings.format.RecafMappingsFormat]         | Enigma mappings, used in [Enigma](https://github.com/FabricMC/Enigma)                                       |
+| [CompactedMappingsFormat][com.grappenmaker.mappings.format.CompactedMappingsFormat] | An experimental mappings format inspired by Tiny, which compresses the format slightly (its docs are below) |
+
+## Compacted mappings specification ([CompactedMappingsFormat][com.grappenmaker.mappings.format.CompactedMappingsFormat])
 Conventions:
 - arrays are denoted `name[]` and are stored with an integral data type before it to indicate the amount of entries in the array
 - string are encoded by first storing its length as a single byte, followed by the utf-8 representation
@@ -155,3 +164,6 @@ Format:
 |------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | names[]: string[]      | Names of this [Mapped][com.grappenmaker.mappings.Mapped] instance, an empty string (length = 0) means the last name with a nonzero length should be copied |
 | descriptor: descriptor | If the descriptor starts with a `(`, this [Mapped][com.grappenmaker.mappings.Mapped] represents a method, a field otherwise                                |
+
+# Package com.grappenmaker.mappings.remap
+Utilities for remapping class and JAR files using mappings provided by the rest of the library.

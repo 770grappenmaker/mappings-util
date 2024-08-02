@@ -1,0 +1,179 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>TinyMappingsWriter</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+<a class="library-name--link" href="../../../index.html">
+                            mappings-util-root
+                    </a>            </div>
+            <div class="library-version">0.2
+            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":mappings-util:dokkaHtmlPartial/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="mappings-util::com.grappenmaker.mappings.format/TinyMappingsWriter///PointingToDeclaration//-237945424">
+  <div class="breadcrumbs"><a href="../../index.html">mappings-util</a><span class="delimiter">/</span><a href="../index.html">com.grappenmaker.mappings.format</a><span class="delimiter">/</span><span class="current">TinyMappingsWriter</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Tiny</span><wbr><span>Mappings</span><wbr><span><span>Writer</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">interface </span><a href="index.html">TinyMappingsWriter</a> : <a href="../../com.grappenmaker.mappings/-mappings-format/index.html">MappingsFormat</a><span class="token operator">&lt;</span><a href="../-tiny-mappings/index.html">TinyMappings</a><span class="token operator">&gt; </span><span class="clearfix"><span class="floating-right">(<a href="https://github.com/770grappenmaker/mappings-util/tree/main/lib/src/main/kotlin/com/grappenmaker/mappings/TinyMappings.kt#L296">source</a>)</span></span></div><p class="paragraph">Convenience interface for parameterizing writing tiny mappings</p><h4 class="">Inheritors</h4><div class="table"><div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-tiny-mappings-v1-format/index.html">TinyMappingsV1Format</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-tiny-mappings-v2-format/index.html">TinyMappingsV2Format</a></div></span></div><div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="1441733581%2FClasslikes%2F-237945424" anchor-label="Context" id="1441733581%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-context/index.html"><span><span>Context</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1441733581%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-context/index.html">Context</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>mappings<span class="token operator">: </span><a href="../-tiny-mappings/index.html">TinyMappings</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>compact<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Context for writing <a href="../-tiny-mappings/index.html">TinyMappings</a>, see <a href="write.html">write</a>. If <a href="-context/compact.html">compact</a> is set, a more compact format will be used, which is unsupported by mappings-io but supported by tiny-mappings-parser and this library.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-1213612865%2FFunctions%2F-237945424" anchor-label="detect" id="-1213612865%2FFunctions%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.grappenmaker.mappings/-mappings-format/detect.html"><span><span>detect</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1213612865%2FFunctions%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../../com.grappenmaker.mappings/-mappings-format/detect.html"><span class="token function">detect</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">lines<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Returns whether this <a href="../../com.grappenmaker.mappings/-mappings-format/index.html">MappingsFormat</a> thinks the <a href="../../com.grappenmaker.mappings/-mappings-format/detect.html">lines</a> represent a valid input for the mappings parser</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="205722140%2FFunctions%2F-237945424" anchor-label="parse" id="205722140%2FFunctions%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.grappenmaker.mappings/-mappings-format/parse.html"><span><span>parse</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="205722140%2FFunctions%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../../com.grappenmaker.mappings/-mappings-format/parse.html"><span class="token function">parse</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">lines<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterator/index.html">Iterator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-tiny-mappings/index.html">TinyMappings</a></div><div class="brief "><p class="paragraph">Parses <a href="../../com.grappenmaker.mappings/-mappings-format/parse.html">lines</a> (an iterator of lines in a mappings file) into a mappings data structure. Throws an <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-state-exception/index.html">IllegalStateException</a> when <a href="../../com.grappenmaker.mappings/-mappings-format/parse.html">lines</a> is not a valid input for this mappings format.</p></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../com.grappenmaker.mappings/-mappings-format/parse.html"><span class="token function">parse</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">lines<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-tiny-mappings/index.html">TinyMappings</a></div><div class="brief "><p class="paragraph">Parses <a href="../../com.grappenmaker.mappings/-mappings-format/parse.html">lines</a> (representing a mappings file) into a mappings data structure. Throws an <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-state-exception/index.html">IllegalStateException</a> when <a href="../../com.grappenmaker.mappings/-mappings-format/parse.html">lines</a> is not a valid input for this mappings format. To check if <a href="../../com.grappenmaker.mappings/-mappings-format/parse.html">lines</a> can be parsed, you could invoke <a href="../../com.grappenmaker.mappings/-mappings-format/detect.html">detect</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1298742624%2FFunctions%2F-237945424" anchor-label="parse" id="-1298742624%2FFunctions%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.grappenmaker.mappings/parse.html"><span><span>parse</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1298742624%2FFunctions%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../../com.grappenmaker.mappings/parse.html">T</a><span class="token operator"> : </span><a href="../../com.grappenmaker.mappings/-mappings/index.html">Mappings</a><span class="token operator">&gt; </span><a href="../../com.grappenmaker.mappings/-mappings-format/index.html">MappingsFormat</a><span class="token operator">&lt;</span><a href="../../com.grappenmaker.mappings/parse.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../../com.grappenmaker.mappings/parse.html"><span class="token function">parse</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">lines<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.grappenmaker.mappings/parse.html">T</a></div><div class="brief "><p class="paragraph">Parses <a href="../../com.grappenmaker.mappings/parse.html">lines</a> (a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a> of lines in a mappings file) into a mappings data structure. Throws an <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-state-exception/index.html">IllegalStateException</a> when <a href="../../com.grappenmaker.mappings/parse.html">lines</a> is not a valid input for this mappings format.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1554494518%2FFunctions%2F-237945424" anchor-label="write" id="-1554494518%2FFunctions%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#753401904%2FFunctions%2F-237945424"><span><span>write</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1554494518%2FFunctions%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#753401904%2FFunctions%2F-237945424"><span class="token function">write</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mappings<span class="token operator">: </span><a href="../-tiny-mappings/index.html">TinyMappings</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes mappings compatible with this <a href="../../com.grappenmaker.mappings/-mappings-format/index.html">MappingsFormat</a> back to a list of lines representing a mappings file</p></div><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="-context/index.html">TinyMappingsWriter.Context</a><span class="token punctuation">.</span><a href="write.html"><span class="token function">write</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes some tiny mappings represented by a <a href="-context/index.html">Context</a> to a file</p></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="write.html"><span class="token function">write</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mappings<span class="token operator">: </span><a href="../-tiny-mappings/index.html">TinyMappings</a><span class="token punctuation">, </span></span><span class="parameter ">compact<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes tiny mappings represented by <a href="write.html">mappings</a> to a file, using a compact format if <a href="write.html">compact</a> is set.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-34310723%2FFunctions%2F-237945424" anchor-label="writeLazy" id="-34310723%2FFunctions%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="write-lazy.html"><span>write</span><wbr><span><span>Lazy</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-34310723%2FFunctions%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="write-lazy.html"><span class="token function">writeLazy</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mappings<span class="token operator">: </span><a href="../-tiny-mappings/index.html">TinyMappings</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes mappings compatible with this <a href="../../com.grappenmaker.mappings/-mappings-format/index.html">MappingsFormat</a> to a lazily evaluated <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

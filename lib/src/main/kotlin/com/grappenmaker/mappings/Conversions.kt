@@ -1,5 +1,14 @@
 package com.grappenmaker.mappings
 
+import com.grappenmaker.mappings.format.CSRGMappings
+import com.grappenmaker.mappings.format.CompactedMappings
+import com.grappenmaker.mappings.format.EnigmaMappings
+import com.grappenmaker.mappings.format.ProguardMappings
+import com.grappenmaker.mappings.format.RecafMappings
+import com.grappenmaker.mappings.format.SRGMappings
+import com.grappenmaker.mappings.format.TSRGMappings
+import com.grappenmaker.mappings.format.TinyMappings
+
 /**
  * Converts these [Mappings] to [SRGMappings], enabling XSRG when [extended] is true.
  *

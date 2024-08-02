@@ -1,5 +1,6 @@
 package com.grappenmaker.mappings
 
+import com.grappenmaker.mappings.aw.*
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.tree.ClassNode
 import kotlin.test.Test

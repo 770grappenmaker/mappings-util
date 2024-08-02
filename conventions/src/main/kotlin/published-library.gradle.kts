@@ -98,4 +98,6 @@ tasks {
             }
         }
     }
+
+    named("sourcesJar", Jar::class) { exclude { "generated" in it.file.absolutePath } }
 }

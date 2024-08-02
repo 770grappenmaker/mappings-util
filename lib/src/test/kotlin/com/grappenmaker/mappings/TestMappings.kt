@@ -1,5 +1,7 @@
 package com.grappenmaker.mappings
 
+import com.grappenmaker.mappings.remap.MappingsRemapper
+import com.grappenmaker.mappings.remap.remap
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.tree.ClassNode
 import kotlin.test.assertEquals

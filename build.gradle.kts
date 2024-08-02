@@ -1,6 +1,6 @@
 allprojects {
     group = "com.grappenmaker"
-    version = "0.1.8"
+    version = "0.2"
 }
 
 plugins {

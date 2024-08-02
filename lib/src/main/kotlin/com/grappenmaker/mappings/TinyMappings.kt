@@ -1,4 +1,10 @@
-package com.grappenmaker.mappings
+@file:Relocated
+
+package com.grappenmaker.mappings.format
+
+import com.grappenmaker.mappings.*
+import com.grappenmaker.mappings.LineAndNumber
+import com.grappenmaker.mappings.fixupHoles
 
 /**
  * Represents either a tiny v1 or a tiny v2 mappings file, which does not have a definition anywhere.
@@ -7,6 +13,7 @@ package com.grappenmaker.mappings
  * Tiny V2 mappings support "mappings metadata", which will be stored in the [metadata] map, where the values
  * are the tab-separated values after the keys declared in the mappings file.
  *
+ * @property metadata said metadata
  * @property isV2 whether this mappings file is Tiny version 2.
  */
 public data class TinyMappings(

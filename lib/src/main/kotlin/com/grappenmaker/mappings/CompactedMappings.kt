@@ -1,7 +1,9 @@
-package com.grappenmaker.mappings
+@file:Relocated
 
+package com.grappenmaker.mappings.format
+
+import com.grappenmaker.mappings.*
 import java.io.*
-import java.util.jar.JarFile
 import kotlin.io.path.*
 
 /**

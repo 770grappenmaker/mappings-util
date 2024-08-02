@@ -3,5 +3,8 @@ $dokka.linkExtension:html
 
 module:mappings-util
 com.grappenmaker.mappings
+com.grappenmaker.mappings.aw
+com.grappenmaker.mappings.format
+com.grappenmaker.mappings.remap
 module:tiny-remapper-provider
 com.grappenmaker.mappings

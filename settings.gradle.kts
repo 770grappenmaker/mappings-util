@@ -6,6 +6,6 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
-include("samples", "remapper", "mappings-util", "tiny-remapper-provider")
+include("samples", "remapper", "mappings-util", "tiny-remapper-provider", "relocator")
 project(":mappings-util").projectDir = file("lib")
 includeBuild("conventions")

@@ -1,6 +1,9 @@
-package com.grappenmaker.mappings
+@file:Relocated
 
-import java.net.URL
+package com.grappenmaker.mappings.format
+
+import com.grappenmaker.mappings.*
+import com.grappenmaker.mappings.LineAndNumber
 
 /**
  * Represents either an enigma mappings file

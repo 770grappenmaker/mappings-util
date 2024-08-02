@@ -1,5 +1,6 @@
 package com.grappenmaker.mappings
 
+import com.grappenmaker.mappings.remap.mapMethodDesc
 import org.objectweb.asm.commons.SimpleRemapper
 
 /**

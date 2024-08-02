@@ -1,15 +1,22 @@
 package com.grappenmaker.mappings
 
-import kotlin.io.path.Path
-import kotlin.io.path.readText
-import kotlin.io.path.writeLines
+import com.grappenmaker.mappings.format.CSRGMappingsFormat
+import com.grappenmaker.mappings.format.EnigmaMappingsFormat
+import com.grappenmaker.mappings.format.ProguardMappingsFormat
+import com.grappenmaker.mappings.format.RecafMappingsFormat
+import com.grappenmaker.mappings.format.SRGMappingsFormat
+import com.grappenmaker.mappings.format.TSRGV1MappingsFormat
+import com.grappenmaker.mappings.format.TSRGV2MappingsFormat
+import com.grappenmaker.mappings.format.TinyMappingsV1Format
+import com.grappenmaker.mappings.format.TinyMappingsV2Format
+import com.grappenmaker.mappings.format.XSRGMappingsFormat
 
 /**
  * Represents any entity that can have different mapped names
  *
  * @property names The names of this named entity, which should correspond to some namespaces in [Mappings.namespaces]
  */
-public sealed interface Mapped {
+public interface Mapped {
     public val names: List<String>
 }
 
@@ -18,7 +25,7 @@ public sealed interface Mapped {
  *
  * @property comments All comments that the author of some [Mappings] file wrote
  */
-public sealed interface Commented {
+public interface Commented {
     public val comments: List<String>
 }
 
@@ -93,7 +100,7 @@ public data class MappedField(
  * @property namespaces All namespaces (in order) that this mappings file supports/contains
  * @property classes All mapped classes in this mappings file (in order, not important)
  */
-public sealed interface Mappings {
+public interface Mappings {
     public val namespaces: List<String>
     public val classes: List<MappedClass>
 }
@@ -111,7 +118,7 @@ public data class GenericMappings(
 /**
  * Represents a generic mappings format
  */
-public sealed interface MappingsFormat<T : Mappings> {
+public interface MappingsFormat<T : Mappings> {
     /**
      * Returns whether this [MappingsFormat] thinks the [lines] represent a valid input for the mappings parser
      */
@@ -148,7 +155,7 @@ public sealed interface MappingsFormat<T : Mappings> {
      * other formats. [detect] will always return `false`. If you want to use this mappings format, it should either
      * be known ahead of time or stored somewhere that this is the case, this library won't handle that for you.
      */
-    public sealed interface Undetectable<T : Mappings> : MappingsFormat<T> {
+    public interface Undetectable<T : Mappings> : MappingsFormat<T> {
         @Deprecated("This mappings format does not support detection", replaceWith = ReplaceWith("false"))
         override fun detect(lines: List<String>): Boolean = false
     }

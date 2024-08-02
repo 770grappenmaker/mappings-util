@@ -1,4 +1,9 @@
-package com.grappenmaker.mappings
+@file:Relocated
+
+package com.grappenmaker.mappings.format
+
+import com.grappenmaker.mappings.*
+import com.grappenmaker.mappings.LineAndNumber
 
 /**
  * Represents either a TSRG v1 or a TSRG v2 mappings file, which does not have a definition anywhere.

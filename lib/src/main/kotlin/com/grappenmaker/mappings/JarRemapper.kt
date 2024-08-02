@@ -1,6 +1,9 @@
 @file:OptIn(ExperimentalJarRemapper::class)
-package com.grappenmaker.mappings
+@file:Relocated
 
+package com.grappenmaker.mappings.remap
+
+import com.grappenmaker.mappings.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import org.objectweb.asm.ClassReader

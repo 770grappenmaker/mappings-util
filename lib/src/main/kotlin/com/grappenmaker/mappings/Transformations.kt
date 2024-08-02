@@ -2,6 +2,9 @@
 
 package com.grappenmaker.mappings
 
+import com.grappenmaker.mappings.remap.MappingsRemapper
+import com.grappenmaker.mappings.remap.mapDesc
+import com.grappenmaker.mappings.remap.mapMethodDesc
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.tree.ClassNode
 import java.util.jar.JarFile

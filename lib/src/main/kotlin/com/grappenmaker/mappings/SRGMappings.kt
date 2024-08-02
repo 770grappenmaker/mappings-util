@@ -1,5 +1,12 @@
-package com.grappenmaker.mappings
+@file:Relocated
 
+package com.grappenmaker.mappings.format
+
+import com.grappenmaker.mappings.*
+import com.grappenmaker.mappings.LineAndNumber
+import com.grappenmaker.mappings.fixupHoles
+import com.grappenmaker.mappings.remap.mapDesc
+import com.grappenmaker.mappings.remap.mapMethodDesc
 import org.objectweb.asm.commons.SimpleRemapper
 
 /**

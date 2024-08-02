@@ -1,0 +1,348 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>com.grappenmaker.mappings.remap</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+<a class="library-name--link" href="../../index.html">
+                            mappings-util-root
+                    </a>            </div>
+            <div class="library-version">0.2
+            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":mappings-util:dokkaHtmlPartial/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageids="mappings-util::com.grappenmaker.mappings.remap////PointingToDeclaration//-237945424">
+  <div class="breadcrumbs"><a href="../index.html">mappings-util</a><span class="delimiter">/</span><span class="current">com.grappenmaker.mappings.remap</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+    <div class="platform-hinted UnderCoverText" data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><p class="paragraph">Utilities for remapping class and JAR files using mappings provided by the rest of the library.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="1148459773%2FClasslikes%2F-237945424" anchor-label="ExperimentalJarRemapper" id="1148459773%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-experimental-jar-remapper/index.html"><span>Experimental</span><wbr><span>Jar</span><wbr><span><span>Remapper</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1148459773%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">annotation class </span><a href="-experimental-jar-remapper/index.html">ExperimentalJarRemapper</a></div><div class="brief "><p class="paragraph">Marker annotation that declares that the annotated type is experimental Jar Remapper API</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1996443411%2FClasslikes%2F-237945424" anchor-label="JarClassVisitor" id="1996443411%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-jar-class-visitor/index.html"><span>Jar</span><wbr><span>Class</span><wbr><span><span>Visitor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1996443411%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token keyword">interface </span><a href="-jar-class-visitor/index.html">JarClassVisitor</a></div><div class="brief "><p class="paragraph">A functional interface that allows users of the <a href="-jar-remapper/index.html">JarRemapper</a> to annotate or mutate class files with ASM during remapping</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2068136565%2FClasslikes%2F-237945424" anchor-label="JarRemapper" id="2068136565%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-jar-remapper/index.html"><span>Jar</span><wbr><span><span>Remapper</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2068136565%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-jar-remapper/index.html">JarRemapper</a></div><div class="brief "><p class="paragraph">Helper / DSL for creating an <a href="-jar-remapper/index.html">JarRemapper</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1224088464%2FClasslikes%2F-237945424" anchor-label="JarRemapperDSL" id="-1224088464%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-jar-remapper-d-s-l/index.html"><span>Jar</span><wbr><span>Remapper</span><wbr><span><span>DSL</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1224088464%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-dsl-marker/index.html"><span class="token annotation builtin">DslMarker</span></a></div></div><span class="token keyword">annotation class </span><a href="-jar-remapper-d-s-l/index.html">JarRemapperDSL</a></div><div class="brief "><p class="paragraph">Marker annotation that declares that a certain type is part of the jar remapper DSL</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-887970421%2FClasslikes%2F-237945424" anchor-label="JarRemapTask" id="-887970421%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-jar-remap-task/index.html"><span>Jar</span><wbr><span>Remap</span><wbr><span><span>Task</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-887970421%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-jar-remap-task/index.html">JarRemapTask</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>input<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html">Path</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>output<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html">Path</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>fromNamespace<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>toNamespace<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A data structure that specifies what the <a href="-jar-remapper/index.html">JarRemapper</a> should do with a specific jar file</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1426153799%2FClasslikes%2F-237945424" anchor-label="JarResourceVisitor" id="-1426153799%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-jar-resource-visitor/index.html"><span>Jar</span><wbr><span>Resource</span><wbr><span><span>Visitor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1426153799%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token keyword">interface </span><a href="-jar-resource-visitor/index.html">JarResourceVisitor</a></div><div class="brief "><p class="paragraph">A functional interface that allows users of the <a href="-jar-remapper/index.html">JarRemapper</a> to annotate or mutate resources in jar files that are not classes</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="281294936%2FClasslikes%2F-237945424" anchor-label="LambdaAwareMethodRemapper" id="281294936%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-lambda-aware-method-remapper/index.html"><span>Lambda</span><wbr><span>Aware</span><wbr><span>Method</span><wbr><span><span>Remapper</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="281294936%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-lambda-aware-method-remapper/index.html">LambdaAwareMethodRemapper</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">parent<span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/MethodVisitor.html">MethodVisitor</a><span class="token punctuation">, </span></span><span class="parameter ">remapper<span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a></span></span><span class="token punctuation">)</span> : <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/MethodRemapper.html">MethodRemapper</a></div><div class="brief "><p class="paragraph">A <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/MethodRemapper.html">MethodRemapper</a> that is aware of the remapping of Invoke Dynamic instructions for lambdas.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="541713977%2FClasslikes%2F-237945424" anchor-label="LambdaAwareRemapper" id="541713977%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-lambda-aware-remapper/index.html"><span>Lambda</span><wbr><span>Aware</span><wbr><span><span>Remapper</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="541713977%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-lambda-aware-remapper/index.html">LambdaAwareRemapper</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">parent<span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/ClassVisitor.html">ClassVisitor</a><span class="token punctuation">, </span></span><span class="parameter ">remapper<span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a></span></span><span class="token punctuation">)</span> : <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/ClassRemapper.html">ClassRemapper</a></div><div class="brief "><p class="paragraph">A <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/ClassRemapper.html">ClassRemapper</a> that is aware of the remapping of Invoke Dynamic instructions for lambdas.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="618717669%2FClasslikes%2F-237945424" anchor-label="LoaderSimpleRemapper" id="618717669%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-loader-simple-remapper/index.html"><span>Loader</span><wbr><span>Simple</span><wbr><span><span>Remapper</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="618717669%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-loader-simple-remapper/index.html">LoaderSimpleRemapper</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">map<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">inheritanceProvider<span class="token operator">: </span><a href="../com.grappenmaker.mappings/-inheritance-provider/index.html">InheritanceProvider</a><span class="token punctuation">, </span></span><span class="parameter ">memoizeInheritance<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span> : <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a></div><div class="brief "><p class="paragraph">A <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a> that can use a <a href="../com.grappenmaker.mappings/-inheritance-provider/index.html">InheritanceProvider</a> for inheritance information to apply a certain <a href="-loader-simple-remapper/map.html">map</a>, that should be in an equivalent format as the one produced by <a href="../com.grappenmaker.mappings/as-a-s-m-mapping.html">Mappings.asASMMapping</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="858692261%2FClasslikes%2F-237945424" anchor-label="MappingsRemapper" id="858692261%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-mappings-remapper/index.html"><span>Mappings</span><wbr><span><span>Remapper</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="858692261%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-mappings-remapper/index.html">MappingsRemapper</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>mappings<span class="token operator">: </span><a href="../com.grappenmaker.mappings/-mappings/index.html">Mappings</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>from<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>to<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">loader<span class="token operator">: </span><a href="../com.grappenmaker.mappings/-classpath-loader/index.html">ClasspathLoader</a></span></span><span class="token punctuation">)</span> : <a href="-loader-simple-remapper/index.html">LoaderSimpleRemapper</a></div><div class="brief "><p class="paragraph">A <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a> for <a href="../com.grappenmaker.mappings/-mappings/index.html">Mappings</a>, which is capable of using inheritance information from classes (the implementor may choose to cache them) to resolve mapping data.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="EXTENSION_PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-1765346900%2FProperties%2F-237945424" anchor-label="isPrimitive" id="-1765346900%2FProperties%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-primitive.html"><span>is</span><wbr><span><span>Primitive</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1765346900%2FProperties%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/Type.html">Type</a><span class="token punctuation">.</span><a href="is-primitive.html">isPrimitive</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Whether a given <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/Type.html">Type</a> represents a JVM primitive type</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-1985867642%2FFunctions%2F-237945424" anchor-label="map" id="-1985867642%2FFunctions%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="map.html"><span><span>map</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1985867642%2FFunctions%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/Type.html">Type</a><span class="token punctuation">.</span><a href="map.html"><span class="token function">map</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">names<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/Type.html">Type</a></div><div class="brief "><p class="paragraph">Remaps a given <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/Type.html">Type</a>, using a map of class <a href="map.html">names</a></p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/Type.html">Type</a><span class="token punctuation">.</span><a href="map.html"><span class="token function">map</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">remapper<span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/Type.html">Type</a></div><div class="brief "><p class="paragraph">Remaps a given <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/Type.html">Type</a> using a given <a href="map.html">remapper</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1454334135%2FFunctions%2F-237945424" anchor-label="mapDesc" id="-1454334135%2FFunctions%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="map-desc.html"><span>map</span><wbr><span><span>Desc</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1454334135%2FFunctions%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="map-desc.html"><span class="token function">mapDesc</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">desc<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">names<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Remaps a given descriptor <a href="map-desc.html">desc</a>, using a map of class <a href="map-desc.html">names</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-605832054%2FFunctions%2F-237945424" anchor-label="mapMethodDesc" id="-605832054%2FFunctions%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="map-method-desc.html"><span>map</span><wbr><span>Method</span><wbr><span><span>Desc</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-605832054%2FFunctions%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="map-method-desc.html"><span class="token function">mapMethodDesc</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">desc<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">names<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Remaps a given method descriptor <a href="map-method-desc.html">desc</a>, using a map of class <a href="map-method-desc.html">names</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="38183839%2FFunctions%2F-237945424" anchor-label="performRemap" id="38183839%2FFunctions%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="perform-remap.html"><span>perform</span><wbr><span><span>Remap</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="38183839%2FFunctions%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">inline suspend </span><span class="token keyword">fun </span><a href="perform-remap.html"><span class="token function">performRemap</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">builder<span class="token operator">: </span><a href="-jar-remapper/index.html">JarRemapper</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Performs a remap using <a href="-jar-remapper/perform.html">JarRemapper.perform</a>. Configuration for it can be provided in the <a href="perform-remap.html">builder</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="386483455%2FFunctions%2F-237945424" anchor-label="remap" id="386483455%2FFunctions%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remap.html"><span><span>remap</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="386483455%2FFunctions%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/tree/AnnotationNode.html">AnnotationNode</a><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="remap.html"><span class="token function">remap</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">remapper<span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Remaps an array of lists of annotations, which is typically used to represent parameter annotations</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/tree/AnnotationNode.html">AnnotationNode</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="remap.html"><span class="token function">remap</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">remapper<span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Remaps a list of annotations, which is typically used to represent a set of annotations that are applied / present on a parameter, field, method, or class</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/tree/AnnotationNode.html">AnnotationNode</a><span class="token punctuation">.</span><a href="remap.html"><span class="token function">remap</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">remapper<span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Remaps an <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/tree/AnnotationNode.html">AnnotationNode</a> using a given <a href="remap.html">remapper</a></p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/tree/AbstractInsnNode.html">AbstractInsnNode</a><span class="token punctuation">.</span><a href="remap.html"><span class="token function">remap</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">remapper<span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a><span class="token punctuation">, </span></span><span class="parameter ">lambdaAware<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Utility that can apply a <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a> to an <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/tree/AbstractInsnNode.html">AbstractInsnNode</a>, remapping it in place. If <a href="remap.html">lambdaAware</a> is <code class="lang-kotlin">true</code>, the remapping will behave like a <a href="-lambda-aware-remapper/index.html">LambdaAwareRemapper</a></p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/tree/ClassNode.html">ClassNode</a><span class="token punctuation">.</span><a href="remap.html"><span class="token function">remap</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">remapper<span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a><span class="token punctuation">, </span></span><span class="parameter ">lambdaAware<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Utility that can apply a <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a> to a <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/tree/ClassNode.html">ClassNode</a>, remapping it in place. If <a href="remap.html">lambdaAware</a> is <code class="lang-kotlin">true</code>, the remapping will behave like a <a href="-lambda-aware-remapper/index.html">LambdaAwareRemapper</a></p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/tree/FieldNode.html">FieldNode</a><span class="token punctuation">.</span><a href="remap.html"><span class="token function">remap</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ownerName<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">remapper<span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Utility that can apply a <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a> to a <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/tree/FieldNode.html">FieldNode</a> inside of an owner represented by <a href="remap.html">ownerName</a>, remapping it in place</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/tree/MethodNode.html">MethodNode</a><span class="token punctuation">.</span><a href="remap.html"><span class="token function">remap</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ownerName<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">remapper<span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a><span class="token punctuation">, </span></span><span class="parameter ">lambdaAware<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Utility that can apply a <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/Remapper.html">Remapper</a> to a <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/tree/MethodNode.html">MethodNode</a> inside of an owner represented by <a href="remap.html">ownerName</a>, remapping it in place. If <a href="remap.html">lambdaAware</a> is <code class="lang-kotlin">true</code>, the remapping will behave like a <a href="-lambda-aware-remapper/index.html">LambdaAwareRemapper</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-544341304%2FFunctions%2F-237945424" anchor-label="remapJar" id="-544341304%2FFunctions%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remap-jar.html"><span>remap</span><wbr><span><span>Jar</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-544341304%2FFunctions%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="remap-jar.html"><span class="token function">remapJar</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mappings<span class="token operator">: </span><a href="../com.grappenmaker.mappings/-mappings/index.html">Mappings</a><span class="token punctuation">, </span></span><span class="parameter ">input<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a><span class="token punctuation">, </span></span><span class="parameter ">output<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a><span class="token punctuation">, </span></span><span class="parameter ">from<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"official"</span><span class="token punctuation">, </span></span><span class="parameter ">to<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"named"</span><span class="token punctuation">, </span></span><span class="parameter ">loader<span class="token operator">: </span><a href="../com.grappenmaker.mappings/-classpath-loader/index.html">ClasspathLoader</a><span class="token operator"> = </span>{ null }<span class="token punctuation">, </span></span><span class="parameter ">visitor<span class="token operator">: </span><span class="token punctuation">(</span>parent<span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/ClassVisitor.html">ClassVisitor</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/ClassVisitor.html">ClassVisitor</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Remaps a .jar file <a href="remap-jar.html">input</a> to an <a href="remap-jar.html">output</a> file, using <a href="remap-jar.html">mappings</a>, between namespaces <a href="remap-jar.html">from</a> and <a href="remap-jar.html">to</a>. If inheritance info from external sources matters, you should pass a classpath <a href="remap-jar.html">loader</a>. If additional class processing is required, an additional <a href="remap-jar.html">visitor</a> can be passed.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="remap-jar.html"><span class="token function">remapJar</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mappings<span class="token operator">: </span><a href="../com.grappenmaker.mappings/-mappings/index.html">Mappings</a><span class="token punctuation">, </span></span><span class="parameter ">input<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a><span class="token punctuation">, </span></span><span class="parameter ">output<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a><span class="token punctuation">, </span></span><span class="parameter ">from<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"official"</span><span class="token punctuation">, </span></span><span class="parameter ">to<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"named"</span><span class="token punctuation">, </span></span><span class="parameter ">files<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/javase/8/docs/api/java/io/File.html">File</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">visitor<span class="token operator">: </span><span class="token punctuation">(</span>parent<span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/ClassVisitor.html">ClassVisitor</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/ClassVisitor.html">ClassVisitor</a><span class="token operator"> = </span>{ it }</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">This function provides a shorthand for <a href="remap-jar.html">remapJar</a> when using physical <a href="remap-jar.html">files</a> representing a classpath, and also takes cares of delegating to the system loader if necessary.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

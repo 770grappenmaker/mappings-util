@@ -1,4 +1,10 @@
-package com.grappenmaker.mappings
+@file:Relocated
+
+package com.grappenmaker.mappings.format
+
+import com.grappenmaker.mappings.*
+import com.grappenmaker.mappings.LineAndNumber
+import com.grappenmaker.mappings.fixupHoles
 
 /**
  * Represents a Recaf Mappings file

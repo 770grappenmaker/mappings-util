@@ -1,5 +1,8 @@
-package com.grappenmaker.mappings
+@file:Relocated
 
+package com.grappenmaker.mappings.remap
+
+import com.grappenmaker.mappings.*
 import org.objectweb.asm.*
 import org.objectweb.asm.commons.ClassRemapper
 import org.objectweb.asm.commons.MethodRemapper

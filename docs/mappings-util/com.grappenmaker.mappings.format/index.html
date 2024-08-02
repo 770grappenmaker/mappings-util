@@ -1,0 +1,449 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>com.grappenmaker.mappings.format</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+<a class="library-name--link" href="../../index.html">
+                            mappings-util-root
+                    </a>            </div>
+            <div class="library-version">0.2
+            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":mappings-util:dokkaHtmlPartial/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageids="mappings-util::com.grappenmaker.mappings.format////PointingToDeclaration//-237945424">
+  <div class="breadcrumbs"><a href="../index.html">mappings-util</a><span class="delimiter">/</span><span class="current">com.grappenmaker.mappings.format</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+    <div class="platform-hinted UnderCoverText" data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><p class="paragraph">Supported mappings and their parsers/<a href="../com.grappenmaker.mappings/-mappings-format/index.html">formats</a>.</p><h2 class="">Supported <a href="../com.grappenmaker.mappings/-mappings-format/index.html">MappingsFormat</a>s</h2><table><thead><tr><th><strong>Name</strong></th><th><strong>Description</strong></th></tr></thead><tbody><tr><td><a href="-proguard-mappings-format/index.html">ProguardMappingsFormat</a></td><td>Emitted by <a href="https://www.guardsquare.com/proguard">Proguard</a> as debug symbols</td></tr><tr><td><a href="-s-r-g-mappings-format/index.html">SRGMappingsFormat</a></td><td>Searge mappings commonly used in the <a href="http://www.modcoderpack.com/">ModCoderPack</a></td></tr><tr><td><a href="-x-s-r-g-mappings-format/index.html">XSRGMappingsFormat</a></td><td>An extension of the <a href="-s-r-g-mappings-format/index.html">SRGMappingsFormat</a></td></tr><tr><td><a href="-c-s-r-g-mappings-format/index.html">CSRGMappingsFormat</a></td><td>A simplification of the <a href="-s-r-g-mappings-format/index.html">SRGMappingsFormat</a></td></tr><tr><td><a href="-t-s-r-g-v1-mappings-format/index.html">TSRGV1MappingsFormat</a></td><td>A variation on the <a href="-s-r-g-mappings-format/index.html">SRGMappingsFormat</a></td></tr><tr><td><a href="-t-s-r-g-v2-mappings-format/index.html">TSRGV2MappingsFormat</a></td><td>A variation on the <a href="-s-r-g-mappings-format/index.html">SRGMappingsFormat</a></td></tr><tr><td><a href="-tiny-mappings-v1-format/index.html">TinyMappingsV1Format</a></td><td>An obsolete version of Tiny mappings, popularized by <a href="https://github.com/FabricMC/yarn">yarn</a></td></tr><tr><td><a href="-tiny-mappings-v2-format/index.html">TinyMappingsV2Format</a></td><td>Tiny mappings, popularized by <a href="https://github.com/FabricMC/yarn">yarn</a></td></tr><tr><td><a href="-enigma-mappings-format/index.html">EnigmaMappingsFormat</a></td><td>Enigma mappings, used in <a href="https://github.com/FabricMC/Enigma">Enigma</a></td></tr><tr><td><a href="-recaf-mappings-format/index.html">RecafMappingsFormat</a></td><td>Enigma mappings, used in <a href="https://github.com/FabricMC/Enigma">Enigma</a></td></tr><tr><td><a href="-compacted-mappings-format/index.html">CompactedMappingsFormat</a></td><td>An experimental mappings format inspired by Tiny, which compresses the format slightly (its docs are below)</td></tr></tbody></table><h2 class="">Compacted mappings specification (<a href="-compacted-mappings-format/index.html">CompactedMappingsFormat</a>)</h2><p class="paragraph">Conventions:</p><ul><li><p class="paragraph">arrays are denoted <code class="lang-kotlin">name[]</code> and are stored with an integral data type before it to indicate the amount of entries in the array</p></li><li><p class="paragraph">string are encoded by first storing its length as a single byte, followed by the utf-8 representation</p></li><li><p class="paragraph">varints are used, see <a href="https://wiki.vg/Data_types#VarInt_and_VarLong">wiki.vg</a></p></li><li><p class="paragraph">descriptors are encoded like strings but without its length, since that can be deduced by reading the descriptor bit by bit. The following replacements are made (to save space):</p></li><ul><li><p class="paragraph"><code class="lang-kotlin">Ljava/lang/Object;</code> -&gt;<code class="lang-kotlin">A</code></p></li><li><p class="paragraph"><code class="lang-kotlin">Ljava/lang/String;</code> -&gt;<code class="lang-kotlin">G</code></p></li><li><p class="paragraph"><code class="lang-kotlin">Ljava/util/List;</code> -&gt;<code class="lang-kotlin">R</code></p></li></ul></ul><p class="paragraph">Format:</p><table><thead><tr><th><strong>Name </strong>&amp;<strong> Type</strong></th><th><strong>Description</strong></th></tr></thead><tbody><tr><td>magic: int</td><td>Always "ACMF" to identify the format, encoded as ascii to a single integer: magicEncoded</td></tr><tr><td>version: byte</td><td>The version of the format being serialized, which is currently just <code class="org.jetbrains.dokka.pages.commenttable@3f50a151 lang-kotlin">1</code></td></tr><tr><td>namespaces[]: string[]</td><td>The namespaces stored (the length is stored as a byte)</td></tr><tr><td>classes[]: class[]</td><td>The mapped classes (the length is stored as an int)</td></tr></tbody></table><p class="paragraph"><code class="lang-kotlin">class</code> type (corresponding to <a href="../com.grappenmaker.mappings/-mapped-class/index.html">MappedClass</a>):</p><table><thead><tr><th><strong>Name </strong>&amp;<strong> Type</strong></th><th><strong>Description</strong></th></tr></thead><tbody><tr><td>names[]: string[]</td><td>Names of this <a href="../com.grappenmaker.mappings/-mapped-class/index.html">MappedClass</a> instance, an empty string (length = 0) means the last name with a nonzero length should be copied</td></tr><tr><td>members: mapped[]</td><td>The mapped members (the length is stored as a varint)</td></tr></tbody></table><p class="paragraph"><code class="lang-kotlin">mapped</code> type (corresponding to <a href="../com.grappenmaker.mappings/-mapped/index.html">Mapped</a>):</p><table><thead><tr><th><strong>Name </strong>&amp;<strong> Type</strong></th><th><strong>Description</strong></th></tr></thead><tbody><tr><td>names[]: string[]</td><td>Names of this <a href="../com.grappenmaker.mappings/-mapped/index.html">Mapped</a> instance, an empty string (length = 0) means the last name with a nonzero length should be copied</td></tr><tr><td>descriptor: descriptor</td><td>If the descriptor starts with a <code class="org.jetbrains.dokka.pages.commenttable@3f50a151 lang-kotlin">(</code>, this <a href="../com.grappenmaker.mappings/-mapped/index.html">Mapped</a> represents a method, a field otherwise</td></tr></tbody></table></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="-2011376779%2FClasslikes%2F-237945424" anchor-label="CompactedMappings" id="-2011376779%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-compacted-mappings/index.html"><span>Compacted</span><wbr><span><span>Mappings</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2011376779%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-compacted-mappings/index.html">CompactedMappings</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>namespaces<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../com.grappenmaker.mappings/-mapped-class/index.html">MappedClass</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>version<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">2</span></span></span><span class="token punctuation">)</span> : <a href="../com.grappenmaker.mappings/-mappings/index.html">Mappings</a></div><div class="brief "><p class="paragraph">Represents a compacted mappings file. See <a href="-compacted-mappings-format/index.html">CompactedMappingsFormat</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1845697474%2FClasslikes%2F-237945424" anchor-label="CompactedMappingsFormat" id="-1845697474%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-compacted-mappings-format/index.html"><span>Compacted</span><wbr><span>Mappings</span><wbr><span><span>Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1845697474%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-compacted-mappings-format/index.html">CompactedMappingsFormat</a></div><div class="brief "><p class="paragraph">Represents the compacted mappings format. Note: this does not support the usual <a href="../com.grappenmaker.mappings/-mappings-format/index.html">MappingsFormat</a> capability, since this is the only mappings format that has a binary representation. Compacted mappings should be explicitly handled through this object</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1832002972%2FClasslikes%2F-237945424" anchor-label="CSRGMappings" id="1832002972%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-s-r-g-mappings/index.html"><span><span>CSRGMappings</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1832002972%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-c-s-r-g-mappings/index.html">CSRGMappings</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../com.grappenmaker.mappings/-mapped-class/index.html">MappedClass</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <a href="../com.grappenmaker.mappings/-mappings/index.html">Mappings</a></div><div class="brief "><p class="paragraph">Represents a CSRG Mappings file</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1633664293%2FClasslikes%2F-237945424" anchor-label="CSRGMappingsFormat" id="1633664293%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-s-r-g-mappings-format/index.html"><span>CSRGMappings</span><wbr><span><span>Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1633664293%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-c-s-r-g-mappings-format/index.html">CSRGMappingsFormat</a> : <a href="../com.grappenmaker.mappings/-mappings-format/-undetectable/index.html">MappingsFormat.Undetectable</a><span class="token operator">&lt;</span><a href="-c-s-r-g-mappings/index.html">CSRGMappings</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents the CSRG mappings format</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1636530618%2FClasslikes%2F-237945424" anchor-label="EnigmaMappings" id="-1636530618%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-enigma-mappings/index.html"><span>Enigma</span><wbr><span><span>Mappings</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1636530618%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-enigma-mappings/index.html">EnigmaMappings</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../com.grappenmaker.mappings/-mapped-class/index.html">MappedClass</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <a href="../com.grappenmaker.mappings/-mappings/index.html">Mappings</a></div><div class="brief "><p class="paragraph">Represents either an enigma mappings file</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1875020209%2FClasslikes%2F-237945424" anchor-label="EnigmaMappingsFormat" id="-1875020209%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-enigma-mappings-format/index.html"><span>Enigma</span><wbr><span>Mappings</span><wbr><span><span>Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1875020209%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-enigma-mappings-format/index.html">EnigmaMappingsFormat</a> : <a href="../com.grappenmaker.mappings/-mappings-format/index.html">MappingsFormat</a><span class="token operator">&lt;</span><a href="-enigma-mappings/index.html">EnigmaMappings</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents the enigma mappings format</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-618204183%2FClasslikes%2F-237945424" anchor-label="ProguardMappings" id="-618204183%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-proguard-mappings/index.html"><span>Proguard</span><wbr><span><span>Mappings</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-618204183%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-proguard-mappings/index.html">ProguardMappings</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../com.grappenmaker.mappings/-mapped-class/index.html">MappedClass</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>comments<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()</span></span><span class="token punctuation">)</span> : <a href="../com.grappenmaker.mappings/-mappings/index.html">Mappings</a>, <a href="../com.grappenmaker.mappings/-commented/index.html">Commented</a></div><div class="brief "><p class="paragraph">Represents Proguard debug deobfuscation mappings. Note that Proguard only supports two mappings namespaces. Line number information is ignored by the parser.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1253974606%2FClasslikes%2F-237945424" anchor-label="ProguardMappingsFormat" id="-1253974606%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-proguard-mappings-format/index.html"><span>Proguard</span><wbr><span>Mappings</span><wbr><span><span>Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1253974606%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-proguard-mappings-format/index.html">ProguardMappingsFormat</a> : <a href="../com.grappenmaker.mappings/-mappings-format/index.html">MappingsFormat</a><span class="token operator">&lt;</span><a href="-proguard-mappings/index.html">ProguardMappings</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Implements the Proguard mappings format, disregarding line number information, which is written as 1:1 when serialized.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1198101086%2FClasslikes%2F-237945424" anchor-label="RecafMappings" id="-1198101086%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-recaf-mappings/index.html"><span>Recaf</span><wbr><span><span>Mappings</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1198101086%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-recaf-mappings/index.html">RecafMappings</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../com.grappenmaker.mappings/-mapped-class/index.html">MappedClass</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <a href="../com.grappenmaker.mappings/-mappings/index.html">Mappings</a></div><div class="brief "><p class="paragraph">Represents a Recaf Mappings file</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1881970517%2FClasslikes%2F-237945424" anchor-label="RecafMappingsFormat" id="-1881970517%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-recaf-mappings-format/index.html"><span>Recaf</span><wbr><span>Mappings</span><wbr><span><span>Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1881970517%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-recaf-mappings-format/index.html">RecafMappingsFormat</a> : <a href="../com.grappenmaker.mappings/-mappings-format/-undetectable/index.html">MappingsFormat.Undetectable</a><span class="token operator">&lt;</span><a href="-recaf-mappings/index.html">RecafMappings</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents the Recaf mappings format</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1117411953%2FClasslikes%2F-237945424" anchor-label="SRGMappings" id="-1117411953%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-r-g-mappings/index.html"><span><span>SRGMappings</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1117411953%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-s-r-g-mappings/index.html">SRGMappings</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../com.grappenmaker.mappings/-mapped-class/index.html">MappedClass</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>isExtended<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span> : <a href="../com.grappenmaker.mappings/-mappings/index.html">Mappings</a></div><div class="brief "><p class="paragraph">Represent any type of SRG mappings, whether this data structure represents XSRG or regular SRG is governed by <a href="-s-r-g-mappings/is-extended.html">isExtended</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-314426664%2FClasslikes%2F-237945424" anchor-label="SRGMappingsFormat" id="-314426664%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-r-g-mappings-format/index.html"><span>SRGMappings</span><wbr><span><span>Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-314426664%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-s-r-g-mappings-format/index.html">SRGMappingsFormat</a> : <a href="../com.grappenmaker.mappings/-mappings-format/index.html">MappingsFormat</a><span class="token operator">&lt;</span><a href="-s-r-g-mappings/index.html">SRGMappings</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents the SRG mappings format</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-391163775%2FClasslikes%2F-237945424" anchor-label="TinyMappings" id="-391163775%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-tiny-mappings/index.html"><span>Tiny</span><wbr><span><span>Mappings</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-391163775%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-tiny-mappings/index.html">TinyMappings</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>namespaces<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../com.grappenmaker.mappings/-mapped-class/index.html">MappedClass</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>metadata<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyMap()<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>isV2<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span> : <a href="../com.grappenmaker.mappings/-mappings/index.html">Mappings</a></div><div class="brief "><p class="paragraph">Represents either a tiny v1 or a tiny v2 mappings file, which does not have a definition anywhere. The serialization method of these mappings is governed by <a href="-tiny-mappings/is-v2.html">isV2</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-445155761%2FClasslikes%2F-237945424" anchor-label="TinyMappingsV1Format" id="-445155761%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-tiny-mappings-v1-format/index.html"><span>Tiny</span><wbr><span>Mappings</span><wbr><span><span>V1Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-445155761%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-tiny-mappings-v1-format/index.html">TinyMappingsV1Format</a> : <a href="-tiny-mappings-writer/index.html">TinyMappingsWriter</a></div><div class="brief "><p class="paragraph">Represents the Tiny v1 mappings format</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1839707694%2FClasslikes%2F-237945424" anchor-label="TinyMappingsV2Format" id="1839707694%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-tiny-mappings-v2-format/index.html"><span>Tiny</span><wbr><span>Mappings</span><wbr><span><span>V2Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1839707694%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-tiny-mappings-v2-format/index.html">TinyMappingsV2Format</a> : <a href="-tiny-mappings-writer/index.html">TinyMappingsWriter</a></div><div class="brief "><p class="paragraph">Represents the Tiny v2 mappings format</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="196968270%2FClasslikes%2F-237945424" anchor-label="TinyMappingsWriter" id="196968270%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-tiny-mappings-writer/index.html"><span>Tiny</span><wbr><span>Mappings</span><wbr><span><span>Writer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="196968270%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">interface </span><a href="-tiny-mappings-writer/index.html">TinyMappingsWriter</a> : <a href="../com.grappenmaker.mappings/-mappings-format/index.html">MappingsFormat</a><span class="token operator">&lt;</span><a href="-tiny-mappings/index.html">TinyMappings</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Convenience interface for parameterizing writing tiny mappings</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1151913683%2FClasslikes%2F-237945424" anchor-label="TSRGMappings" id="-1151913683%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-t-s-r-g-mappings/index.html"><span><span>TSRGMappings</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1151913683%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-t-s-r-g-mappings/index.html">TSRGMappings</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>namespaces<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../com.grappenmaker.mappings/-mapped-class/index.html">MappedClass</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>isV2<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span> : <a href="../com.grappenmaker.mappings/-mappings/index.html">Mappings</a></div><div class="brief "><p class="paragraph">Represents either a TSRG v1 or a TSRG v2 mappings file, which does not have a definition anywhere. The serialization method of these mappings is governed by <a href="-t-s-r-g-mappings/is-v2.html">isV2</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1825496901%2FClasslikes%2F-237945424" anchor-label="TSRGV1MappingsFormat" id="-1825496901%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-t-s-r-g-v1-mappings-format/index.html"><span>TSRGV1Mappings</span><wbr><span><span>Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1825496901%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-t-s-r-g-v1-mappings-format/index.html">TSRGV1MappingsFormat</a> : <a href="../com.grappenmaker.mappings/-mappings-format/index.html">MappingsFormat</a><span class="token operator">&lt;</span><a href="-t-s-r-g-mappings/index.html">TSRGMappings</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents the TSRG v1 mappings format</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-363916902%2FClasslikes%2F-237945424" anchor-label="TSRGV2MappingsFormat" id="-363916902%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-t-s-r-g-v2-mappings-format/index.html"><span>TSRGV2Mappings</span><wbr><span><span>Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-363916902%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-t-s-r-g-v2-mappings-format/index.html">TSRGV2MappingsFormat</a> : <a href="../com.grappenmaker.mappings/-mappings-format/index.html">MappingsFormat</a><span class="token operator">&lt;</span><a href="-t-s-r-g-mappings/index.html">TSRGMappings</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents the TSRG v2 mappings format</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="800969466%2FClasslikes%2F-237945424" anchor-label="XSRGMappingsFormat" id="800969466%2FClasslikes%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-x-s-r-g-mappings-format/index.html"><span>XSRGMappings</span><wbr><span><span>Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="800969466%2FClasslikes%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-x-s-r-g-mappings-format/index.html">XSRGMappingsFormat</a> : <a href="../com.grappenmaker.mappings/-mappings-format/index.html">MappingsFormat</a><span class="token operator">&lt;</span><a href="-s-r-g-mappings/index.html">SRGMappings</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Represents the XSRG mappings format</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="EXTENSION_FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-1168798108%2FFunctions%2F-237945424" anchor-label="asSimpleRemapper" id="-1168798108%2FFunctions%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="as-simple-remapper.html"><span>as</span><wbr><span>Simple</span><wbr><span><span>Remapper</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1168798108%2FFunctions%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-s-r-g-mappings/index.html">SRGMappings</a><span class="token punctuation">.</span><a href="as-simple-remapper.html"><span class="token function">asSimpleRemapper</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/SimpleRemapper.html">SimpleRemapper</a></div><div class="brief "><p class="paragraph">Shorthand for converting <a href="-s-r-g-mappings/index.html">SRGMappings</a> to a <a href="https://asm.ow2.io/javadoc/org/objectweb/asm/commons/SimpleRemapper.html">SimpleRemapper</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1042826798%2FFunctions%2F-237945424" anchor-label="write" id="1042826798%2FFunctions%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="write.html"><span><span>write</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1042826798%2FFunctions%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-c-s-r-g-mappings/index.html">CSRGMappings</a><span class="token punctuation">.</span><a href="write.html"><span class="token function">write</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes <a href="-c-s-r-g-mappings/index.html">CSRGMappings</a> to a mappings file represented by a list of strings</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="-compacted-mappings/index.html">CompactedMappings</a><span class="token punctuation">.</span><a href="write.html"><span class="token function">write</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html">ByteArray</a></div><div class="brief "><p class="paragraph">Writes <a href="-compacted-mappings/index.html">CompactedMappings</a> as its binary representation</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="-enigma-mappings/index.html">EnigmaMappings</a><span class="token punctuation">.</span><a href="write.html"><span class="token function">write</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes <a href="-enigma-mappings/index.html">EnigmaMappings</a> to a mappings file represented by a list of strings.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="-proguard-mappings/index.html">ProguardMappings</a><span class="token punctuation">.</span><a href="write.html"><span class="token function">write</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes <a href="-proguard-mappings/index.html">ProguardMappings</a> to a mappings file represented by a list of strings</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="-recaf-mappings/index.html">RecafMappings</a><span class="token punctuation">.</span><a href="write.html"><span class="token function">write</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes <a href="-recaf-mappings/index.html">RecafMappings</a> to a mappings file represented by a list of strings</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="-s-r-g-mappings/index.html">SRGMappings</a><span class="token punctuation">.</span><a href="write.html"><span class="token function">write</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes <a href="-s-r-g-mappings/index.html">SRGMappings</a> to a mappings file represented by a list of strings</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="-t-s-r-g-mappings/index.html">TSRGMappings</a><span class="token punctuation">.</span><a href="write.html"><span class="token function">write</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes <a href="-t-s-r-g-mappings/index.html">TSRGMappings</a> to a mappings file represented by a list of strings</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="-tiny-mappings/index.html">TinyMappings</a><span class="token punctuation">.</span><a href="write.html"><span class="token function">write</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">compact<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span>isV2</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes <a href="-tiny-mappings/index.html">TinyMappings</a> to a mappings file represented by a list of strings. If <a href="write.html">compact</a> is set, a more compact format of tiny mappings will be used, see <a href="-tiny-mappings-writer/write.html">TinyMappingsWriter.write</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="738531207%2FFunctions%2F-237945424" anchor-label="writeLazy" id="738531207%2FFunctions%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="write-lazy.html"><span>write</span><wbr><span><span>Lazy</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="738531207%2FFunctions%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-c-s-r-g-mappings/index.html">CSRGMappings</a><span class="token punctuation">.</span><a href="write-lazy.html"><span class="token function">writeLazy</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes <a href="-c-s-r-g-mappings/index.html">CSRGMappings</a> as a lazily evaluated <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a></p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="-enigma-mappings/index.html">EnigmaMappings</a><span class="token punctuation">.</span><a href="write-lazy.html"><span class="token function">writeLazy</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes <a href="-enigma-mappings/index.html">EnigmaMappings</a> as a lazily evaluated <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a>.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="-proguard-mappings/index.html">ProguardMappings</a><span class="token punctuation">.</span><a href="write-lazy.html"><span class="token function">writeLazy</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes <a href="-proguard-mappings/index.html">ProguardMappings</a> as a lazily evaluated <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a></p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="-recaf-mappings/index.html">RecafMappings</a><span class="token punctuation">.</span><a href="write-lazy.html"><span class="token function">writeLazy</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes <a href="-recaf-mappings/index.html">RecafMappings</a> as a lazily evaluated <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a></p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="-s-r-g-mappings/index.html">SRGMappings</a><span class="token punctuation">.</span><a href="write-lazy.html"><span class="token function">writeLazy</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes <a href="-s-r-g-mappings/index.html">SRGMappings</a> as a lazily evaluated <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a></p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="-t-s-r-g-mappings/index.html">TSRGMappings</a><span class="token punctuation">.</span><a href="write-lazy.html"><span class="token function">writeLazy</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes <a href="-t-s-r-g-mappings/index.html">TSRGMappings</a> as a lazily evaluated <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a></p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="-tiny-mappings/index.html">TinyMappings</a><span class="token punctuation">.</span><a href="write-lazy.html"><span class="token function">writeLazy</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">compact<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span>isV2</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Writes <a href="-tiny-mappings/index.html">TinyMappings</a> as a lazily evaluated <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.sequences/-sequence/index.html">Sequence</a>. If <a href="write-lazy.html">compact</a> is set, a more compact format of tiny mappings will be used, see <a href="-tiny-mappings-writer/write.html">TinyMappingsWriter.write</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1271322887%2FFunctions%2F-237945424" anchor-label="writeTo" id="1271322887%2FFunctions%2F-237945424" data-filterable-set=":mappings-util:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-filterable-current=":mappings-util:dokkaHtmlPartial/main" data-filterable-set=":mappings-util:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="write-to.html"><span>write</span><wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1271322887%2FFunctions%2F-237945424"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-compacted-mappings/index.html">CompactedMappings</a><span class="token punctuation">.</span><a href="write-to.html"><span class="token function">writeTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">stream<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html">OutputStream</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Writes some mappings to an <a href="https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html">OutputStream</a> as an equivalent representation</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
