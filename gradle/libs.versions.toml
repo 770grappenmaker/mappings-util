@@ -19,6 +19,7 @@ ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin"
 ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 poet = { module = "com.squareup:kotlinpoet", version.ref = "poet" }
 poet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "poet" }
+mixin = { module = "net.fabricmc:sponge-mixin", version = "0.15.0+mixin.0.8.7" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

@@ -84,6 +84,24 @@ public fun interface JarClassVisitor {
     public fun visit(name: String, parent: ClassVisitor): ClassVisitor?
 }
 
+/**
+ * A functional interface that allows users of the [JarRemapper] to alter the remapping process at a later stage.
+ * During a single remapping task, this [RemapperExtension] will be called.
+ */
+@JarRemapperDSL
+@ExperimentalJarRemapper
+public fun interface RemapperExtension {
+    /**
+     * Called whenever a single remapping task is about to be processed. The given [ClasspathLoader] is able to load
+     * all classpath classes and input classes for a single task. It might not be able to load classes from the system
+     * class loader. The [Remapper] is a specialized remapper for this specific task, which is also used to remap
+     * the class files, including the Code attributes.
+     *
+     * This function should return a [JarClassVisitor] specialized to this specific mapping task
+     */
+    public fun createVisitor(loader: ClasspathLoader, remapper: Remapper): JarClassVisitor
+}
+
 internal val signatureResourceVisitor = JarResourceVisitor { name, file ->
     if (name.endsWith(".RSA") || name.endsWith(".SF")) null else file
 }
@@ -98,7 +116,7 @@ public class JarRemapper {
      * The [Mappings] that will be used to remap classes in input jar files
      */
     public var mappings: Mappings = EmptyMappings
-    private var tasks = mutableListOf<JarRemapTask>()
+    private val tasks = mutableListOf<JarRemapTask>()
 
     /**
      * The [ClasspathLoader] that should be used to request class files from classpath / environment files,
@@ -108,8 +126,9 @@ public class JarRemapper {
      */
     public var loader: ClasspathLoader = { null }
 
-    private var classVisitors = mutableListOf<JarClassVisitor>()
-    private var resourceVisitors = mutableListOf(signatureResourceVisitor)
+    private val classVisitors = mutableListOf<JarClassVisitor>()
+    private val resourceVisitors = mutableListOf(signatureResourceVisitor)
+    private val extensions = mutableListOf<RemapperExtension>()
 
     /**
      * Determines whether the [JarRemapper] will copy non-classfile resources from input jars into output jars
@@ -144,6 +163,15 @@ public class JarRemapper {
     }
 
     /**
+     * Adds a [RemapperExtension] to the pipeline of extensions that will be applied to each task
+     *
+     * @see [RemapperExtension]
+     */
+    public fun extension(extension: RemapperExtension) {
+        extensions += extension
+    }
+
+    /**
      * Performs all configured tasks
      */
     public suspend fun perform() {
@@ -153,7 +181,7 @@ public class JarRemapper {
         // toList to copy, to ensure no unexpected concurrency weirdness
         val context = Context(
             mappings, tasks, commonLoader, classVisitors.toList(),
-            resourceVisitors.toList(), copyResources
+            resourceVisitors.toList(), extensions.toList(), copyResources
         )
 
         supervisorScope {
@@ -167,6 +195,7 @@ public class JarRemapper {
         val loader: ClasspathLoader,
         val classVisitors: List<JarClassVisitor>,
         val resourceVisitors: List<JarResourceVisitor>,
+        val extensions: List<RemapperExtension>,
         val copyResources: Boolean,
     ) {
         init {
@@ -182,7 +211,10 @@ public class JarRemapper {
             .mapTo(hashSetOf()) { it.fromNamespace to it.toNamespace }
             .associateWith { (f, t) -> mappings.asASMMapping(f, t) }
 
-        private fun ByteArray.remap(remapper: Remapper): Pair<ByteArray, String> {
+        private fun ByteArray.remap(
+            remapper: Remapper,
+            extraVisitors: List<JarClassVisitor>
+        ): Pair<ByteArray, String> {
             val reader = ClassReader(this)
             val writer = ClassWriter(reader, 0)
 
@@ -203,7 +235,8 @@ public class JarRemapper {
             }
 
             val outer = classVisitors.fold(inner) { acc, curr -> curr.visit(originalName, acc) ?: acc }
-            reader.accept(LambdaAwareRemapper(outer, remapper), 0)
+            val outerWithExtra = extraVisitors.fold(outer) { acc, curr -> curr.visit(originalName, acc) ?: acc }
+            reader.accept(LambdaAwareRemapper(outerWithExtra, remapper), 0)
 
             return writer.toByteArray() to writtenName
         }
@@ -232,9 +265,10 @@ public class JarRemapper {
                 val map = sharedMaps.getValue(fromNamespace to toNamespace)
                 val totalLoader = ClasspathLoaders.compound(ClasspathLoaders.fromLookup(lookup), loader)
                 val remapper = LoaderSimpleRemapper(map, totalLoader)
+                val extraVisitors = extensions.map { it.createVisitor(totalLoader, remapper) }
 
                 lookup.forEach { (_, original) ->
-                    val (bytes, writtenName) = original.remap(remapper)
+                    val (bytes, writtenName) = original.remap(remapper, extraVisitors)
                     write("$writtenName.class", bytes)
                 }
             }

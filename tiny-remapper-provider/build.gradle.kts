@@ -9,7 +9,7 @@ repositories {
 
 dependencies {
     api(projects.mappingsUtil)
-    api(libs.tiny.remapper) {
-        exclude(module = "net.fabricmc:mapping-io")
+    compileOnly(libs.tiny.remapper) {
+        exclude(group = "net.fabricmc", module = "mapping-io")
     }
 }

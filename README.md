@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.770grappenmaker:mappings-util:0.1.7")
+    implementation("io.github.770grappenmaker:mappings-util:0.2")
 }
 ```
 #### Maven
@@ -24,7 +24,7 @@ dependencies {
     <dependency>
         <groupId>io.github.770grappenmaker</groupId>
         <artifactId>mappings-util</artifactId>
-        <version>0.1.7</version>
+        <version>0.2</version>
     </dependency>
 </dependencies>
 ```
