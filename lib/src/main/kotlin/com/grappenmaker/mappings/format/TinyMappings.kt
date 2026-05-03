@@ -21,6 +21,32 @@ public data class TinyMappings(
     init {
         assertValidDescs()
     }
+
+    /**
+     * Writes [TinyMappings] to a mappings file represented by a list of strings.
+     */
+    override fun write(): List<String> =
+        (if (isV2) TinyMappingsV2Format else TinyMappingsV1Format).write(this, true).toList()
+
+    /**
+     * Writes [TinyMappings] as a lazily evaluated [Sequence].
+     */
+    override fun writeLazy(): Sequence<String> =
+        (if (isV2) TinyMappingsV2Format else TinyMappingsV1Format).write(this, true)
+
+    /**
+     * Writes [TinyMappings] to a mappings file represented by a list of strings. A more compact
+     * format of tiny mappings will be used, see [TinyMappingsWriter.write].
+     */
+    public fun writeCompact(compact: Boolean = isV2): List<String> =
+        (if (isV2) TinyMappingsV2Format else TinyMappingsV1Format).write(this, compact).toList()
+
+    /**
+     * Writes [TinyMappings] as a lazily evaluated [Sequence]. A more compact
+     * format of tiny mappings will be used, see [TinyMappingsWriter.write].
+     */
+    public fun writeCompactLazy(compact: Boolean = isV2): Sequence<String> =
+        (if (isV2) TinyMappingsV2Format else TinyMappingsV1Format).write(this, compact)
 }
 
 /**
@@ -278,20 +304,6 @@ public data object TinyMappingsV2Format : TinyMappingsWriter {
         }
     }
 }
-
-/**
- * Writes [TinyMappings] to a mappings file represented by a list of strings. If [compact] is set, a more compact
- * format of tiny mappings will be used, see [TinyMappingsWriter.write].
- */
-public fun TinyMappings.write(compact: Boolean = isV2): List<String> =
-    (if (isV2) TinyMappingsV2Format else TinyMappingsV1Format).write(this, compact).toList()
-
-/**
- * Writes [TinyMappings] as a lazily evaluated [Sequence]. If [compact] is set, a more compact
- * format of tiny mappings will be used, see [TinyMappingsWriter.write].
- */
-public fun TinyMappings.writeLazy(compact: Boolean = isV2): Sequence<String> =
-    (if (isV2) TinyMappingsV2Format else TinyMappingsV1Format).write(this, compact)
 
 /**
  * Convenience interface for parameterizing writing tiny mappings

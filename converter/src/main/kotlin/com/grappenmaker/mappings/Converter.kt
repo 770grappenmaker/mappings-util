@@ -1,18 +1,6 @@
 package com.grappenmaker.mappings
 
-import com.grappenmaker.mappings.format.BasicSRGParser
-import com.grappenmaker.mappings.format.CSRGMappingsFormat
-import com.grappenmaker.mappings.format.EnigmaMappingsFormat
-import com.grappenmaker.mappings.format.MappingsLoader
-import com.grappenmaker.mappings.format.ProguardMappingsFormat
-import com.grappenmaker.mappings.format.RecafMappingsFormat
-import com.grappenmaker.mappings.format.TSRGMappingsFormat
-import com.grappenmaker.mappings.format.TSRGV2MappingsFormat
-import com.grappenmaker.mappings.format.TinyMappingsV2Format
-import com.grappenmaker.mappings.format.TinyMappingsWriter
-import com.grappenmaker.mappings.format.XSRGMappingsFormat
-import com.grappenmaker.mappings.format.parse
-import com.grappenmaker.mappings.format.writeLazy
+import com.grappenmaker.mappings.format.*
 import kotlin.io.path.Path
 import kotlin.io.path.exists
 import kotlin.io.path.inputStream
@@ -87,14 +75,14 @@ fun main(args: Array<String>) {
     val mappings = format.parse(input.lineSequence())
     val bufferedWriter = output.bufferedWriter()
     when (outFormat) {
-        is TinyMappingsWriter -> mappings.asTinyMappings(v2 = outFormat is TinyMappingsV2Format).writeLazy()
-        is BasicSRGParser -> mappings.asSRGMappings(extended = outFormat is XSRGMappingsFormat).writeLazy()
-        is ProguardMappingsFormat -> mappings.asProguardMappings().writeLazy()
-        is TSRGMappingsFormat -> mappings.asTSRGMappings(v2 = outFormat is TSRGV2MappingsFormat).writeLazy()
-        is CSRGMappingsFormat -> mappings.asCSRGMappings().writeLazy()
-        is EnigmaMappingsFormat -> mappings.asEnigmaMappings().writeLazy()
-        is RecafMappingsFormat -> mappings.asRecafMappings().writeLazy()
-    }.writeTo(bufferedWriter)
+        is TinyMappingsWriter -> mappings.asTinyMappings(v2 = outFormat is TinyMappingsV2Format)
+        is BasicSRGParser -> mappings.asSRGMappings(extended = outFormat is XSRGMappingsFormat)
+        is ProguardMappingsFormat -> mappings.asProguardMappings()
+        is TSRGMappingsFormat -> mappings.asTSRGMappings(v2 = outFormat is TSRGV2MappingsFormat)
+        is CSRGMappingsFormat -> mappings.asCSRGMappings()
+        is EnigmaMappingsFormat -> mappings.asEnigmaMappings()
+        is RecafMappingsFormat -> mappings.asRecafMappings()
+    }.writeLazy().writeTo(bufferedWriter)
 
     bufferedWriter.flush()
     output.close()

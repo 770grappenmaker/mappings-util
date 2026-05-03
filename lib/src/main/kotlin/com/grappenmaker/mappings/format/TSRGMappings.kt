@@ -12,18 +12,18 @@ public data class TSRGMappings(
     override val namespaces: List<String>,
     override val classes: List<MappedClass>,
     val isV2: Boolean
-) : Mappings
+) : Mappings {
+    /**
+     * Writes [TSRGMappings] to a mappings file represented by a list of strings
+     */
+    override fun write(): List<String> = (if (isV2) TSRGV2MappingsFormat else TSRGV1MappingsFormat).write(this)
 
-/**
- * Writes [TSRGMappings] to a mappings file represented by a list of strings
- */
-public fun TSRGMappings.write(): List<String> = (if (isV2) TSRGV2MappingsFormat else TSRGV1MappingsFormat).write(this)
-
-/**
- * Writes [TSRGMappings] as a lazily evaluated [Sequence]
- */
-public fun TSRGMappings.writeLazy(): Sequence<String> =
-    (if (isV2) TSRGV2MappingsFormat else TSRGV1MappingsFormat).writeLazy(this)
+    /**
+     * Writes [TSRGMappings] as a lazily evaluated [Sequence]
+     */
+    override fun writeLazy(): Sequence<String> =
+        (if (isV2) TSRGV2MappingsFormat else TSRGV1MappingsFormat).writeLazy(this)
+}
 
 /**
  * Represents the TSRG v1 mappings format

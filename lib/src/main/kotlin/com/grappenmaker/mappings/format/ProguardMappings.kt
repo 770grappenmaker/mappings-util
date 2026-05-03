@@ -15,17 +15,17 @@ public data class ProguardMappings(
     init {
         assertValidDescs()
     }
+
+    /**
+     * Writes [ProguardMappings] to a mappings file represented by a list of strings
+     */
+    override fun write(): List<String> = ProguardMappingsFormat.write(this)
+
+    /**
+     * Writes [ProguardMappings] as a lazily evaluated [Sequence]
+     */
+    override fun writeLazy(): Sequence<String> = ProguardMappingsFormat.writeLazy(this)
 }
-
-/**
- * Writes [ProguardMappings] to a mappings file represented by a list of strings
- */
-public fun ProguardMappings.write(): List<String> = ProguardMappingsFormat.write(this)
-
-/**
- * Writes [ProguardMappings] as a lazily evaluated [Sequence]
- */
-public fun ProguardMappings.writeLazy(): Sequence<String> = ProguardMappingsFormat.writeLazy(this)
 
 /**
  * Implements the Proguard mappings format, disregarding line number information,

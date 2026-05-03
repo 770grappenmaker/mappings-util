@@ -17,6 +17,17 @@ public data class SRGMappings(override val classes: List<MappedClass>, val isExt
     init {
         if (isExtended) assertValidDescs()
     }
+
+    /**
+     * Writes [SRGMappings] to a mappings file represented by a list of strings
+     */
+    override fun write(): List<String> = (if (isExtended) XSRGMappingsFormat else SRGMappingsFormat).write(this)
+
+    /**
+     * Writes [SRGMappings] as a lazily evaluated [Sequence]
+     */
+    override fun writeLazy(): Sequence<String> =
+        (if (isExtended) XSRGMappingsFormat else SRGMappingsFormat).writeLazy(this)
 }
 
 /**
@@ -25,17 +36,6 @@ public data class SRGMappings(override val classes: List<MappedClass>, val isExt
  * @see [Mappings.asSimpleRemapper]
  */
 public fun SRGMappings.asSimpleRemapper(): SimpleRemapper = asSimpleRemapper(namespaces[0], namespaces[1])
-
-/**
- * Writes [SRGMappings] to a mappings file represented by a list of strings
- */
-public fun SRGMappings.write(): List<String> = (if (isExtended) XSRGMappingsFormat else SRGMappingsFormat).write(this)
-
-/**
- * Writes [SRGMappings] as a lazily evaluated [Sequence]
- */
-public fun SRGMappings.writeLazy(): Sequence<String> =
-    (if (isExtended) XSRGMappingsFormat else SRGMappingsFormat).writeLazy(this)
 
 /**
  * Represents the SRG mappings format

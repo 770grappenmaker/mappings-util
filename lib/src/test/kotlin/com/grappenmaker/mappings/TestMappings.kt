@@ -11,7 +11,6 @@ import com.grappenmaker.mappings.format.MappedMethod
 import com.grappenmaker.mappings.format.Mappings
 import com.grappenmaker.mappings.format.MappingsFormat
 import com.grappenmaker.mappings.format.MappingsLoader
-import com.grappenmaker.mappings.format.write
 import com.grappenmaker.mappings.remap.MappingsRemapper
 import com.grappenmaker.mappings.remap.remap
 import org.objectweb.asm.Opcodes.*

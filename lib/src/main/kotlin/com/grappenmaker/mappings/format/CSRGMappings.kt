@@ -5,17 +5,17 @@ package com.grappenmaker.mappings.format
  */
 public data class CSRGMappings(override val classes: List<MappedClass>) : Mappings {
     override val namespaces: List<String> = listOf("official", "named")
+
+    /**
+     * Writes [CSRGMappings] to a mappings file represented by a list of strings
+     */
+    override fun write(): List<String> = CSRGMappingsFormat.write(this)
+
+    /**
+     * Writes [CSRGMappings] as a lazily evaluated [Sequence]
+     */
+    override fun writeLazy(): Sequence<String> = CSRGMappingsFormat.writeLazy(this)
 }
-
-/**
- * Writes [CSRGMappings] to a mappings file represented by a list of strings
- */
-public fun CSRGMappings.write(): List<String> = CSRGMappingsFormat.write(this)
-
-/**
- * Writes [CSRGMappings] as a lazily evaluated [Sequence]
- */
-public fun CSRGMappings.writeLazy(): Sequence<String> = CSRGMappingsFormat.writeLazy(this)
 
 /**
  * Represents the CSRG mappings format

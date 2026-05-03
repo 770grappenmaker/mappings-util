@@ -1,5 +1,10 @@
 package com.grappenmaker.mappings.format
 
+import com.grappenmaker.mappings.format.parse
+import java.io.InputStream
+import kotlin.io.lineSequence
+import kotlin.system.exitProcess
+
 /**
  * Represents any entity that can have different mapped names
  *
@@ -92,6 +97,16 @@ public data class MappedField(
 public interface Mappings {
     public val namespaces: List<String>
     public val classes: List<MappedClass>
+
+    /**
+     * Writes these [Mappings] as a [List] of lines
+     */
+    public fun write(): List<String>
+
+    /**
+     * Writes these [Mappings] as a lazily evaluated [Sequence] of lines
+     */
+    public fun writeLazy(): Sequence<String>
 }
 
 /**
@@ -102,7 +117,10 @@ public interface Mappings {
 public data class GenericMappings(
     override val namespaces: List<String>,
     override val classes: List<MappedClass>
-) : Mappings
+) : Mappings {
+    override fun write(): Nothing = error("Generic mappings may not be written!")
+    override fun writeLazy(): Nothing = error("Generic mappings may not be written!")
+}
 
 /**
  * Represents a generic mappings format
@@ -167,6 +185,9 @@ public fun <T : Mappings> MappingsFormat<T>.parse(lines: Sequence<String>): T = 
 public data object EmptyMappings : Mappings {
     override val namespaces: List<String> = emptyList()
     override val classes: List<MappedClass> = emptyList()
+
+    override fun write(): List<String> = emptyList()
+    override fun writeLazy(): Sequence<String> = emptySequence()
 }
 
 /**
@@ -222,6 +243,28 @@ public object MappingsLoader {
      * @see [MappingsFormat.parse]
      */
     public fun loadMappings(lines: List<String>): Mappings = findMappingsFormat(lines).parse(lines)
+
+    /**
+     * Attempts to load mappings from the [input] stream as [Mappings]. Throws an [IllegalStateException] when an
+     * invalid mappings sequence is provided (or not supported).
+     *
+     * Note that mappings in formats that do not support detection (inheritors of [MappingsFormat.Undetectable]) will
+     * not be parsed correctly, and an [IllegalStateException] will be thrown.
+     *
+     * @see [MappingsFormat.parse]
+     */
+    public fun loadMappings(input: InputStream): Mappings {
+        val buffered = input.bufferedReader()
+        val buf = CharArray(1024)
+        buffered.mark(buf.size)
+        buffered.read(buf)
+
+        val head = buf.concatToString()
+        val format = findMappingsFormat(head.lines())
+
+        buffered.reset()
+        return format.parse(buffered.lineSequence())
+    }
 }
 
 internal fun Mappings.assertValidDescs() {

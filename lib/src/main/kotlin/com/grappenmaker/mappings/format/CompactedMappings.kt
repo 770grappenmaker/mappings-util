@@ -12,6 +12,9 @@ public data class CompactedMappings(
     override val classes: List<MappedClass>,
     val version: Int = 2,
 ) : Mappings {
+    override fun write(): Nothing = error("Compacted mappings do not have a textual representation")
+    override fun writeLazy(): Nothing = error("Compacted mappings do not have a textual representation")
+
     init {
         assertValidDescs()
     }
@@ -20,7 +23,7 @@ public data class CompactedMappings(
 /**
  * Writes [CompactedMappings] as its binary representation
  */
-public fun CompactedMappings.write(): ByteArray = CompactedMappingsFormat.write(this)
+public fun CompactedMappings.writeBytes(): ByteArray = CompactedMappingsFormat.write(this)
 
 /**
  * Writes some [CompactedMappings] to an [OutputStream] as an equivalent representation

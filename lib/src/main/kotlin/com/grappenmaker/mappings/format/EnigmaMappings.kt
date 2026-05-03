@@ -9,17 +9,17 @@ public data class EnigmaMappings(override val classes: List<MappedClass>) : Mapp
     }
 
     override val namespaces: List<String> = listOf("official", "named")
+
+    /**
+     * Writes [EnigmaMappings] to a mappings file represented by a list of strings.
+     */
+    override fun write(): List<String> = EnigmaMappingsFormat.write(this)
+
+    /**
+     * Writes [EnigmaMappings] as a lazily evaluated [Sequence].
+     */
+    override fun writeLazy(): Sequence<String> = EnigmaMappingsFormat.writeLazy(this)
 }
-
-/**
- * Writes [EnigmaMappings] to a mappings file represented by a list of strings.
- */
-public fun EnigmaMappings.write(): List<String> = EnigmaMappingsFormat.write(this)
-
-/**
- * Writes [EnigmaMappings] as a lazily evaluated [Sequence].
- */
-public fun EnigmaMappings.writeLazy(): Sequence<String> = EnigmaMappingsFormat.writeLazy(this)
 
 /**
  * Represents the enigma mappings format

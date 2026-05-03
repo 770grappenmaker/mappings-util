@@ -1,14 +1,23 @@
 # mappings-util
 A small JVM mappings library designed to load, modify, and use mappings, for runtime and pre-runtime remapping.
-Several mappings formats are supported, like SRG, XSRG, Tiny (v1 and v2), Proguard.
+Several mappings formats are supported, namely:
+- Tiny (v1 and v2),
+- SRG and XSRG,
+- CSRG,
+- TSRG (v1 and v2),
+- Proguard,
+- Recaf,
+- Enigma,
+- and a custom "compacted" binary format
 
 **Important: this is a Kotlin-first library.** This means that this library was written in Kotlin and with Kotlin in mind. You can use this library in Java as well, albeit probably with a slightly worse experience (extension functions do not exist in Java, for example). Using Kotlin is highly recommended.
 
-### Usage
-`mappings-util` is on [Maven Central](https://central.sonatype.com/artifact/io.github.770grappenmaker/mappings-util), 
+**Important**: this library introduced **binary incompatibility** in version 0.2
+## Usage
+`mappings-util` is on [Maven Central](https://central.sonatype.com/artifact/nl.koenoostveen/mappings-util), 
 and can be linked in your project depending on the build system.
 
-#### Gradle (Kotlin DSL)
+### Gradle (Kotlin DSL)
 ```kotlin
 repositories {
     mavenCentral()
@@ -18,7 +27,7 @@ dependencies {
     implementation("nl.koenoostveen:mappings-util:0.2")
 }
 ```
-#### Maven
+### Maven
 ```xml
 <dependencies>
     <dependency>
@@ -29,19 +38,23 @@ dependencies {
 </dependencies>
 ```
 
-### Docs
-Available in [GitHub Pages](https://770grappenmaker.github.io/mappings-util/mappings-util/).
+## Docs
+Available on [GitHub Pages](https://770grappenmaker.github.io/mappings-util/mappings-util/).
 
-### Examples
-Note: these examples are in Kotlin, but can be applied in Java as well.
+## Examples
+- Some basic examples on how to transform and handle mappings can be found [here](samples/src/test/kotlin/samples/Mappings.kt)
+- Parsing mappings from disk can be done in two ways:
+  - Fully buffered:
+  ```kt
+  MappingsLoader.loadMappings(File("/path/to/some/mappings/file").readLines())
+  ```
+  - Partially buffered:
+  ```kt
+  File("/path/to/some/mappings/file").inputStream().use { inp -> MappingsLoader.loadMappings(inp) }
+  ```
+  The latter is slightly faster and more memory efficient.
+- Mappings may be used for remapping through:
 ```kt
-// Parsing mappings
-val lines = File("/path/to/some/mappings/file").readLines()
-
-// The mappings format is automatically detected
-val mappings = MappingsLoader.loadMappings(lines)
-
-// Using mappings
 val remapper = MappingsRemapper(
     mappings,
     from = "fromNamespace",
@@ -50,7 +63,7 @@ val remapper = MappingsRemapper(
 )
 
 val reader = ClassReader(bytes)
-val writer = ClassWriter(reader)
+val writer = ClassWriter(null)
 reader.accept(LambdaAwareRemapper(writer, remapper), 0)
 
 // Or remapping a ClassNode
@@ -61,25 +74,61 @@ node.remap(remapper)
 // Or for remapping a full jar
 remapJar(mappings, inputFile, outputFile, "fromNamespace", "toNamespace")
 
-// Transforming mappings
-val extracted = mappings.extractNamespaces("newFrom", "newTo")
-val renamed = mappings.renameNamespaces("newFirst", "newSecond", "newThird")
-val reordered = mappings.reorderNamespaces("c", "b", "a")
-val joined = mappings.join(otherMappings, "intermediary")
-val filtered = mappings.filterNamespaces("b", "c")
-val tinyMappings = mappings.asTinyMappings(v2 = true)
+// Or with the experimental DSL
+performRemap {
+    copyResources = true
+    mappings = File("/path/to/some/mappings/file").inputStream().use { inp ->
+        MappingsLoader.loadMappings(inp)
+    }
+    
+    loader = ClasspathLoaders.fromJars(listOf(
+        "classpath-a.jar",
+        "classpath-b.jar"
+    ))
 
-// Writing mappings
-File("/path/to/some/mappings/file").writeText(tinyMappings.write().joinToString("\n"))
+    task(
+        input = Path("input.jar"),
+        output = Path("output.jar"),
+        fromNamespace = "fromNamespace",
+        toNamespace = "toNamespace",
+    )
+}
+```
+- Writing mappings to disk is easy:
+```kt
+File("/path/to/some/mappings/file").bufferedWriter().use { mappings.writeLazy().writeTo(it) }
 ```
 
-### Building
+## Tools
+### Remapper
+`remapper` can take JAR files and a mappings file, and produce a remapped JAR file. Example:
 ```shell
-./gradlew build
+remapper --force -- client.jar client-mapped.jar client.txt official named
+```
+takes Proguard mappings from `client.txt`, and turns `client.jar` into `client-mapped.jar`, taking names in
+"official" to "named".
+
+### Converter
+Converts mappings files between formats. Usage:
+```
+converter <mappings> <format> [output]
+where <format> is one of:
+  - "tinyv1"
+  - "tiny"
+  - "srg"
+  - "xsrg"
+  - "proguard"
+  - "tsrg"
+  - "tsrg2"
+  - "csrg"
+  - "enigma"
+  - "recaf"
+
+If [output] is missing or -, defaults to stdout
 ```
 
-### License
+## License
 Use of this source code is governed by the MIT license, a copy of which can be found [here](LICENSE.md).
 
-### Contributing
+## Contributing
 PRs are welcome!

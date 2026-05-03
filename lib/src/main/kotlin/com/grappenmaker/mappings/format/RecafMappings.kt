@@ -9,17 +9,17 @@ public data class RecafMappings(override val classes: List<MappedClass>) : Mappi
     }
 
     override val namespaces: List<String> = listOf("official", "named")
+
+    /**
+     * Writes [RecafMappings] to a mappings file represented by a list of strings
+     */
+    override fun write(): List<String> = RecafMappingsFormat.write(this)
+
+    /**
+     * Writes [RecafMappings] as a lazily evaluated [Sequence]
+     */
+    override fun writeLazy(): Sequence<String> = RecafMappingsFormat.writeLazy(this)
 }
-
-/**
- * Writes [RecafMappings] to a mappings file represented by a list of strings
- */
-public fun RecafMappings.write(): List<String> = RecafMappingsFormat.write(this)
-
-/**
- * Writes [RecafMappings] as a lazily evaluated [Sequence]
- */
-public fun RecafMappings.writeLazy(): Sequence<String> = RecafMappingsFormat.writeLazy(this)
 
 /**
  * Represents the Recaf mappings format
