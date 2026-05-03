@@ -1,9 +1,5 @@
 package com.grappenmaker.mappings.format
 
-import com.grappenmaker.mappings.*
-import com.grappenmaker.mappings.LineAndNumber
-import com.grappenmaker.mappings.fixupHoles
-
 /**
  * Represents a CSRG Mappings file
  */
@@ -25,6 +21,8 @@ public fun CSRGMappings.writeLazy(): Sequence<String> = CSRGMappingsFormat.write
  * Represents the CSRG mappings format
  */
 public data object CSRGMappingsFormat : MappingsFormat.Undetectable<CSRGMappings> {
+    override val identifier: String = "csrg"
+
     override fun parse(lines: Iterator<String>): CSRGMappings {
         val methods = mutableMapOf<String, MutableList<MappedMethod>>()
         val fields = mutableMapOf<String, MutableList<MappedField>>()

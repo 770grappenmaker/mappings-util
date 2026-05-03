@@ -1,7 +1,11 @@
 package samples
 
 import com.grappenmaker.mappings.*
-import com.grappenmaker.mappings.Mappings
+import com.grappenmaker.mappings.format.EmptyMappings
+import com.grappenmaker.mappings.format.GenericMappings
+import com.grappenmaker.mappings.format.MappedClass
+import com.grappenmaker.mappings.format.MappedMethod
+import com.grappenmaker.mappings.format.Mappings
 import kotlin.test.*
 
 typealias Sample = Test
@@ -11,18 +15,22 @@ class Mappings {
     fun rename() {
         val mappings = GenericMappings(
             namespaces = listOf("official", "named"),
-            classes = listOf(MappedClass(
-                names = listOf("a", "b"),
-            ))
+            classes = listOf(
+                MappedClass(
+                    names = listOf("a", "b"),
+                )
+            )
         )
 
         val renamed = mappings.renameNamespaces("original", "remapped")
         assertEquals(
             GenericMappings(
                 namespaces = listOf("original", "remapped"),
-                classes = listOf(MappedClass(
-                    names = listOf("a", "b"),
-                ))
+                classes = listOf(
+                    MappedClass(
+                        names = listOf("a", "b"),
+                    )
+                )
             ), renamed
         )
     }
@@ -31,18 +39,22 @@ class Mappings {
     fun reorder() {
         val mappings = GenericMappings(
             namespaces = listOf("official", "named"),
-            classes = listOf(MappedClass(
-                names = listOf("a", "b"),
-            ))
+            classes = listOf(
+                MappedClass(
+                    names = listOf("a", "b"),
+                )
+            )
         )
 
         val renamed = mappings.reorderNamespaces("named", "official", "named")
         assertEquals(
             GenericMappings(
                 namespaces = listOf("named", "official", "named"),
-                classes = listOf(MappedClass(
-                    names = listOf("b", "a", "b"),
-                ))
+                classes = listOf(
+                    MappedClass(
+                        names = listOf("b", "a", "b"),
+                    )
+                )
             ), renamed
         )
     }
@@ -51,16 +63,20 @@ class Mappings {
     fun join() {
         val someMappings = GenericMappings(
             namespaces = listOf("official", "intermediary"),
-            classes = listOf(MappedClass(
-                names = listOf("a", "b"),
-            ))
+            classes = listOf(
+                MappedClass(
+                    names = listOf("a", "b"),
+                )
+            )
         )
 
         val otherMappings = GenericMappings(
             namespaces = listOf("intermediary", "named"),
-            classes = listOf(MappedClass(
-                names = listOf("b", "c"),
-            ))
+            classes = listOf(
+                MappedClass(
+                    names = listOf("b", "c"),
+                )
+            )
         )
 
         val joined = someMappings.join(otherMappings, intermediateNamespace = "intermediary")
@@ -68,9 +84,11 @@ class Mappings {
         assertEquals(
             GenericMappings(
                 namespaces = listOf("official", "intermediary", "named"),
-                classes = listOf(MappedClass(
-                    names = listOf("a", "b", "c"),
-                ))
+                classes = listOf(
+                    MappedClass(
+                        names = listOf("a", "b", "c"),
+                    )
+                )
             ), joined
         )
     }
@@ -79,23 +97,29 @@ class Mappings {
     fun joinList() {
         val someMappings = GenericMappings(
             namespaces = listOf("official", "intermediary"),
-            classes = listOf(MappedClass(
-                names = listOf("a", "b"),
-            ))
+            classes = listOf(
+                MappedClass(
+                    names = listOf("a", "b"),
+                )
+            )
         )
 
         val otherMappings = GenericMappings(
             namespaces = listOf("intermediary", "named"),
-            classes = listOf(MappedClass(
-                names = listOf("b", "c"),
-            ))
+            classes = listOf(
+                MappedClass(
+                    names = listOf("b", "c"),
+                )
+            )
         )
 
         val moreMappings = GenericMappings(
             namespaces = listOf("intermediary", "obfuscated"),
-            classes = listOf(MappedClass(
-                names = listOf("b", "e"),
-            ))
+            classes = listOf(
+                MappedClass(
+                    names = listOf("b", "e"),
+                )
+            )
         )
 
         val joined = listOf(someMappings, otherMappings, moreMappings).join(intermediateNamespace = "intermediary")
@@ -103,9 +127,11 @@ class Mappings {
         assertEquals(
             GenericMappings(
                 namespaces = listOf("official", "named", "intermediary", "obfuscated"),
-                classes = listOf(MappedClass(
-                    names = listOf("a", "c", "b", "e"),
-                ))
+                classes = listOf(
+                    MappedClass(
+                        names = listOf("a", "c", "b", "e"),
+                    )
+                )
             ), joined
         )
 
@@ -116,18 +142,22 @@ class Mappings {
     fun filter() {
         val mappings = GenericMappings(
             namespaces = listOf("official", "intermediary", "named"),
-            classes = listOf(MappedClass(
-                names = listOf("a", "b", "c"),
-            ))
+            classes = listOf(
+                MappedClass(
+                    names = listOf("a", "b", "c"),
+                )
+            )
         )
 
         val filtered = mappings.filterNamespaces("named", "official", "another")
         assertEquals(
             GenericMappings(
                 namespaces = listOf("official", "named"),
-                classes = listOf(MappedClass(
-                    names = listOf("a", "c"),
-                ))
+                classes = listOf(
+                    MappedClass(
+                        names = listOf("a", "c"),
+                    )
+                )
             ), filtered
         )
     }
@@ -136,18 +166,22 @@ class Mappings {
     fun dedup() {
         val mappings = GenericMappings(
             namespaces = listOf("official", "named", "named"),
-            classes = listOf(MappedClass(
-                names = listOf("a", "b", "b"),
-            ))
+            classes = listOf(
+                MappedClass(
+                    names = listOf("a", "b", "b"),
+                )
+            )
         )
 
         val deduped = mappings.deduplicateNamespaces()
         assertEquals(
             GenericMappings(
                 namespaces = listOf("official", "named"),
-                classes = listOf(MappedClass(
-                    names = listOf("a", "b"),
-                ))
+                classes = listOf(
+                    MappedClass(
+                        names = listOf("a", "b"),
+                    )
+                )
             ), deduped
         )
     }
@@ -156,9 +190,11 @@ class Mappings {
     fun conversions() {
         val mappings = GenericMappings(
             namespaces = listOf("official", "named"),
-            classes = listOf(MappedClass(
-                names = listOf("a", "b"),
-            ))
+            classes = listOf(
+                MappedClass(
+                    names = listOf("a", "b"),
+                )
+            )
         )
 
         mappings.asTinyMappings(v2 = true) // or false
@@ -172,41 +208,45 @@ class Mappings {
     fun redundancy() {
         val mappings = GenericMappings(
             namespaces = listOf("official", "named"),
-            classes = listOf(MappedClass(
-                names = listOf("a", "b"),
-                methods = listOf(
-                    MappedMethod(
-                        names = listOf("hashCode", "hashCode"),
-                        desc = "()I"
-                    ),
-                    MappedMethod(
-                        names = listOf("toString", "toString"),
-                        desc = "()Ljava/lang/String;"
-                    ),
-                    MappedMethod(
-                        names = listOf("equals", "equals"),
-                        desc = "(Ljava/lang/Object;)Z"
-                    ),
-                    MappedMethod(
-                        names = listOf("sameName", "sameName"),
-                        desc = "()V"
-                    ),
-                    MappedMethod(
-                        names = listOf("<init>", "<init>"),
-                        desc = "()V"
-                    ),
+            classes = listOf(
+                MappedClass(
+                    names = listOf("a", "b"),
+                    methods = listOf(
+                        MappedMethod(
+                            names = listOf("hashCode", "hashCode"),
+                            desc = "()I"
+                        ),
+                        MappedMethod(
+                            names = listOf("toString", "toString"),
+                            desc = "()Ljava/lang/String;"
+                        ),
+                        MappedMethod(
+                            names = listOf("equals", "equals"),
+                            desc = "(Ljava/lang/Object;)Z"
+                        ),
+                        MappedMethod(
+                            names = listOf("sameName", "sameName"),
+                            desc = "()V"
+                        ),
+                        MappedMethod(
+                            names = listOf("<init>", "<init>"),
+                            desc = "()V"
+                        ),
+                    )
                 )
-            ))
+            )
         )
 
         val simplified = mappings.removeRedundancy { null }
         assertEquals(
             GenericMappings(
                 namespaces = listOf("official", "named"),
-                classes = listOf(MappedClass(
-                    names = listOf("a", "b"),
-                    methods = emptyList()
-                ))
+                classes = listOf(
+                    MappedClass(
+                        names = listOf("a", "b"),
+                        methods = emptyList()
+                    )
+                )
             ), simplified
         )
     }

@@ -1,8 +1,6 @@
 package com.grappenmaker.mappings.format
 
 import com.grappenmaker.mappings.*
-import com.grappenmaker.mappings.LineAndNumber
-import com.grappenmaker.mappings.fixupHoles
 
 /**
  * Represents either a tiny v1 or a tiny v2 mappings file, which does not have a definition anywhere.
@@ -29,6 +27,8 @@ public data class TinyMappings(
  * Represents the Tiny v1 mappings format
  */
 public data object TinyMappingsV1Format : TinyMappingsWriter {
+    override val identifier: String = "tinyv1"
+
     override fun detect(lines: List<String>): Boolean =
         lines.firstOrNull()?.parts()?.first() == "v1"
 
@@ -87,6 +87,8 @@ public data object TinyMappingsV1Format : TinyMappingsWriter {
  * Represents the Tiny v2 mappings format
  */
 public data object TinyMappingsV2Format : TinyMappingsWriter {
+    override val identifier: String = "tiny"
+
     override fun detect(lines: List<String>): Boolean =
         lines.firstOrNull()?.parts()?.first() == "tiny"
 

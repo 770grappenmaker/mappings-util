@@ -1,7 +1,5 @@
 package com.grappenmaker.mappings.format
 
-import com.grappenmaker.mappings.*
-import com.grappenmaker.mappings.LineAndNumber
 import org.objectweb.asm.Type
 
 /**
@@ -34,6 +32,8 @@ public fun ProguardMappings.writeLazy(): Sequence<String> = ProguardMappingsForm
  * which is written as 1:1 when serialized.
  */
 public data object ProguardMappingsFormat : MappingsFormat<ProguardMappings> {
+    override val identifier: String = "proguard"
+
     private val testRegex = """^(\w|\.)+ -> (\w|\.)+:$""".toRegex()
     private const val INDENT = "    "
 

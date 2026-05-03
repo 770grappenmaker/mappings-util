@@ -15,14 +15,14 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.770grappenmaker:mappings-util:0.2")
+    implementation("nl.koenoostveen:mappings-util:0.2")
 }
 ```
 #### Maven
 ```xml
 <dependencies>
     <dependency>
-        <groupId>io.github.770grappenmaker</groupId>
+        <groupId>nl.koenoostveen</groupId>
         <artifactId>mappings-util</artifactId>
         <version>0.2</version>
     </dependency>

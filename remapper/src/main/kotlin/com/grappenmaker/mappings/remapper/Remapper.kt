@@ -2,7 +2,7 @@ package com.grappenmaker.mappings.remapper
 
 import com.grappenmaker.mappings.ClasspathLoaders
 import com.grappenmaker.mappings.remap.ExperimentalJarRemapper
-import com.grappenmaker.mappings.MappingsLoader
+import com.grappenmaker.mappings.format.MappingsLoader
 import com.grappenmaker.mappings.remap.performRemap
 import kotlinx.coroutines.runBlocking
 import java.util.jar.JarFile
@@ -16,7 +16,6 @@ private const val parametersSeparator = "--"
 
 @OptIn(ExperimentalJarRemapper::class)
 fun main(args: Array<String>) {
-    println()
     val sepIdx = args.indexOf(parametersSeparator)
     if (sepIdx < 0) printUsageFatal("error: use a $parametersSeparator before positional parameters")
 

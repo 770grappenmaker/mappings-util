@@ -1,6 +1,7 @@
 package com.grappenmaker.mappings.remap
 
 import com.grappenmaker.mappings.*
+import com.grappenmaker.mappings.format.Mappings
 import org.objectweb.asm.*
 import org.objectweb.asm.commons.ClassRemapper
 import org.objectweb.asm.commons.MethodRemapper
@@ -54,7 +55,7 @@ public open class LambdaAwareMethodRemapper(
 }
 
 /**
- * A [Remapper] for [Mappings], which is capable of using inheritance information from classes
+ * A [Remapper] for [com.grappenmaker.mappings.format.Mappings], which is capable of using inheritance information from classes
  * (the implementor may choose to cache them) to resolve mapping data.
  *
  * The [Remapper] takes names in the [from] namespace and translates them into names of the [to] namespace.

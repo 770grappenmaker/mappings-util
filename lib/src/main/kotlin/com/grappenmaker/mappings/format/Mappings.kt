@@ -1,15 +1,4 @@
-package com.grappenmaker.mappings
-
-import com.grappenmaker.mappings.format.CSRGMappingsFormat
-import com.grappenmaker.mappings.format.EnigmaMappingsFormat
-import com.grappenmaker.mappings.format.ProguardMappingsFormat
-import com.grappenmaker.mappings.format.RecafMappingsFormat
-import com.grappenmaker.mappings.format.SRGMappingsFormat
-import com.grappenmaker.mappings.format.TSRGV1MappingsFormat
-import com.grappenmaker.mappings.format.TSRGV2MappingsFormat
-import com.grappenmaker.mappings.format.TinyMappingsV1Format
-import com.grappenmaker.mappings.format.TinyMappingsV2Format
-import com.grappenmaker.mappings.format.XSRGMappingsFormat
+package com.grappenmaker.mappings.format
 
 /**
  * Represents any entity that can have different mapped names
@@ -118,7 +107,12 @@ public data class GenericMappings(
 /**
  * Represents a generic mappings format
  */
-public interface MappingsFormat<T : Mappings> {
+public sealed interface MappingsFormat<T : Mappings> {
+    /**
+     * Returns a all-lowercase unique identifier for this [MappingsFormat], or "unknown" if not set
+     */
+    public val identifier: String get() = "unknown"
+
     /**
      * Returns whether this [MappingsFormat] thinks the [lines] represent a valid input for the mappings parser
      */
@@ -155,7 +149,7 @@ public interface MappingsFormat<T : Mappings> {
      * other formats. [detect] will always return `false`. If you want to use this mappings format, it should either
      * be known ahead of time or stored somewhere that this is the case, this library won't handle that for you.
      */
-    public interface Undetectable<T : Mappings> : MappingsFormat<T> {
+    public sealed interface Undetectable<T : Mappings> : MappingsFormat<T> {
         @Deprecated("This mappings format does not support detection", replaceWith = ReplaceWith("false"))
         override fun detect(lines: List<String>): Boolean = false
     }
@@ -205,6 +199,18 @@ public object MappingsLoader {
      */
     public fun findMappingsFormat(lines: List<String>): MappingsFormat<*> =
         allMappingsFormats.find { it.detect(lines) } ?: error("No format was found for mappings")
+
+    /**
+     * Finds the correct [MappingsFormat] for the mappings file represented by [lines]. Returns null
+     * when an invalid mappings sequence is provided (or not supported).
+     *
+     * Note that mappings formats that do not support detection (inheritors of [MappingsFormat.Undetectable]) will not
+     * be returned by this function.
+     *
+     * @see [MappingsFormat.detect]
+     */
+    public fun findMappingsFormatOrNull(lines: List<String>): MappingsFormat<*>? =
+        allMappingsFormats.find { it.detect(lines) }
 
     /**
      * Attempts to load the mappings represented by [lines] as [Mappings]. Throws an [IllegalStateException] when an

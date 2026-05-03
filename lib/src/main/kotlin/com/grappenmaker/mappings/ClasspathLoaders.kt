@@ -1,5 +1,6 @@
 package com.grappenmaker.mappings
 
+import com.grappenmaker.mappings.format.Mappings
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Opcodes

@@ -9,6 +9,7 @@ plugins {
 include(
     "samples",
     "remapper",
+    "converter",
     "mappings-util",
     "tiny-remapper-provider",
     "sponge-mixin-remapper"

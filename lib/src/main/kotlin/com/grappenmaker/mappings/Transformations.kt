@@ -2,6 +2,13 @@
 
 package com.grappenmaker.mappings
 
+import com.grappenmaker.mappings.format.EmptyMappings
+import com.grappenmaker.mappings.format.GenericMappings
+import com.grappenmaker.mappings.format.Mapped
+import com.grappenmaker.mappings.format.MappedClass
+import com.grappenmaker.mappings.format.MappedField
+import com.grappenmaker.mappings.format.MappedMethod
+import com.grappenmaker.mappings.format.Mappings
 import com.grappenmaker.mappings.remap.MappingsRemapper
 import com.grappenmaker.mappings.remap.mapDesc
 import com.grappenmaker.mappings.remap.mapMethodDesc
@@ -11,7 +18,7 @@ import java.util.jar.JarFile
 import kotlin.experimental.ExperimentalTypeInference
 
 /**
- * Transforms this [Mappings] structure to a generic mappings implementation that maps between [from] and [to].
+ * Transforms this [com.grappenmaker.mappings.format.Mappings] structure to a generic mappings implementation that maps between [from] and [to].
  */
 @Deprecated(
     message = "This function is redundant",

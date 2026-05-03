@@ -1,9 +1,5 @@
 package com.grappenmaker.mappings.format
 
-import com.grappenmaker.mappings.*
-import com.grappenmaker.mappings.LineAndNumber
-import com.grappenmaker.mappings.fixupHoles
-
 /**
  * Represents a Recaf Mappings file
  */
@@ -29,6 +25,8 @@ public fun RecafMappings.writeLazy(): Sequence<String> = RecafMappingsFormat.wri
  * Represents the Recaf mappings format
  */
 public data object RecafMappingsFormat : MappingsFormat.Undetectable<RecafMappings> {
+    override val identifier: String = "recaf"
+
     override fun parse(lines: Iterator<String>): RecafMappings {
         val methods = mutableMapOf<String, MutableList<MappedMethod>>()
         val fields = mutableMapOf<String, MutableList<MappedField>>()

@@ -1,8 +1,5 @@
 package com.grappenmaker.mappings.format
 
-import com.grappenmaker.mappings.*
-import com.grappenmaker.mappings.LineAndNumber
-
 /**
  * Represents either an enigma mappings file
  */
@@ -28,6 +25,8 @@ public fun EnigmaMappings.writeLazy(): Sequence<String> = EnigmaMappingsFormat.w
  * Represents the enigma mappings format
  */
 public data object EnigmaMappingsFormat : MappingsFormat<EnigmaMappings> {
+    override val identifier: String = "enigma"
+
     override fun detect(lines: List<String>): Boolean = lines.firstOrNull()?.parts()?.first() == "CLASS"
 
     override fun parse(lines: Iterator<String>): EnigmaMappings {

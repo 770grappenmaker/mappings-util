@@ -1,6 +1,5 @@
 package com.grappenmaker.mappings.format
 
-import com.grappenmaker.mappings.*
 import java.io.*
 
 /**

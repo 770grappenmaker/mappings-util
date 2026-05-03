@@ -1,8 +1,6 @@
 package com.grappenmaker.mappings.format
 
 import com.grappenmaker.mappings.*
-import com.grappenmaker.mappings.LineAndNumber
-import com.grappenmaker.mappings.fixupHoles
 import com.grappenmaker.mappings.remap.mapDesc
 import com.grappenmaker.mappings.remap.mapMethodDesc
 import org.objectweb.asm.commons.SimpleRemapper
@@ -42,14 +40,18 @@ public fun SRGMappings.writeLazy(): Sequence<String> =
 /**
  * Represents the SRG mappings format
  */
-public data object SRGMappingsFormat : MappingsFormat<SRGMappings> by BasicSRGParser(false)
+public data object SRGMappingsFormat : BasicSRGParser(false)
 
 /**
  * Represents the XSRG mappings format
  */
-public data object XSRGMappingsFormat : MappingsFormat<SRGMappings> by BasicSRGParser(true)
+public data object XSRGMappingsFormat : BasicSRGParser(true)
 
-internal class BasicSRGParser(private val isExtended: Boolean) : MappingsFormat<SRGMappings> {
+/**
+ * Base class for SRG based format parsing
+ */
+public sealed class BasicSRGParser(private val isExtended: Boolean) : MappingsFormat<SRGMappings> {
+    override val identifier: String get() = if (isExtended) "xsrg" else "srg"
     private val entryTypes = setOf("CL", "FD", "MD", "PK")
 
     override fun detect(lines: List<String>): Boolean {

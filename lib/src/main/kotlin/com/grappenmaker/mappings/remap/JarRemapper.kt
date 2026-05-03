@@ -3,6 +3,8 @@
 package com.grappenmaker.mappings.remap
 
 import com.grappenmaker.mappings.*
+import com.grappenmaker.mappings.format.EmptyMappings
+import com.grappenmaker.mappings.format.Mappings
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import org.objectweb.asm.ClassReader
@@ -112,7 +114,7 @@ internal val signatureResourceVisitor = JarResourceVisitor { name, file ->
 @ExperimentalJarRemapper
 public class JarRemapper {
     /**
-     * The [Mappings] that will be used to remap classes in input jar files
+     * The [com.grappenmaker.mappings.format.Mappings] that will be used to remap classes in input jar files
      */
     public var mappings: Mappings = EmptyMappings
     private val tasks = mutableListOf<JarRemapTask>()
@@ -133,6 +135,13 @@ public class JarRemapper {
      * Determines whether the [JarRemapper] will copy non-classfile resources from input jars into output jars
      */
     public var copyResources: Boolean = true
+
+    /**
+     * Determines whether the [JarRemapper] will normalize the constant pool, that is, delete unused constants
+     *
+     * Reminder to NOT abbreviate constant pool thank you very much
+     */
+    public var normalizeConstantPool: Boolean = true
 
     /**
      * Adds a new remapping task to the [JarRemapper]. The [input] jar file will be read, remapped, and written
@@ -180,7 +189,7 @@ public class JarRemapper {
         // toList to copy, to ensure no unexpected concurrency weirdness
         val context = Context(
             mappings, tasks, commonLoader, classVisitors.toList(),
-            resourceVisitors.toList(), extensions.toList(), copyResources
+            resourceVisitors.toList(), extensions.toList(), copyResources, normalizeConstantPool
         )
 
         supervisorScope {
@@ -196,6 +205,7 @@ public class JarRemapper {
         val resourceVisitors: List<JarResourceVisitor>,
         val extensions: List<RemapperExtension>,
         val copyResources: Boolean,
+        val normalizeConstantPool: Boolean,
     ) {
         init {
             for (task in tasks) {
@@ -215,7 +225,7 @@ public class JarRemapper {
             extraVisitors: List<JarClassVisitor>
         ): Pair<ByteArray, String> {
             val reader = ClassReader(this)
-            val writer = ClassWriter(reader, 0)
+            val writer = ClassWriter(if (normalizeConstantPool) null else reader, 0)
 
             val originalName = reader.className
             var writtenName = remapper.map(originalName)

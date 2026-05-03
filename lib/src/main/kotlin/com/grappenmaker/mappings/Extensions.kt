@@ -1,12 +1,14 @@
 package com.grappenmaker.mappings
 
+import com.grappenmaker.mappings.format.MappedMethod
+import com.grappenmaker.mappings.format.Mappings
 import com.grappenmaker.mappings.remap.mapMethodDesc
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.commons.SimpleRemapper
 
 /**
  * Returns the index of a namespace named [name], but throws an [IllegalStateException] when [name] is not in the
- * [Mappings.namespaces].
+ * [com.grappenmaker.mappings.format.Mappings.namespaces].
  */
 public fun Mappings.namespace(name: String): Int =
     namespaces.indexOf(name).also { if (it == -1) error("Invalid namespace $name") }
@@ -75,7 +77,7 @@ public fun Mappings.asASMMapping(
 }
 
 /**
- * Returns whether the methods represented by this [MappedMethod] is a data method, that is, if this method
+ * Returns whether the methods represented by this [com.grappenmaker.mappings.format.MappedMethod] is a data method, that is, if this method
  * is [hashCode], [toString], [equals] or an initializer, like a constructor or init {} block
  * (this means that the jvm names are &lt;init&gt; and &lt;clinit&gt;, respectively)
  */

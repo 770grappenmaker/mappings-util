@@ -1,7 +1,6 @@
 package com.grappenmaker.mappings.format
 
 import com.grappenmaker.mappings.*
-import com.grappenmaker.mappings.LineAndNumber
 
 /**
  * Represents either a TSRG v1 or a TSRG v2 mappings file, which does not have a definition anywhere.
@@ -29,14 +28,19 @@ public fun TSRGMappings.writeLazy(): Sequence<String> =
 /**
  * Represents the TSRG v1 mappings format
  */
-public data object TSRGV1MappingsFormat : MappingsFormat<TSRGMappings> by TSRGMappingsFormat(false)
+public data object TSRGV1MappingsFormat : TSRGMappingsFormat(false)
 
 /**
  * Represents the TSRG v2 mappings format
  */
-public data object TSRGV2MappingsFormat : MappingsFormat<TSRGMappings> by TSRGMappingsFormat(true)
+public data object TSRGV2MappingsFormat : TSRGMappingsFormat(true)
 
-internal class TSRGMappingsFormat(private val isV2: Boolean) : MappingsFormat<TSRGMappings> {
+/**
+ * Base class for TSRG based format parsing
+ */
+public sealed class TSRGMappingsFormat(private val isV2: Boolean) : MappingsFormat<TSRGMappings> {
+    override val identifier: String get() = if (isV2) "tsrg2" else "tsrg"
+
     override fun detect(lines: List<String>): Boolean = when {
         isV2 -> lines.firstOrNull()?.startsWith("tsrg2") == true
         lines.size < 2 -> false

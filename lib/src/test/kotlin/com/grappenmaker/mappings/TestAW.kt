@@ -14,6 +14,7 @@ import com.grappenmaker.mappings.aw.applyWidener
 import com.grappenmaker.mappings.aw.join
 import com.grappenmaker.mappings.aw.plus
 import com.grappenmaker.mappings.aw.write
+import com.grappenmaker.mappings.format.MappingsLoader
 import org.junit.Assert.assertThrows
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.tree.ClassNode

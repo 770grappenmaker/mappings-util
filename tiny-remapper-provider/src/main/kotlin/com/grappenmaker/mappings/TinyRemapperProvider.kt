@@ -1,12 +1,15 @@
 package com.grappenmaker.mappings
 
+import com.grappenmaker.mappings.format.MappedClass
+import com.grappenmaker.mappings.format.MappedMethod
+import com.grappenmaker.mappings.format.Mappings
 import net.fabricmc.tinyremapper.IMappingProvider
 import net.fabricmc.tinyremapper.IMappingProvider.MappingAcceptor
 import net.fabricmc.tinyremapper.IMappingProvider.Member
 
 /**
- * An [IMappingProvider] that can send [Mappings] to an [IMappingProvider.MappingAcceptor]. If [passParameters] is
- * `true`, [MappedParameter]s and [MappedLocal]s will be passed to the [IMappingProvider.MappingAcceptor] as well.
+ * An [IMappingProvider] that can send [com.grappenmaker.mappings.format.Mappings] to an [IMappingProvider.MappingAcceptor]. If [passParameters] is
+ * `true`, [com.grappenmaker.mappings.format.MappedParameter]s and [com.grappenmaker.mappings.format.MappedLocal]s will be passed to the [IMappingProvider.MappingAcceptor] as well.
  *
  * @param sourceNamespace the namespace of the original class files passed to tiny remapper
  * @param targetNamespace the desired namespace the class files passed to tiny remapper should be remapped to

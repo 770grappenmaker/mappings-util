@@ -1,6 +1,6 @@
 package com.grappenmaker.mappings.aw
 
-import com.grappenmaker.mappings.Mappings
+import com.grappenmaker.mappings.format.Mappings
 import com.grappenmaker.mappings.remap.MappingsRemapper
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.FieldVisitor
