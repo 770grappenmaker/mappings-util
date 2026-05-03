@@ -11,6 +11,7 @@ import com.grappenmaker.mappings.format.MappedMethod
 import com.grappenmaker.mappings.format.Mappings
 import com.grappenmaker.mappings.format.MappingsFormat
 import com.grappenmaker.mappings.format.MappingsLoader
+import com.grappenmaker.mappings.format.writeBytes
 import com.grappenmaker.mappings.remap.MappingsRemapper
 import com.grappenmaker.mappings.remap.remap
 import org.objectweb.asm.Opcodes.*
@@ -152,7 +153,7 @@ class TestMappings {
     fun `compacting and decompacting works`() {
         val mappings = MappingsLoader.loadMappings(testDocument).removeComments()
         val toTest = mappings.asCompactedMappings()
-        val actual = CompactedMappingsFormat.parse(toTest.write())
+        val actual = CompactedMappingsFormat.parse(toTest.writeBytes())
         assertEquals(toTest, actual)
     }
 }
