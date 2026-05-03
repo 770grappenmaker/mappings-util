@@ -104,9 +104,10 @@ public value class AccessMask(public val value: Int) : Iterable<AccessType> {
 public fun Set<AccessType>.toMask(): AccessMask = AccessMask(fold(0) { acc, curr -> acc or curr.mask })
 
 /**
- * Converts some sort of collection of [AccessMask]s to a resultant [AccessMask] combining them
+ * Converts some sort of collection of [AccessMask]s to a resultant [AccessMask] combining them,
+ * in the sense that the resulting mask is the union of all [AccessType]s that it consists of
  */
-public fun Iterable<AccessMask>.join(): AccessMask = reduce { acc, curr -> acc + curr }
+public fun Iterable<AccessMask>.join(): AccessMask = reduceOrNull { acc, curr -> acc + curr } ?: AccessMask.EMPTY
 
 /**
  * A type of access that can be "widened" on a class, field or method
