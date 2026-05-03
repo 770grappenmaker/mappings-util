@@ -1,7 +1,6 @@
 plugins {
     id("kotlin-convention")
     id("published-library")
-    id("relocator-convention")
     alias(libs.plugins.dokka)
 }
 

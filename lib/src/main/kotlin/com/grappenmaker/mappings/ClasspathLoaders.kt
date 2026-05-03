@@ -2,6 +2,7 @@ package com.grappenmaker.mappings
 
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.Opcodes
 import org.objectweb.asm.commons.ClassRemapper
 import org.objectweb.asm.commons.Remapper
 import org.objectweb.asm.commons.SimpleRemapper
@@ -22,7 +23,7 @@ private data class CompoundClasspathLoader(val loaders: List<ClasspathLoader>) :
 }
 
 /**
- * Provides default implementations for the classpath loaders in [MappingsRemapper]
+ * Provides default implementations for the classpath loaders in [com.grappenmaker.mappings.remap.MappingsRemapper]
  */
 public object ClasspathLoaders {
     /**
@@ -117,6 +118,6 @@ public fun ClasspathLoader.remappingNames(
         includeFields = false
     ) else emptyMap()
 
-    val mapper = SimpleRemapper(names.entries.associate { (k, v) -> v to k })
+    val mapper = SimpleRemapper(Opcodes.ASM9, names.entries.associate { (k, v) -> v to k })
     return { this(names[it] ?: it)?.remapForLoader(mapper) }
 }

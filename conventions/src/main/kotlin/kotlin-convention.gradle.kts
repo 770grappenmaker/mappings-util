@@ -8,5 +8,5 @@ repositories {
 
 kotlin {
     jvmToolchain(8)
-    compilerOptions { freeCompilerArgs.add("-Xcontext-receivers") }
+    compilerOptions { freeCompilerArgs.add("-Xcontext-parameters") }
 }

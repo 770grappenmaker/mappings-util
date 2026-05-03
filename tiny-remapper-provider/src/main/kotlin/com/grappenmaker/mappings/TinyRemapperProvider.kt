@@ -44,6 +44,9 @@ public class MappingsProvider(
         }
     }
 
+    /**
+     * Loads the given [Mappings] mapping data into the [acceptor]
+     */
     override fun load(acceptor: MappingAcceptor) {
         for (clz in mappings.classes) clz.load(acceptor)
     }

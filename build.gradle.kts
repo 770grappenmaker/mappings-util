@@ -12,14 +12,16 @@ repositories {
     mavenCentral()
 }
 
-tasks {
-    val docsDir = projectDir.resolve("docs")
-    val deployDocs by registering(Copy::class) {
-        notCompatibleWithConfigurationCache("indirectly invokes dokka which makes it unsupported")
+dependencies {
+    dokka(projects.mappingsUtil)
+    dokka(projects.tinyRemapperProvider)
+}
 
-        dependsOn(dokkaHtmlMultiModule)
-        from(dokkaHtmlMultiModule.map { it.outputDirectory })
-        into(docsDir)
+tasks {
+    val deployDocs by registering(Copy::class) {
+        dependsOn(dokkaGeneratePublicationHtml)
+        from(dokkaGeneratePublicationHtml.map { it.outputDirectory })
+        into(projectDir.resolve("docs"))
 
         duplicatesStrategy = DuplicatesStrategy.FAIL
     }

@@ -1,5 +1,3 @@
-import org.jetbrains.dokka.gradle.DokkaTask
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import java.net.URI
 
 plugins {
@@ -8,16 +6,16 @@ plugins {
     signing
     id("kotlin-convention")
     id("org.jetbrains.dokka")
+    id("org.jetbrains.dokka-javadoc")
 }
 
 repositories {
     mavenCentral()
 }
 
-val dokkaJavadoc by tasks.getting(DokkaTask::class)
 val dokkaAsJavadoc by tasks.registering(Jar::class) {
-    dependsOn(dokkaJavadoc)
-    from(dokkaJavadoc.outputDirectory)
+    dependsOn(tasks.dokkaGeneratePublicationJavadoc)
+    from(tasks.dokkaGeneratePublicationJavadoc.map { it.outputDirectory })
     archiveClassifier.set("javadoc")
 }
 
@@ -77,27 +75,27 @@ signing {
     sign(publishing.publications)
 }
 
-tasks {
-    withType<DokkaTaskPartial>().configureEach {
-        dokkaSourceSets.configureEach {
-            val test by project(":samples").sourceSets.getting
-            samples.from(test.extensions.getByName("kotlin"))
-            reportUndocumented = true
+dokka {
+    dokkaSourceSets.configureEach {
+        val test by project(":samples").sourceSets.getting
+        samples.from(test.extensions.getByName("kotlin"))
+        reportUndocumented = true
 
-            sourceLink {
-                localDirectory = rootDir
-                remoteUrl = URI("https://github.com/770grappenmaker/mappings-util/tree/main").toURL()
-                remoteLineSuffix = "#L"
-            }
+        sourceLink {
+            localDirectory = rootDir
+            remoteUrl = URI("https://github.com/770grappenmaker/mappings-util/tree/main")
+            remoteLineSuffix = "#L"
+        }
 
-            includes.from("dokka-module.md")
+        includes.from("dokka-module.md")
 
-            externalDocumentationLink {
-                url = URI("https://asm.ow2.io/javadoc/").toURL()
-                packageListUrl = rootProject.layout.projectDirectory.file("asm.package-list").asFile.toURI().toURL()
-            }
+        externalDocumentationLinks.register("asm") {
+            url = URI("https://asm.ow2.io/javadoc/")
+            packageListUrl = rootProject.layout.projectDirectory.file("asm.package-list").asFile.toURI()
         }
     }
+}
 
+tasks {
     named("sourcesJar", Jar::class) { exclude { "generated" in it.file.absolutePath } }
 }

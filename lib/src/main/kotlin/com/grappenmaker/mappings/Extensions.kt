@@ -1,6 +1,7 @@
 package com.grappenmaker.mappings
 
 import com.grappenmaker.mappings.remap.mapMethodDesc
+import org.objectweb.asm.Opcodes
 import org.objectweb.asm.commons.SimpleRemapper
 
 /**
@@ -12,9 +13,10 @@ public fun Mappings.namespace(name: String): Int =
 
 /**
  * Returns an asm [SimpleRemapper] for remapping references between namespaces [from] and [to] disregarding inheritance
- * and lambdas. For proper remapping, you should use the [MappingsRemapper].
+ * and lambdas. For proper remapping, you should use the [com.grappenmaker.mappings.remap.MappingsRemapper].
  */
-public fun Mappings.asSimpleRemapper(from: String, to: String): SimpleRemapper = SimpleRemapper(asASMMapping(from, to))
+public fun Mappings.asSimpleRemapper(from: String, to: String): SimpleRemapper =
+    SimpleRemapper(Opcodes.ASM9, asASMMapping(from, to))
 
 private inline fun MutableMap<String, String>.putOptional(
     f: String,

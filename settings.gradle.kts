@@ -3,7 +3,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "mappings-util-root"
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
 include(
@@ -11,7 +11,6 @@ include(
     "remapper",
     "mappings-util",
     "tiny-remapper-provider",
-    "relocator",
     "sponge-mixin-remapper"
 )
 

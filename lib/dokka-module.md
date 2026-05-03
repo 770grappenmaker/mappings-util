@@ -19,11 +19,11 @@ Several utilities and general definitions, forming the base of this library.
 
 ## Writing (mappings) files
 
-| **Type**                                                                | **Snippet**                                                                  |
-|-------------------------------------------------------------------------|------------------------------------------------------------------------------|
-| Any type of [MappingsFormat][com.grappenmaker.mappings.MappingsFormat]  | [Mappings.write][com.grappenmaker.mappings.write]                            |
-| An [AccessWidener][com.grappenmaker.mappings.aw.AccessWidener]          | [AccessWidener.write][com.grappenmaker.mappings.write]                       |
-| [CompactedMappings][com.grappenmaker.mappings.format.CompactedMappings] | [CompactedMappings.write][com.grappenmaker.mappings.write]                   |
+| **Type**                                                                | **Snippet**                                                       |
+|-------------------------------------------------------------------------|-------------------------------------------------------------------|
+| Any type of [MappingsFormat][com.grappenmaker.mappings.MappingsFormat]  | [Mappings.write][com.grappenmaker.mappings.format.write]          |
+| An [AccessWidener][com.grappenmaker.mappings.aw.AccessWidener]          | [AccessWidener.write][com.grappenmaker.mappings.aw.write]         |
+| [CompactedMappings][com.grappenmaker.mappings.format.CompactedMappings] | [CompactedMappings.write][com.grappenmaker.mappings.format.write] |
 
 ## Mappings transformations
 
