@@ -89,40 +89,48 @@
         </nav>
         <div id="resizer" class="resizer" data-item-type="BAR"></div>
         <div id="main" data-item-type="SECTION" role="main">
-<div class="main-content" data-page-type="member" id="content" pageids="mappings-util::com.grappenmaker.mappings//reorderNamespaces/com.grappenmaker.mappings.Mappings#vararg(kotlin.String)/PointingToDeclaration//-1121527208">
+<div class="main-content" data-page-type="member" id="content" pageids="mappings-util::com.grappenmaker.mappings//reorderNamespaces/com.grappenmaker.mappings.format.Mappings#vararg(kotlin.String)/PointingToDeclaration//-1121527208">
   <div class="breadcrumbs"><a href="../index.html">mappings-util</a><span class="delimiter">/</span><a href="index.html">com.grappenmaker.mappings</a><span class="delimiter">/</span><span class="current">reorderNamespaces</span></div>
   <div class="cover ">
     <h1 class="cover"><span>reorder</span><wbr><span><span>Namespaces</span></span></h1>
   </div>
-  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-mappings/index.html">Mappings</a><span class="token punctuation">.</span><a href="reorder-namespaces.html"><span class="token function">reorderNamespaces</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>order<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-mappings/index.html">Mappings</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/770grappenmaker/mappings-util/tree/main/lib/src/main/kotlin/com/grappenmaker/mappings/Transformations.kt#L74">source</a>)</span></span></div><p class="paragraph">Swaps out the names for the namespaces in this <a href="-mappings/index.html">Mappings</a> data structure, by reordering. Duplicate names are allowed, in which case mapped entries are duplicated to fit the new <a href="reorder-namespaces.html">order</a>. If a name in <a href="-mappings/namespaces.html">Mappings.namespaces</a> does not appear in <a href="reorder-namespaces.html">order</a>, its mapping entries will be missing in the returned <a href="-mappings/index.html">Mappings</a>.</p><h4 class="">Samples</h4><div class="sample-container"><pre><code class="monospace block lang-kotlin" theme="idea">val mappings = GenericMappings(
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mappings-util/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../com.grappenmaker.mappings.format/-mappings/index.html">Mappings</a><span class="token punctuation">.</span><a href="reorder-namespaces.html"><span class="token function">reorderNamespaces</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>order<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../com.grappenmaker.mappings.format/-mappings/index.html">Mappings</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/770grappenmaker/mappings-util/tree/main/lib/src/main/kotlin/com/grappenmaker/mappings/Transformations.kt#L81">source</a>)</span></span></div><p class="paragraph">Swaps out the names for the namespaces in this <a href="../com.grappenmaker.mappings.format/-mappings/index.html">Mappings</a> data structure, by reordering. Duplicate names are allowed, in which case mapped entries are duplicated to fit the new <a href="reorder-namespaces.html">order</a>. If a name in <a href="../com.grappenmaker.mappings.format/-mappings/namespaces.html">Mappings.namespaces</a> does not appear in <a href="reorder-namespaces.html">order</a>, its mapping entries will be missing in the returned <a href="../com.grappenmaker.mappings.format/-mappings/index.html">Mappings</a>.</p><h4 class="">Samples</h4><div class="sample-container"><pre><code class="monospace block lang-kotlin" theme="idea">val mappings = GenericMappings(
     namespaces = listOf("official", "named"),
-    classes = listOf(MappedClass(
-        names = listOf("a", "b"),
-    ))
+    classes = listOf(
+        MappedClass(
+            names = listOf("a", "b"),
+        )
+    )
 )
 
 val renamed = mappings.reorderNamespaces("named", "official", "named")
 assertEquals(
     GenericMappings(
         namespaces = listOf("named", "official", "named"),
-        classes = listOf(MappedClass(
-            names = listOf("b", "a", "b"),
-        ))
+        classes = listOf(
+            MappedClass(
+                names = listOf("b", "a", "b"),
+            )
+        )
     ), renamed
-)</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><hr><div class="symbol monospace"><span class="token keyword">fun </span><a href="-mappings/index.html">Mappings</a><span class="token punctuation">.</span><a href="reorder-namespaces.html"><span class="token function">reorderNamespaces</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">order<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-mappings/index.html">Mappings</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/770grappenmaker/mappings-util/tree/main/lib/src/main/kotlin/com/grappenmaker/mappings/Transformations.kt#L84">source</a>)</span></span></div><p class="paragraph">Swaps out the names for the namespaces in this <a href="-mappings/index.html">Mappings</a> data structure, by reordering. Duplicate names are allowed, in which case mapped entries are duplicated to fit the new <a href="reorder-namespaces.html">order</a>. If a name in <a href="-mappings/namespaces.html">Mappings.namespaces</a> does not appear in <a href="reorder-namespaces.html">order</a>, its mapping entries will be missing in the returned <a href="-mappings/index.html">Mappings</a>. If a namespace in <a href="reorder-namespaces.html">order</a> does not exist in this <a href="-mappings/index.html">Mappings</a>, an <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-illegal-argument-exception/index.html">IllegalArgumentException</a> will be thrown.</p><h4 class="">Samples</h4><div class="sample-container"><pre><code class="monospace block lang-kotlin" theme="idea">val mappings = GenericMappings(
+)</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><hr><div class="symbol monospace"><span class="token keyword">fun </span><a href="../com.grappenmaker.mappings.format/-mappings/index.html">Mappings</a><span class="token punctuation">.</span><a href="reorder-namespaces.html"><span class="token function">reorderNamespaces</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">order<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../com.grappenmaker.mappings.format/-mappings/index.html">Mappings</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/770grappenmaker/mappings-util/tree/main/lib/src/main/kotlin/com/grappenmaker/mappings/Transformations.kt#L91">source</a>)</span></span></div><p class="paragraph">Swaps out the names for the namespaces in this <a href="../com.grappenmaker.mappings.format/-mappings/index.html">Mappings</a> data structure, by reordering. Duplicate names are allowed, in which case mapped entries are duplicated to fit the new <a href="reorder-namespaces.html">order</a>. If a name in <a href="../com.grappenmaker.mappings.format/-mappings/namespaces.html">Mappings.namespaces</a> does not appear in <a href="reorder-namespaces.html">order</a>, its mapping entries will be missing in the returned <a href="../com.grappenmaker.mappings.format/-mappings/index.html">Mappings</a>. If a namespace in <a href="reorder-namespaces.html">order</a> does not exist in this <a href="../com.grappenmaker.mappings.format/-mappings/index.html">Mappings</a>, an <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-illegal-argument-exception/index.html">IllegalArgumentException</a> will be thrown.</p><h4 class="">Samples</h4><div class="sample-container"><pre><code class="monospace block lang-kotlin" theme="idea">val mappings = GenericMappings(
     namespaces = listOf("official", "named"),
-    classes = listOf(MappedClass(
-        names = listOf("a", "b"),
-    ))
+    classes = listOf(
+        MappedClass(
+            names = listOf("a", "b"),
+        )
+    )
 )
 
 val renamed = mappings.reorderNamespaces("named", "official", "named")
 assertEquals(
     GenericMappings(
         namespaces = listOf("named", "official", "named"),
-        classes = listOf(MappedClass(
-            names = listOf("b", "a", "b"),
-        ))
+        classes = listOf(
+            MappedClass(
+                names = listOf("b", "a", "b"),
+            )
+        )
     ), renamed
 )</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div></div></div>
 </div>

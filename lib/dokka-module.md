@@ -11,32 +11,32 @@ Several utilities and general definitions, forming the base of this library.
 
 ## Loading (mappings) files
 
-| **Type**                                                                | **Snippet**                                                                                     |
-|-------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
-| Any type of [MappingsFormat][com.grappenmaker.mappings.MappingsFormat]  | [MappingsLoader.loadMappings][com.grappenmaker.mappings.MappingsLoader.loadMappings]            |
-| An [AccessWidener][com.grappenmaker.mappings.aw.AccessWidener]          | [loadAccessWidener][com.grappenmaker.mappings.aw.loadAccessWidener]                             |
-| [CompactedMappings][com.grappenmaker.mappings.format.CompactedMappings] | [CompactedMappingsFormat.parse][com.grappenmaker.mappings.format.CompactedMappingsFormat.parse] |
+| **Type**                                                                      | **Snippet**                                                                                     |
+|-------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
+| Any type of [MappingsFormat][com.grappenmaker.mappings.format.MappingsFormat] | [MappingsLoader.loadMappings][com.grappenmaker.mappings.MappingsLoader.loadMappings]            |
+| An [AccessWidener][com.grappenmaker.mappings.aw.AccessWidener]                | [loadAccessWidener][com.grappenmaker.mappings.aw.loadAccessWidener]                             |
+| [CompactedMappings][com.grappenmaker.mappings.format.CompactedMappings]       | [CompactedMappingsFormat.parse][com.grappenmaker.mappings.format.CompactedMappingsFormat.parse] |
 
 ## Writing (mappings) files
 
-| **Type**                                                                | **Snippet**                                                       |
-|-------------------------------------------------------------------------|-------------------------------------------------------------------|
-| Any type of [MappingsFormat][com.grappenmaker.mappings.MappingsFormat]  | [Mappings.write][com.grappenmaker.mappings.format.write]          |
-| An [AccessWidener][com.grappenmaker.mappings.aw.AccessWidener]          | [AccessWidener.write][com.grappenmaker.mappings.aw.write]         |
-| [CompactedMappings][com.grappenmaker.mappings.format.CompactedMappings] | [CompactedMappings.write][com.grappenmaker.mappings.format.write] |
+| **Type**                                                                      | **Snippet**                                                                                   |
+|-------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| Any type of [MappingsFormat][com.grappenmaker.mappings.format.MappingsFormat] | [Mappings.write][com.grappenmaker.mappings.format.MappingsFormat.write]                       |
+| An [AccessWidener][com.grappenmaker.mappings.aw.AccessWidener]                | [AccessWidener.write][com.grappenmaker.mappings.aw.write]                                     |
+| [CompactedMappings][com.grappenmaker.mappings.format.CompactedMappings]       | [CompactedMappings.writeBytes][com.grappenmaker.mappings.format.CompactedMappings.writeBytes] |
 
 ## Mappings transformations
 
-| **Name**                                                                          | **Description**                                                           |
-|-----------------------------------------------------------------------------------|---------------------------------------------------------------------------|
-| [Mappings.renameNamespaces][com.grappenmaker.mappings.renameNamespaces]           | Renames namespaces                                                        |
-| [Mappings.reorderNamespaces][com.grappenmaker.mappings.reorderNamespaces]         | Reorders/duplicates namespaces                                            |
-| [Mappings.join][com.grappenmaker.mappings.join]                                   | Joins two [Mappings][com.grappenmaker.mappings.Mappings] objects together |
-| [Mappings.filterNamespaces][com.grappenmaker.mappings.filterNamespaces]           | Filters certain namespaces by a set of allowed names, or a predicate      |
-| [Mappings.deduplicateNamespaces][com.grappenmaker.mappings.deduplicateNamespaces] | Removes duplicate namespaces                                              |
+| **Name**                                                                          | **Description**                                                                  |
+|-----------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
+| [Mappings.renameNamespaces][com.grappenmaker.mappings.renameNamespaces]           | Renames namespaces                                                               |
+| [Mappings.reorderNamespaces][com.grappenmaker.mappings.reorderNamespaces]         | Reorders/duplicates namespaces                                                   |
+| [Mappings.join][com.grappenmaker.mappings.join]                                   | Joins two [Mappings][com.grappenmaker.mappings.format.Mappings] objects together |
+| [Mappings.filterNamespaces][com.grappenmaker.mappings.filterNamespaces]           | Filters certain namespaces by a set of allowed names, or a predicate             |
+| [Mappings.deduplicateNamespaces][com.grappenmaker.mappings.deduplicateNamespaces] | Removes duplicate namespaces                                                     |
 
 
-## Common [Mappings][com.grappenmaker.mappings.Mappings] operations
+## Common [Mappings][com.grappenmaker.mappings.format.Mappings] operations
 
 ```kt
 // Parsing mappings
@@ -114,9 +114,9 @@ aw.write()
 ```
 
 # Package com.grappenmaker.mappings.format
-Supported mappings and their parsers/[formats][com.grappenmaker.mappings.MappingsFormat].
+Supported mappings and their parsers/[formats][com.grappenmaker.mappings.format.MappingsFormat].
 
-## Supported [MappingsFormat][com.grappenmaker.mappings.MappingsFormat]s
+## Supported [MappingsFormat][com.grappenmaker.mappings.format.MappingsFormat]s
 
 | **Name**                                                                            | **Description**                                                                                             |
 |-------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
@@ -151,19 +151,19 @@ Format:
 | namespaces[]: string[] | The namespaces stored (the length is stored as a byte)                                   |
 | classes[]: class[]     | The mapped classes (the length is stored as an int)                                      |
 
-`class` type (corresponding to [MappedClass][com.grappenmaker.mappings.MappedClass]):
+`class` type (corresponding to [MappedClass][com.grappenmaker.mappings.format.MappedClass]):
 
 | **Name & Type**   | **Description**                                                                                                                                                      |
 |-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| names[]: string[] | Names of this [MappedClass][com.grappenmaker.mappings.MappedClass] instance, an empty string (length = 0) means the last name with a nonzero length should be copied |
+| names[]: string[] | Names of this [MappedClass][com.grappenmaker.mappings.format.MappedClass] instance, an empty string (length = 0) means the last name with a nonzero length should be copied |
 | members: mapped[] | The mapped members (the length is stored as a varint)                                                                                                                |
 
-`mapped` type (corresponding to [Mapped][com.grappenmaker.mappings.Mapped]):
+`mapped` type (corresponding to [Mapped][com.grappenmaker.mappings.format.Mapped]):
 
 | **Name & Type**        | **Description**                                                                                                                                            |
 |------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| names[]: string[]      | Names of this [Mapped][com.grappenmaker.mappings.Mapped] instance, an empty string (length = 0) means the last name with a nonzero length should be copied |
-| descriptor: descriptor | If the descriptor starts with a `(`, this [Mapped][com.grappenmaker.mappings.Mapped] represents a method, a field otherwise                                |
+| names[]: string[]      | Names of this [Mapped][com.grappenmaker.mappings.format.Mapped] instance, an empty string (length = 0) means the last name with a nonzero length should be copied |
+| descriptor: descriptor | If the descriptor starts with a `(`, this [Mapped][com.grappenmaker.mappings.format.Mapped] represents a method, a field otherwise                                |
 
 # Package com.grappenmaker.mappings.remap
 Utilities for remapping class and JAR files using mappings provided by the rest of the library.
