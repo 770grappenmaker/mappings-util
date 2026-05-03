@@ -2,6 +2,8 @@ plugins {
     `kotlin-dsl`
 }
 
+group = "nl.koenoostveen"
+
 repositories {
     mavenCentral()
 }

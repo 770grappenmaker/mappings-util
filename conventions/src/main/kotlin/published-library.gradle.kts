@@ -1,9 +1,8 @@
 import java.net.URI
 
 plugins {
-    `maven-publish`
     `java-library`
-    signing
+    id("publishing-base")
     id("kotlin-convention")
     id("org.jetbrains.dokka")
     id("org.jetbrains.dokka-javadoc")
@@ -25,8 +24,6 @@ kotlin { explicitApi() }
 publishing {
     publications {
         create<MavenPublication>("central") {
-            groupId = "io.github.770grappenmaker"
-
             artifact(dokkaAsJavadoc)
             from(components["java"])
 
@@ -47,7 +44,7 @@ publishing {
                 developers {
                     developer {
                         id = "770grappenmaker"
-                        name = "NotEvenJoking"
+                        name = "Koen Oostveen"
                         email = "770grappenmaker@gmail.com"
                         url = "https://github.com/770grappenmaker/"
                     }
@@ -61,18 +58,6 @@ publishing {
             }
         }
     }
-
-    repositories {
-        maven {
-            name = "Central"
-            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            credentials(PasswordCredentials::class)
-        }
-    }
-}
-
-signing {
-    sign(publishing.publications)
 }
 
 dokka {
@@ -94,8 +79,4 @@ dokka {
             packageListUrl = rootProject.layout.projectDirectory.file("asm.package-list").asFile.toURI()
         }
     }
-}
-
-tasks {
-    named("sourcesJar", Jar::class) { exclude { "generated" in it.file.absolutePath } }
 }
