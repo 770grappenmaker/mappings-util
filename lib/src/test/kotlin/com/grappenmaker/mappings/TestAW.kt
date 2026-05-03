@@ -11,8 +11,10 @@ import com.grappenmaker.mappings.aw.loadAccessWidener
 import com.grappenmaker.mappings.aw.remap
 import com.grappenmaker.mappings.aw.toTree
 import com.grappenmaker.mappings.aw.applyWidener
+import com.grappenmaker.mappings.aw.join
 import com.grappenmaker.mappings.aw.plus
 import com.grappenmaker.mappings.aw.write
+import org.junit.Assert.assertThrows
 import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.tree.ClassNode
 import kotlin.test.Test
@@ -140,6 +142,16 @@ class TestAW {
                 AccessedMember("a", "d", "()Le;") to AccessMask(0b011),
             ),
         ), merged)
+    }
+
+    @Test
+    fun `empty collections of masks are legal`() {
+        assertEquals(AccessMask.EMPTY, emptyList<AccessMask>().join())
+    }
+
+    @Test
+    fun `empty access wideners cannot be joined`() {
+        assertThrows(IllegalArgumentException::class.java) { emptyList<AccessWidener>().join() }
     }
 
     // could consider comparing unserialized forms but thats too boring
