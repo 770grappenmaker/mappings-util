@@ -33,6 +33,7 @@ public interface InheritanceProvider {
      * class B extends E
      * interface C extends F
      * interface D
+     * class E
      * interface F
      *
      * Then, calling this method on A should return [D, C, F, B, E] (up to reordering of the interfaces,
@@ -40,6 +41,8 @@ public interface InheritanceProvider {
      *
      * The default implementation performs depth-first search with pruning over [getDirectParents].
      * Implementations are welcome to optimize it for their specific use-case.
+     *
+     * The returned iterable contains no duplicates, and never contains java/lang/Object, as this is always implied.
      */
     public fun getParents(internalName: String): Iterable<String> = sequence {
         val queue = ArrayDeque<String>()
@@ -49,7 +52,11 @@ public interface InheritanceProvider {
         while (queue.isNotEmpty()) {
             val curr = queue.removeLast()
             yield(curr)
-            getDirectParents(internalName).forEach { if (seen.add(it)) queue.addLast(it) }
+
+            for (parent in getDirectParents(curr)) {
+                if (parent == "java/lang/Object") continue
+                if (seen.add(parent)) queue.addLast(parent)
+            }
         }
     }.drop(1).asIterable()
 
