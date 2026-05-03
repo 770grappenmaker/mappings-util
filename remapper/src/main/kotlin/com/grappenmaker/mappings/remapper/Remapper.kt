@@ -71,18 +71,18 @@ fun main(args: Array<String>) {
 }
 
 private fun printUsageFatal(msg: String? = null): Nothing {
-    if (msg != null) println(msg)
+    if (msg != null) System.err.println(msg)
     printUsage()
     exitProcess(-1)
 }
 
 private fun printUsage() {
-    println("Usage: [-s | --skip-resources] [-f | --force] [-v | --stacktrace] " +
+    System.err.println("Usage: [-s | --skip-resources] [-f | --force] [-v | --stacktrace] " +
             "-- <input> <output> <mappings> <from> <to> [classpath...]")
 }
 
 private fun fatalError(msg: String): Nothing {
-    println(msg)
+    System.err.println(msg)
     exitProcess(-1)
 }
 
