@@ -27,12 +27,16 @@ public interface InheritanceProvider {
      * Returns the internal names of the parents of a class with a given [internalName], in depth-first order,
      * interfaces first.
      *
-     * Suppose we have the following class definitions:
+     * Suppose we have the following class and interface definitions:
      *
      * class A extends B implements C, D
      * class B extends E
+     * interface C extends F
+     * interface D
+     * interface F
      *
-     * Then, calling this method on A should return {D, C, E} ({C, D, E} is also valid).
+     * Then, calling this method on A should return [D, C, F, B, E] (up to reordering of the interfaces,
+     * so [C, D, F, B, E] is considered correct, too).
      *
      * The default implementation performs depth-first search with pruning over [getDirectParents].
      * Implementations are welcome to optimize it for their specific use-case.
