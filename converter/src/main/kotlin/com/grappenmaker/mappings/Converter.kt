@@ -2,6 +2,7 @@ package com.grappenmaker.mappings
 
 import com.grappenmaker.mappings.format.*
 import kotlin.io.path.Path
+import kotlin.io.path.absolute
 import kotlin.io.path.exists
 import kotlin.io.path.inputStream
 import kotlin.io.path.isDirectory
@@ -40,7 +41,7 @@ fun main(args: Array<String>) {
         args.size <= 2 -> System.out
         args[2].trim() == "-" -> System.out
         else -> {
-            val outputPath = Path(args[2])
+            val outputPath = Path(args[2]).absolute()
             if (!outputPath.parent.exists()) {
                 eprintln("No such file or directory: ${outputPath.parent}")
                 exitProcess(1)

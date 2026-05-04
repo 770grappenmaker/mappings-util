@@ -12,6 +12,8 @@ import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.commons.Remapper
+import java.io.InputStream
+import java.io.OutputStream
 import java.nio.file.Path
 import java.util.*
 import java.util.jar.JarEntry
@@ -59,12 +61,12 @@ public data class JarRemapTask(
 public fun interface JarResourceVisitor {
     /**
      * Called whenever a resource is being copied over from an input jar file by the [JarRemapper], where [name] is
-     * the name of the resource being copied, and [file] the original buffer read from the input jar file.
-     * The [ByteArray] that this [JarResourceVisitor] returns will be passed onto the next [JarResourceVisitor]
-     * in the chain, and at the end the newly created buffer will be written to the output jar file. Returning null
+     * the name of the resource being copied, and [input] an input stream of the resource data read from the input jar file.
+     * The [InputStream] that this [JarResourceVisitor] returns will be passed onto the next [JarResourceVisitor]
+     * in the chain, and at the end the newly created resource will be written to the output jar file. Returning null
      * here means that this [JarResourceVisitor] believes the file should not be copied over and should be discarded.
      */
-    public fun visit(name: String, file: ByteArray): ByteArray?
+    public fun visit(name: String, input: InputStream): InputStream?
 }
 
 /**
@@ -251,34 +253,36 @@ public class JarRemapper {
         }
 
         fun JarRemapTask.start() {
-            val (classes, resources) = JarInputStream(input.inputStream(), false).use { stream ->
-                generateSequence { stream.nextJarEntry }
-                    .map { it.name to stream.readBytes() }
-                    .partition { (n) -> n.endsWith(".class") }
-                    .toList()
-            }
+            val lookup = hashMapOf<String, ByteArray>()
 
-            JarOutputStream(output.outputStream()).use { out ->
-                fun write(name: String, bytes: ByteArray) {
-                    out.putNextEntry(JarEntry(name))
-                    out.write(bytes)
-                }
+            JarInputStream(input.inputStream(), false).use { stream ->
+                JarOutputStream(output.outputStream()).use { out ->
+                    while (true) {
+                        val entry = stream.nextJarEntry ?: break
+                        if (entry.name.endsWith(".class")) {
+                            lookup[entry.name.dropLast(6)] = stream.readBytes()
+                            continue
+                        }
 
-                if (copyResources) resources.forEach { (k, v) ->
-                    var buffer = v
-                    for (visitor in resourceVisitors) buffer = visitor.visit(k, buffer) ?: return@forEach
-                    write(k, buffer)
-                }
+                        if (!copyResources) continue
 
-                val lookup = classes.associate { (k, v) -> k.dropLast(6) to v }
-                val map = sharedMaps.getValue(fromNamespace to toNamespace)
-                val totalLoader = ClasspathLoaders.compound(ClasspathLoaders.fromLookup(lookup), loader)
-                val remapper = LoaderSimpleRemapper(map, totalLoader)
-                val extraVisitors = extensions.map { it.createVisitor(totalLoader, remapper) }
+                        var resource: InputStream = stream
+                        for (visitor in resourceVisitors) resource = visitor.visit(entry.name, resource) ?: continue
 
-                lookup.forEach { (_, original) ->
-                    val (bytes, writtenName) = original.remap(remapper, extraVisitors)
-                    write("$writtenName.class", bytes)
+                        out.putNextEntry(JarEntry(entry.name))
+                        resource.copyTo(out)
+                    }
+
+                    val map = sharedMaps.getValue(fromNamespace to toNamespace)
+                    val totalLoader = ClasspathLoaders.compound(ClasspathLoaders.fromLookup(lookup), loader)
+                    val remapper = LoaderSimpleRemapper(map, totalLoader)
+                    val extraVisitors = extensions.map { it.createVisitor(totalLoader, remapper) }
+
+                    for ((_, original) in lookup) {
+                        val (bytes, writtenName) = original.remap(remapper, extraVisitors)
+                        out.putNextEntry(JarEntry("$writtenName.class"))
+                        out.write(bytes)
+                    }
                 }
             }
         }
