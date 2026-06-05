@@ -39,7 +39,7 @@ dependencies {
 ```
 
 ## Docs
-Available on [GitHub Pages](https://770grappenmaker.github.io/mappings-util/mappings-util/).
+Available on [Forgejo Pages](https://koen.pages.koenoostveen.nl/mappings-util).
 
 ## Examples
 - Some basic examples on how to transform and handle mappings can be found [here](samples/src/test/kotlin/samples/Mappings.kt)
