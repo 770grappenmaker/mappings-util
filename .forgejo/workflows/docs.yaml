@@ -1,0 +1,33 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
+      - name: Setup Java
+        uses: https://forge.koenoostveen.nl/actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: https://forge.koenoostveen.nl/actions/gradle/setup-gradle@v6
+      
+      - name: Build docs with Gradle
+        run: ./gradlew --no-configuration-cache deployDocs
+
+      - uses: actions/git-pages@v2
+        with:
+          site: https://koen.pages.koenoostveen.nl/mappings-util/
+          token: ${{ forge.token }}
+          source: ./docs
